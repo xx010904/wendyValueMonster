@@ -8,11 +8,7 @@ local slaughterSetting = modvalueconfig.slaughterSetting
 local shadowSetting = modvalueconfig.shadowSetting
 local lunarSetting = modvalueconfig.lunarSetting
 
-STRINGS.ACTIONS.USESPEAROARTOOL = "矛桨转换"
-STRINGS.ACTIONS.USESHIELDBOATTOOL = "盾船转换"
-STRINGS.ACTIONS.BOATDISMANTLED = "呼叫舰队"
-STRINGS.ACTIONS.CALLLIST = "呼叫近卫"
-STRINGS.ACTIONS.CONCATLIST = "拼接名单"
+STRINGS.ACTIONS.HIRE_PIPSPOOK = "安排任务"
 
 STRINGS.NAMES.OAR_WATHGRITHR_LIGHTNING = "奔雷桨"
 STRINGS.NAMES.OAR_WATHGRITHR_LIGHTNING_CHARGED = "充能奔雷桨"

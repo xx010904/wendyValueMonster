@@ -10,7 +10,7 @@ Assets = {
 
 PrefabFiles = {
 	-- 注册新的 prefab
-    -- "boat_shield_deployer",
+    "smallghost_giver",
     -- 其他 prefab 名称...
 }
 

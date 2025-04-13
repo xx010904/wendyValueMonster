@@ -8,11 +8,7 @@ local slaughterSetting = modvalueconfig.slaughterSetting
 local shadowSetting = modvalueconfig.shadowSetting
 local lunarSetting = modvalueconfig.lunarSetting
 
-STRINGS.ACTIONS.USESPEAROARTOOL = "Spoar Transfer"
-STRINGS.ACTIONS.USESHIELDBOATTOOL = "RöndBoat Transfer"
-STRINGS.ACTIONS.BOATDISMANTLED = "Call In The Fleet"
-STRINGS.ACTIONS.CALLLIST = "Call Sentinel"
-STRINGS.ACTIONS.CONCATLIST = "Concat List"
+STRINGS.ACTIONS.HIRE_PIPSPOOK = "Assign Task"
 
 STRINGS.NAMES.OAR_WATHGRITHR_LIGHTNING = "Elding Oar"
 STRINGS.NAMES.OAR_WATHGRITHR_LIGHTNING_CHARGED = "Charged Elding Oar"
