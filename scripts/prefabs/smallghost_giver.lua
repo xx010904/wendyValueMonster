@@ -40,7 +40,7 @@ local function AddSunkenChest(inst, possible_loot)
 	end
 
     if pearlReturn then
-        local base = 0.1
+        local base = 0.05
         -- if true then
         local EXTRA_LOOT =
         {
@@ -110,27 +110,27 @@ local function AddSunkenChest(inst, possible_loot)
 end
 
 local function MakeLoot(inst)
-     ---- 风滚草 基础奖励
+     ---- 基础奖励
     local possible_loot =
     {
         -- base
-        {chance = 14,   item = "cutgrass"},
-        {chance = 14,   item = "twigs"},
-        {chance = 5,   item = "log"},
-        {chance = 5,   item = "rocks"},
+        {chance = 12,   item = "cutgrass"},
+        {chance = 12,   item = "twigs"},
+        {chance = 7,   item = "log"},
+        {chance = 7,   item = "rocks"},
         {chance = 1,   item = "nitre"},
         {chance = 1,   item = "flint"},
         -- wendy_use
-        {chance = 2,    item = "petals"},
+        {chance = 3,    item = "petals"},
         {chance = 1,    item = "petals_evil"},
-        {chance = 2,    item = "moon_tree_blossom"},
+        {chance = 3,    item = "moon_tree_blossom"},
         {chance = 2,    item = "butterfly"},
         {chance = 2,    item = "butterflywings"},
         {chance = 2,    item = "moonbutterfly"},
         {chance = 2,    item = "moonbutterflywings"},
         {chance = 2,    item = "spidergland"},
-        {chance = 0.1,  item = "slurtle_shellpieces"},
-        {chance = 0.8,  item = "graveurn"},
+        {chance = 0.6,  item = "slurtle_shellpieces"},
+        {chance = 1.2,  item = "graveurn"},
         {chance = 2,    item = "forgetmelots"},
         {chance = 1,    item = "reviver"},
         {chance = 1,    item = "honey"},
@@ -138,9 +138,13 @@ local function MakeLoot(inst)
         {chance = 1,    item = "livinglog"},
         -- seed
         {chance = 1,    item = "seeds"},
-        {chance = 0.8,  item = "bullkelp_root"},
+        {chance = 0.4,  item = "bullkelp_root"},
         {chance = 0.8,  item = "sapling"},
         {chance = 0.8,  item = "acorn"},
+        {chance = 0.8,  item = "dug_berrybush"},
+        {chance = 0.8,  item = "marsh_bush"},
+        {chance = 0.4,  item = "monkeytail"},
+        {chance = 0.4,  item = "lureplantbulb"},
         -- food
         {chance = 0.4,  item = "foliage"},
         {chance = 0.4,  item = "rottenegg"},
@@ -344,7 +348,7 @@ local function MakeLoot(inst)
     local loots = {}
     local next_loot = nil
     local next_chance = nil
-    local num_loots = 3
+    local num_loots = math.random(1, 4)
     while num_loots > 0 do
         next_chance = math.random()*totalchance
         next_loot = nil
@@ -402,26 +406,14 @@ local function shadow_fn()
 		if inst.AnimState:IsCurrentAnimation("quest_completed") then
 			inst.AnimState:PlayAnimation("dissipate", false)
 			-- print("smallghost_giver gift")
-            local loot_count = {} -- 创建一个表来统计物品数量
 
-            for i = 1, 100 do
-                local gift = SpawnPrefab("gift")
-                local loots = MakeLoot(inst)
+            local gift = SpawnPrefab("gift")
+            local loots = MakeLoot(inst)
 
-                -- 统计loots内容
-                for _, loot in ipairs(loots) do
-                    loot_count[loot] = (loot_count[loot] or 0) + 1 -- 增加物品计数
-                end
+            gift.components.unwrappable:WrapItems(loots)
+            gift.Transform:SetPosition(inst.Transform:GetWorldPosition())
+            SpawnPrefab("carnival_confetti_fx").Transform:SetPosition(gift.Transform:GetWorldPosition())
 
-                gift.components.unwrappable:WrapItems(loots)
-                local x, y, z = inst.Transform:GetWorldPosition()
-                gift.Transform:SetPosition(x + math.random(-2, 2), y, z + math.random(-2, 2))
-            end
-
-            -- 输出统计结果
-            for item, count in pairs(loot_count) do
-                print(string.format("%s: %d", item, count))
-            end
             inst:Hide()
 		end
 		if inst.AnimState:IsCurrentAnimation("appear") then

@@ -1,170 +1,22 @@
-local shieldSetting = modvalueconfig.shieldSetting
-local spearSetting = modvalueconfig.spearSetting
-local helmSetting = modvalueconfig.helmSetting
-local shallowGraveSetting = modvalueconfig.shallowGraveSetting
-local autoSingSetting = modvalueconfig.autoSingSetting
-local unfetteredSetting = modvalueconfig.unfetteredSetting
-local slaughterSetting = modvalueconfig.slaughterSetting
-local shadowSetting = modvalueconfig.shadowSetting
-local lunarSetting = modvalueconfig.lunarSetting
+STRINGS.ACTIONS.HIRE_PIPSPOOK = "安排"
 
-STRINGS.ACTIONS.HIRE_PIPSPOOK = "安排任务"
-
-STRINGS.NAMES.OAR_WATHGRITHR_LIGHTNING = "奔雷桨"
-STRINGS.NAMES.OAR_WATHGRITHR_LIGHTNING_CHARGED = "充能奔雷桨"
-STRINGS.NAMES.BOAT_BUTTON = "战斗圆船"
-STRINGS.NAMES.BOAT_SHIELD = "战斗圆船"
-STRINGS.NAMES.BOAT_SHIELD_DEPLOYER = "战斗圆船套装"
-STRINGS.NAMES.BEEFALO_CASTER_BATTLE = "牛看守"
-STRINGS.NAMES.BEEFALO_CASTER_WALK = "牛巡逻"
-STRINGS.NAMES.BEEFALODEATHLIST = "亡者名单"
-STRINGS.NAMES.BEEFALO_SHAKE_BASIC = "犀利"
-STRINGS.NAMES.BEEFALO_SHAKE_WAR = "高远"
-STRINGS.NAMES.BEEFALO_SHAKE_DOLL = "贪婪"
-STRINGS.NAMES.BEEFALO_SHAKE_FESTIVE = "迅速"
-STRINGS.NAMES.BEEFALO_SHAKE_NATURE = "永恒"
-STRINGS.NAMES.BEEFALO_SHAKE_ROBOT = "坚强"
-STRINGS.NAMES.BEEFALO_SHAKE_ICE = "狂热"
-STRINGS.NAMES.BEEFALO_SHAKE_FORMAL = "壮实"
-STRINGS.NAMES.BEEFALO_SHAKE_VICTORIAN = "神秘"
-STRINGS.NAMES.BEEFALO_SHAKE_BEAST = "警觉"
-STRINGS.NAMES.HELM_GNARWAIL = "统御头盔支配的一角鲸"
-STRINGS.NAMES.HELM_POLLY_ROGERS = "统御头盔支配的波莉·罗杰"
-
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BOAT_BUTTON = "和盾牌一样坚固无比。"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BOAT_SHIELD = "和盾牌一样坚固无比。"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALODEATHLIST = "记录着杀死了多少皮弗娄牛的名单。"
-STRINGS.CHARACTERS.WATHGRITHR.DESCRIBE.BEEFALODEATHLIST = "记录着驯化了多少皮弗娄牛的名单。"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.HELM_GNARWAIL = "它的头上和我头盔上都有尖角。"
-STRINGS.CHARACTERS.WATHGRITHR.DESCRIBE.HELM_GNARWAIL = "头上尖角的海洋歌唱家。"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_BASIC = "犀利狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_WAR = "高远狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_DOLL = "贪婪狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_FESTIVE = "迅速狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_NATURE = "永恒狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_ROBOT = "坚强狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_ICE = "狂热狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_FORMAL = "壮实狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_VICTORIAN = "神秘狂石！"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.BEEFALO_SHAKE_BEAST = "警觉狂石！"
-
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BEEFALO_FLEE = "我的牛跑了！！！"
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BEEFALO_DIE = "我的牛死了！！！"
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BEEFALO_KILL = {
-    "“我的错误越多，怨恨越深。”",
-    "“我驯服你是为你好！”",
-    "“你就像一块锻造的铁；你必须被锤打成型。”",
-    "驯牛如此简单！",
-    "你要永远，为驯化过的事物负责！",
-    "驯化就是建立联系！",
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_LEAVE = {
+    "可怜的灵魂，离开吧。",
+    "现在轮到你来帮助我，但我却只想念她。",
+    "请帮我找一些能填补空缺的东西，不要是玩具。",
+    "快走吧，我无法再承受这份孤独。",
+    "你也应该为我做点什么，我的姐妹已经不在了。",
+    "我并没有抛弃你，只是失去了最亲的她……",
+    "我希望能再次听到她的声音，但这似乎不可能。",
+    "我只希望你能帮我找到一些她的回忆。",
 }
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BEEFALO_CAST = {
-    "“这是一桩血腥的生意。”",
-    "“血是力量的代价。”",
-    "“血必偿血。”",
-    "“如果你刺我们，我们不也会流血吗？”",
-    "“仁慈的品质并不强求。”",
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_BACK = {
+    "可怜的灵魂，你带回来了什么？",
+    "你找到我失去的东西了吗？",
+    "小惊吓，你能带回我的最爱吗？",
+    "你带回来的东西能让我不再孤单吗？",
+    "我真的很想念我的姐妹，她能回来吗？",
+    "你能不能带回一些她的回忆，让我不再孤独？",
+    "可否告诉我，她的灵魂在哪里？",
+    "我只想再次感受她的温暖，哪怕是片刻。",
 }
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BEEFALO_COME = {
-    "“生命不过是一个愚蠢的故事！”",
-    "“出发吧，黑暗的思绪！”",
-    "“轮回已至!”",
-    "“过去只是序幕。”",
-    "“不死鸟从灰烬中燃起！”",
-    "“这正是你恐惧的真实写照。”",
-    "“死亡不是生命的对立面，而是生命的一部分。”",
-}
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_ATTACK_THRESHOLD = "牛牛救我！！！"
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_BOAT_DISMANTLE = "还有其他人在船上!"
-STRINGS.CHARACTERS.WATHGRITHR.ANNOUNCE_BOAT_DISMANTLE =  {
-    "维京人不会放弃船上的人!",
-    "没用，他们连船都开不好！！！",
-}
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_GNARWAIL_COME = {
-    "那角！刺得我眼睛发痛！",
-    "音乐竟然从那怪物的角中流出！",
-    "它是海洋的王，带着怒吼而来！",
-    "一角鲸的存在，简直无法忽视！",
-    "它能听见我们听不见的声音！",
-    "我头盔上的音符，让它更狂暴！",
-    "音乐在它的角上震撼！",
-    "这一角鲸，真是疯了！",
-    "它的歌声在空气中炸裂！"
-}
-STRINGS.CHARACTERS.GENERIC.ANNOUNCE_GNARWAIL_GO = {
-    "音乐停了！一角鲸也消失了！",
-    "它的影像消失，留给我只有沉寂！",
-    "它的角！终于消失在远方！",
-    "歌声远去，海面又恢复死寂！",
-    "它的力量，随波而去！",
-    "一角鲸的身影像个幻影消散！",
-    "它的歌声也随着波浪隐没！",
-    "音乐一停，一角鲸的魔力消失了！"
-}
-STRINGS.CHARACTERS.WATHGRITHR.ANNOUNCE_BATTLESONG_INSTANT_SHADOW_BUFF = {
-    "黑暗吞噬一切！",
-    "夜潮汹涌，心中只剩痛苦！",
-    "黑暗啊，成了唯一的朋友！",
-    "在无尽黑暗中，只有自我折磨！",
-    "黑夜永不离开！"
-}
-STRINGS.CHARACTERS.WATHGRITHR.ANNOUNCE_BATTLESONG_INSTANT_LUNAR_BUFF = {
-    "在梦海中，我彻底迷失！",
-    "月光下，灵魂被带走！",
-    "摇篮晃动，带我远去！",
-    "梦的边缘，已经没有回头路！",
-    "我在梦中游荡，找不到自我！"
-}
-
-if shieldSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SHIELD_3_DESC ..
-    "\n可以当做坚不可摧的，可回收的小饼船使用。"
-end
-if spearSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_5_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_SPEAR_5_DESC ..
-    "\n可以当做极其高效的船桨使用，此桨可以将猴子击退落水。"
-end
-if helmSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_HELMET_5_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ARSENAL_HELMET_5_DESC ..
-    "\n可以更耐用灵活地操作船只及其设备，并支配一角鲸来保护它。"
-end
-if shallowGraveSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_REVIVEWARRIOR_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_REVIVEWARRIOR_DESC ..
-    "\n让活着的盟友回光返照，将伤害转换成治疗进行返场表演。"
-end
-if autoSingSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_CONTAINER_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_CONTAINER_DESC ..
-    "\n永久获得3格战歌槽位，满足条件时自动施展对应战歌。"
-end
-if unfetteredSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_SONGS_INSTANTSONG_CD_DESC = 
-    "施展战吼不再有最低灵感要求。\n如果灵感不足则进入补偿冷却时间。\n灵感溢出时加快冷却回复。"
-end
-if slaughterSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC ..
-    "\n同时也给牛近卫换上更强的鞍具。如果牛近卫死亡薇格弗德进入狂暴状态。"
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC ..
-    "\n成为领头牛时也会如此。"
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC ..
-    "\n同时也会延长牛近卫的存在时间。"
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC ..
-    "\n将击杀的皮弗娄牛记录到名单，呼叫名单可以命令牛近卫保卫你和帮你加移速。"
-end
-if slaughterSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_SADDLE_DESC ..
-    "\n同时也给牛近卫换上更强的鞍具。如果牛近卫死亡薇格弗德进入狂暴状态。"
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_3_DESC ..
-    "\n成为领头牛时也会如此。"
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_2_DESC ..
-    "\n同时也会延长牛近卫的存在时间。"
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_BEEFALO_1_DESC ..
-    "\n将击杀的皮弗娄牛记录到名单，呼叫名单可以命令牛近卫保卫你和帮你加移速。"
-end
-if shadowSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_SHADOW_DESC ..
-    "黑暗悲歌的阴郁旋律可以让敌人攻击薇格弗德时转为自残。"
-end
-if lunarSetting then
-    STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_LUNAR_DESC = STRINGS.SKILLTREE.WATHGRITHR.WATHGRITHR_ALLEGIANCE_LUNAR_DESC ..
-    "启迪摇篮曲的空灵旋律可以让敌人睡觉梦游。"
-end
