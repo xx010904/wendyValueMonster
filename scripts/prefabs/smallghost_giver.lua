@@ -24,6 +24,29 @@ local function AddChess(inst, possible_loot)
     end
 end
 
+local function AddRift(inst, possible_loot)
+    if TheWorld.components.riftspawner ~= nil and TheWorld.components.riftspawner:IsLunarPortalActive() then
+        local EXTRA_LOOT = {
+            {chance = 3,  item = "lunarplant_husk"},
+            {chance = 3,  item = "purebrilliance"},
+            {chance = 3,  item = "security_pulse_cage_full"}, --充能火花柜
+        }
+        for _, loot in ipairs(EXTRA_LOOT) do
+            table.insert(possible_loot, loot)
+        end
+    end
+    if TheWorld.components.riftspawner ~= nil and TheWorld.components.riftspawner:IsShadowPortalActive() then
+        local EXTRA_LOOT = {
+            {chance = 3,  item = "horrorfuel"},
+            {chance = 3,  item = "voidcloth"},
+            {chance = 3,  item = "shadowheart_infused"}, --附身暗影心房
+        }
+        for _, loot in ipairs(EXTRA_LOOT) do
+            table.insert(possible_loot, loot)
+        end
+    end
+end
+
 local function AddSunkenChest(inst, possible_loot)
     ---- 沉底宝箱
     local pearlReturn = true -- The Cracked Pearl has been given to Hermit.
@@ -118,24 +141,37 @@ local function AddDays(inst, possible_loot)
             {chance = 3,    item = "moon_tree_blossom"},
             {chance = 0.6,  item = "slurtle_shellpieces"},
             {chance = 1.2,  item = "graveurn"},
-            {chance = 0.4,  item = "pumpkin_seeds"},
-            {chance = 0.4,  item = "tomato_seeds"},
-            {chance = 0.4,  item = "eggplant_seeds"},
             {chance = 1,    item = "bananajuice"}, -- 香蕉奶昔
-            {chance = 2,    item = "bananapop"}, -- 香蕉冻 wendy最爱
+            {chance = 3,    item = "bananapop"}, -- 香蕉冻 wendy最爱
+            --seed
+            {chance = 0.8,  item = "seeds_cooked"},
+            {chance = 0.8,  item = "pumpkin_seeds"},
+            {chance = 0.8,  item = "tomato_seeds"},
+            {chance = 0.8,  item = "eggplant_seeds"},
+            {chance = 0.8,  item = "spore_small"},
+            {chance = 0.8,  item = "spore_medium"},
+            {chance = 0.8,  item = "spore_tall"},
+            {chance = 0.8,  item = "spore_moon"},
             --vege
-            {chance = 0.4,  item = "pumpkin_cooked"},
-            {chance = 0.4,  item = "tomato_cooked"},
-            {chance = 0.4,  item = "eggplant_cooked"},
-            {chance = 0.4,  item = "pumpkin"},
-            {chance = 0.4,  item = "tomato"},
-            {chance = 0.4,  item = "eggplant"},
-            {chance = 0.4,  item = "lightbulb"},
+            {chance = 0.8,  item = "pumpkin_cooked"},
+            {chance = 0.8,  item = "tomato_cooked"},
+            {chance = 0.8,  item = "eggplant_cooked"},
+            {chance = 0.8,  item = "pumpkin"},
+            {chance = 0.8,  item = "tomato"},
+            {chance = 0.8,  item = "eggplant"},
+            {chance = 0.8,  item = "lightbulb"},
+            {chance = 0.8,  item = "firenettles"},
+            {chance = 0.8,  item = "tillweed"},
             {chance = 1,    item = "rock_avocado_fruit"}, --石果
             {chance = 1,    item = "cave_banana"},
             {chance = 1,    item = "wormlight"},
+            {chance = 1,    item = "ice"},
+            {chance = 1,    item = "kelp_cooked"},
+            {chance = 1,    item = "cutlichen"}, --苔藓
             --meat
             {chance = 0.3,  item = "trunk_winter"},
+            {chance = 0.8,  item = "slurper_pelt"},
+            {chance = 0.8,  item = "goatmilk"},
             --Gem
             {chance = 0.6,  item = "redgem"},
             {chance = 0.6,  item = "bluegem"},
@@ -150,6 +186,26 @@ local function AddDays(inst, possible_loot)
             {chance = 1,    item = "hammer"},
             {chance = 0.6,  item = "onemanband"},
             {chance = 1,    item = "treegrowthsolution"},
+            {chance = 1,    item = "boat_bumper_shell_kit"},
+            {chance = 1,    item = "boat_bumper_kelp_kit"},
+            {chance = 1,    item = "waterballoon"},
+            {chance = 1,    item = "soil_amender"}, --催长剂起子
+            {chance = 0.33, item = "thulecitebugnet"}, --铥矿捕虫网
+            --wall
+            {chance = 1.2,  item = "wall_moonrock_item"},
+            {chance = 1.2,  item = "wall_ruins_item"},
+            --boat
+            {chance = 0.8,  item = "mastupgrade_lightningrod_item"},
+            {chance = 0.8,  item = "mastupgrade_lamp_item"},
+            {chance = 0.8,  item = "boat_item"},
+            {chance = 0.8,  item = "boat_grass_item"},
+            {chance = 0.8,  item = "boatpatch"},
+            {chance = 0.8,  item = "boat_grass_item"},
+            {chance = 0.8,  item = "steeringwheel_item"},
+            {chance = 0.8,  item = "boat_rotator_kit"},
+            {chance = 0.8,  item = "mast_item"},
+            {chance = 0.8,  item = "boat_magnet_beacon"},
+            {chance = 0.8,  item = "boat_magnet_kit"},
             --heal
             {chance = 1,    item = "healingsalve_acid"},
             {chance = 0.33, item = "slurtleslime"}, --蛞蝓龟黏液
@@ -159,12 +215,24 @@ local function AddDays(inst, possible_loot)
             {chance = 0.33, item = "feather_robin_winter"},
             {chance = 0.33, item = "feather_canary"},
             {chance = 0.4,  item = "wagpunk_bits"},
+            {chance = 0.88,   item = "moonrocknugget"},
+            {chance = 0.88,   item = "lightninggoathorn"},
+            {chance = 0.88,  item = "refined_dust"}, --尘土块
+            --animals
+            {chance = 1.4,  item = "robin_winter"},
+            {chance = 1.4,  item = "robin"},
+            {chance = 1.4,  item = "lightflier"},
             --cloth
             {chance = 0.67, item = "armorslurper"}, --饥饿腰带
             -- important
-            {chance = 0.07, item = "deerclops_eyeball"},
-            {chance = 0.07, item = "dragon_scales"},
-            {chance = 0.04, item = "dragonflyfurnace_blueprint"},
+            {chance = 0.77, item = "deer_antler"}, --鹿角
+            {chance = 0.85, item = "honeycomb"}, -- 蜜脾
+            {chance = 0.33, item = "beeswax"}, -- 蜂蜡
+            {chance = 0.33, item = "royal_jelly"}, -- 蜂王浆
+            {chance = 0.15, item = "hivehat"},
+            {chance = 0.15, item = "jellybean"},
+            {chance = 0.15, item = "deerclops_eyeball"},
+            {chance = 0.55, item = "fossil_piece"}, --化石碎片
         }
         for _, loot in ipairs(EXTRA_LOOT) do
             table.insert(possible_loot, loot)
@@ -173,46 +241,50 @@ local function AddDays(inst, possible_loot)
     if TheWorld.state.cycles > 60 then
         local EXTRA_LOOT = {
             -- seed
-            {chance = 0.8,  item = "sapling_moon"},
+            {chance = 0.8,  item = "sapling_moon"}, --月亮树苗
             {chance = 0.8,  item = "rock_avocado_bush"},
             {chance = 0.4,  item = "monkeytail"},
             {chance = 0.4,  item = "bananabush"},
-            {chance = 0.4,  item = "garlic_seeds"},
-            {chance = 0.4,  item = "onion_seeds"},
-            {chance = 0.4,  item = "pepper_seeds"},
+            {chance = 0.8,  item = "garlic_seeds"},
+            {chance = 0.8,  item = "onion_seeds"},
+            {chance = 0.8,  item = "pepper_seeds"},
             -- vege
-            {chance = 0.4,  item = "garlic_cooked"},
-            {chance = 0.4,  item = "onion_cooked"},
-            {chance = 0.4,  item = "pepper_cooked"},
-            {chance = 0.4,  item = "garlic"},
-            {chance = 0.4,  item = "onion"},
-            {chance = 0.4,  item = "pepper"},
-            {chance = 0.1,  item = "moon_cap"},
-            {chance = 0.1,  item = "fig"}, --无花果
-            --gem
-            {chance = 0.05, item = "opalpreciousgem"},
-            {chance = 0.2,  item = "orangegem"},
-            {chance = 0.2,  item = "yellowgem"},
-            {chance = 0.1,  item = "greengem"},
+            {chance = 0.8,  item = "garlic_cooked"},
+            {chance = 0.8,  item = "onion_cooked"},
+            {chance = 0.8,  item = "pepper_cooked"},
+            {chance = 0.8,  item = "garlic"},
+            {chance = 0.8,  item = "onion"},
+            {chance = 0.8,  item = "pepper"}, --辣椒
+            {chance = 0.2,  item = "moon_cap"},
+            {chance = 0.7,  item = "powcake"}, --芝士蛋糕
+            {chance = 0.2,  item = "fig"}, --无花果
             --tools
             {chance = 0.5,  item = "brush"},
+            {chance = 1.5,  item = "archive_resonator_item"}, --星象探测仪
             {chance = 0.5,  item = "pumpkin_lantern"},
             {chance = 0.5,  item = "bathbomb"},
+            {chance = 0.5,  item = "megaflare"},
             {chance = 1,    item = "moonglassaxe"}, --玻璃斧
             {chance = 0.33, item = "carpentry_blade_moonglass"}, --月光玻璃锯片
+            --wall
+            {chance = 1.2,  item = "wall_dreadstone_item"},
+            {chance = 1.2,  item = "wall_scrap_item"},
             --combat
-            {chance = 0.5,  item = "ruins_bat"},
-            {chance = 0.5,  item = "ruinshat"},
-            {chance = 0.5,  item = "armorruins"},
-            {chance = 0.5,  item = "nightsword"},
-            {chance = 0.5,  item = "armor_sanity"},
+            {chance = 0.6,  item = "ruins_bat"},
+            {chance = 0.6,  item = "ruinshat"},
+            {chance = 0.6,  item = "armorruins"},
+            {chance = 0.6,  item = "nightsword"},
+            {chance = 0.6,  item = "armor_sanity"},
+            {chance = 0.6,  item = "slurtlehat"},
             {chance = 0.67, item = "multitool_axe_pickaxe"}, -- 多用斧镐
-            {chance = 0.4,  item = "thulecite"}, -- 铥矿
-            {chance = 0.4,  item = "thulecite_pieces"}, -- 铥矿碎片
-            {chance = 0.4,  item = "glasscutter"}, -- 玻璃刀
+            {chance = 0.6,  item = "thulecite"}, -- 铥矿
+            {chance = 0.6,  item = "thulecite_pieces"}, -- 铥矿碎片
+            {chance = 0.6,  item = "glasscutter"}, -- 玻璃刀
             --cloth
             {chance = 1.2,  item = "molehat"},
+            {chance = 1.2,  item = "deserthat"},
             --gem
+            {chance = 0.05, item = "opalpreciousgem"},
             {chance = 0.2,  item = "yellowgem"},
             {chance = 0.2,  item = "orangegem"},
             {chance = 0.2,  item = "greengem"},
@@ -225,12 +297,13 @@ local function AddDays(inst, possible_loot)
             {chance = 0.4,  item = "orangeamulet"},
             {chance = 0.4,  item = "greenamulet"},
             --important
-            {chance = 0.55, item = "honeycomb"}, -- 蜜脾
-            {chance = 0.11, item = "beeswax"}, -- 蜂蜡
-            {chance = 0.1,  item = "armordragonfly"},
-            {chance = 0.07, item = "hivehat"},
-            {chance = 0.04, item = "bundlewrap_blueprint"},
-            {chance = 0.07, item = "mandrake"},
+            {chance = 0.15, item = "dragon_scales"},
+            {chance = 0.05, item = "dragonflyfurnace_blueprint"},
+            {chance = 0.15, item = "spidereggsack"},
+            {chance = 0.2,  item = "armordragonfly"},
+            {chance = 0.05, item = "bundlewrap_blueprint"},
+            {chance = 0.15, item = "mandrake"},
+            {chance = 0.15, item = "mast_malbatross_item"},
         }
         for _, loot in ipairs(EXTRA_LOOT) do
             table.insert(possible_loot, loot)
@@ -239,34 +312,37 @@ local function AddDays(inst, possible_loot)
     if TheWorld.state.cycles > 90 then
         local EXTRA_LOOT = {
             -- seeds
-            {chance = 0.4,  item = "durian_seeds"}, --榴莲
-            {chance = 0.4,  item = "asparagus_seeds"}, --芦笋
-            {chance = 0.4,  item = "pomegranate_seeds"}, --石榴
-            {chance = 0.4,  item = "durian_cooked"}, -- 榴莲熟
-            {chance = 0.4,  item = "asparagus_cooked"}, -- 芦笋熟
-            {chance = 0.4,  item = "pomegranate_cooked"}, -- 石榴熟
+            {chance = 0.8,  item = "durian_seeds"}, --榴莲
+            {chance = 0.8,  item = "asparagus_seeds"}, --芦笋
+            {chance = 0.8,  item = "pomegranate_seeds"}, --石榴
+            {chance = 0.8,  item = "durian_cooked"}, -- 榴莲熟
+            {chance = 0.8,  item = "asparagus_cooked"}, -- 芦笋熟
+            {chance = 0.8,  item = "pomegranate_cooked"}, -- 石榴熟
             {chance = 0.4,  item = "rock_avocado_fruit_sprout"},
             {chance = 0.4,  item = "bullkelp_beachedroot"},
             -- vege
-            {chance = 0.4,  item = "durian"},
-            {chance = 0.4,  item = "asparagus"},
-            {chance = 0.4,  item = "pomegranate"},
+            {chance = 0.8,  item = "durian"},
+            {chance = 0.8,  item = "asparagus"},
+            {chance = 0.8,  item = "pomegranate"},
             --animals
             {chance = 1.111, item = "canary"}, --金丝雀
             {chance = 0.333, item = "oceanfish_medium_8_inv"}, --冰鲷鱼
             {chance = 0.333, item = "oceanfish_small_8_inv"}, --炽热太阳鱼
             {chance = 0.667, item = "oceanfish_small_9_inv"}, --口水鱼
             --important
-            {chance = 0.07, item = "bootleg"},
-            {chance = 0.07, item = "staff_tornado"},
+            {chance = 0.15, item = "bootleg"},
+            {chance = 0.15, item = "staff_tornado"},
             {chance = 0.01, item = "krampus_sack"},
-            {chance = 0.08, item = "featherfan"},
-            {chance = 0.07, item = "shroom_skin"},
-            {chance = 0.02, item = "sleepbomb"},
+            {chance = 0.15, item = "featherfan"},
+            {chance = 0.15, item = "eyeturret_item"},
+            {chance = 0.15, item = "shroom_skin"},
+            {chance = 0.05, item = "sleepbomb"},
             {chance = 0.04, item = "mushroom_light_blueprint"},
             {chance = 0.04, item = "mushroom_light2_blueprint"},
             {chance = 0.04, item = "townportal_blueprint"},
             {chance = 0.04, item = "trident_blueprint"},
+            {chance = 0.04, item = "trident"},
+            {chance = 0.24, item = "shadowheart"}, --暗影心房
         }
         for _, loot in ipairs(EXTRA_LOOT) do
             table.insert(possible_loot, loot)
@@ -275,27 +351,63 @@ local function AddDays(inst, possible_loot)
     if TheWorld.state.cycles > 120 then
         local EXTRA_LOOT = {
             -- seeds
-            {chance = 0.4,  item = "dragonfruit_seeds"},
-            {chance = 0.4,  item = "watermelon_seeds"},
-            {chance = 0.4,  item = "dragonfruit_cooked"},
-            {chance = 0.4,  item = "watermelon_cooked"},
-            {chance = 0.4,  item = "dragonfruit"},
-            {chance = 0.4,  item = "watermelon"},
-            {chance = 0.01,  item = "ancienttree_seed"},
+            {chance = 0.8,  item = "dragonfruit_seeds"},
+            {chance = 0.8,  item = "watermelon_seeds"},
+            {chance = 0.1,  item = "ancienttree_seed"},
+            --vege
+            {chance = 0.8,  item = "dragonfruit_cooked"},
+            {chance = 0.8,  item = "watermelon_cooked"},
+            {chance = 0.8,  item = "dragonfruit"},
+            {chance = 0.8,  item = "watermelon"},
+            {chance = 1.1,  item = "cactus_flower"},
+            {chance = 1.1,  item = "cactus_meat"},
+            {chance = 1.3,  item = "ancientfruit_nightvision"}, --夜莓
+            {chance = 1.1,  item = "succulent_picked"},
+            {chance = 1.1,  item = "mandrakesoup"},
             --meat
             {chance = 0.6,  item = "trunk_summer"},
+            {chance = 0.5,  item = "flowersalad"},
+            {chance = 0.5,  item = "plantmeat"},
+            {chance = 0.5,  item = "plantmeat_cooked"},
             --gem
             {chance = 1.5,  item = "moonrockidol"},
+            {chance = 1.5,  item = "ancientfruit_gem"}, --晶洞果
+            --tools
+            {chance = 0.5,  item = "oceanfishinglure_spoon_red"},
+            {chance = 0.5,  item = "oceanfishinglure_spoon_green"},
+            {chance = 0.5,  item = "oceanfishinglure_spinner_red"},
+            {chance = 0.5,  item = "oceanfishinglure_spinner_green"},
+            {chance = 0.5,  item = "oceanfishinglure_hermit_rain"},
+            {chance = 0.5,  item = "oceanfishinglure_hermit_snow"},
+            {chance = 0.5,  item = "oceanfishinglure_hermit_drowsy"},
+            {chance = 0.5,  item = "oceanfishinglure_hermit_heavy"},
+            {chance = 0.5,  item = "supertacklecontainer"},
+            {chance = 0.5,  item = "oceanfishingbobber_ball"},
+            {chance = 0.5,  item = "oceanfishingbobber_oval"},
+            {chance = 0.5,  item = "oceanfishingbobber_crow"},
+            {chance = 0.5,  item = "oceanfishingbobber_robin"},
+            {chance = 0.5,  item = "oceanfishingbobber_robin_winter"},
+            {chance = 0.5,  item = "oceanfishingbobber_canary"},
+            {chance = 0.5,  item = "oceanfishingbobber_goose"},
+            {chance = 0.5,  item = "oceanfishingbobber_malbatross"},
+            {chance = 0.5,  item = "chum"},
             --combat
-            {chance = 1.55, item = "gunpowder"},
+            {chance = 1.88, item = "gunpowder"},
+            --cloth
+            {chance = 1.25, item = "antlionhat"}, --刮地皮头盔
             -- important
-            {chance = 0.3,  item = "dreadstone"}, -- 绝望石
+            {chance = 0.6,  item = "dreadstone"}, -- 绝望石
             {chance = 0.1,  item = "moonstorm_static_item"}, -- 约束静电
+            {chance = 1.2,  item = "moonglass_charged"}, -- 注能月亮碎片
+            {chance = 1.2,  item = "moonstorm_spark"}, -- 月熠
+            {chance = 0.5,  item = "moonstorm_goggleshat"}, -- 星象护目镜
+            {chance = 0.08, item = "chestupgrade_stacksize"}, --弹性空间制造器
             {chance = 0.08, item = "icepack"},
-            {chance = 0.04, item = "red_mushroomhat_blueprint"},
-            {chance = 0.04, item = "green_mushroomhat_blueprint"},
-            {chance = 0.04, item = "blue_mushroomhat_blueprint"},
-            {chance = 1.111, item = "fireflies"},
+            {chance = 0.05, item = "red_mushroomhat_blueprint"},
+            {chance = 0.05, item = "green_mushroomhat_blueprint"},
+            {chance = 0.05, item = "blue_mushroomhat_blueprint"},
+            {chance = 0.09, item = "alterguardianhatshard"},
+            {chance = 1.25, item = "fireflies"},
         }
         for _, loot in ipairs(EXTRA_LOOT) do
             table.insert(possible_loot, loot)
@@ -325,19 +437,23 @@ local function MakeLoot(inst)
         {chance = 1,    item = "reviver"},
         {chance = 1,    item = "honey"},
         {chance = 1,    item = "stinger"},
+        {chance = 1,    item = "ash"},
+        {chance = 1,    item = "ghostflowerhat"},
         -- seed
         {chance = 1,    item = "seeds"},
-        {chance = 0.4,  item = "bullkelp_root"},
+        {chance = 0.4,  item = "bullkelp_beachedroot"},
         {chance = 0.8,  item = "dug_sapling"},
         {chance = 0.8,  item = "dug_grass"},
         {chance = 0.8,  item = "acorn"}, --桦栗果
+        {chance = 0.8,  item = "pinecone"},
         {chance = 0.8,  item = "dug_berrybush"},
-        {chance = 0.8,  item = "marsh_bush"},
+        {chance = 0.8,  item = "dug_marsh_bush"},
         {chance = 0.4,  item = "carrot_seeds"},
         {chance = 0.4,  item = "corn_seeds"},
         {chance = 0.4,  item = "potato_seeds"},
         {chance = 0.4,  item = "marblebean"},
         -- vege
+        {chance = 0.4,  item = "foliage"}, --蕨类
         {chance = 1,    item = "berries"},
         {chance = 1,    item = "carrot"},
         {chance = 1,    item = "carrot_cooked"},
@@ -348,25 +464,34 @@ local function MakeLoot(inst)
         {chance = 0.3,  item = "red_cap"},
         {chance = 0.3,  item = "green_cap"},
         {chance = 0.3,  item = "blue_cap"},
+        {chance = 0.6,  item = "shroombait"}, -- 酿夜帽
         -- meat
-        {chance = 0.4,  item = "foliage"},
         {chance = 0.4,  item = "rottenegg"},
+        {chance = 0.8,  item = "spoiled_fish"},
         {chance = 0.8,  item = "spoiled_fish_small"},
-        {chance = 1.2,  item = "monstermeat"},
         {chance = 0.6,  item = "fishmeat"},
         {chance = 0.6,  item = "batnose"},
         {chance = 0.6,  item = "barnacle"}, -- 藤壶
-        {chance = 0.01, item = "butter"},
-        {chance = 0.5,  item = "flowersalad"},
+        {chance = 0.15, item = "butter"},
         {chance = 0.5,  item = "batwing"},
-        {chance = 1,    item = "meat_dried"}, -- 晾肉干
+        {chance = 0.5,  item = "bird_egg"},
+        {chance = 0.6,  item = "meat_dried"}, -- 晾肉干
+        {chance = 0.6,  item = "smallmeat_dried"},
+        {chance = 1.2,  item = "monstermeat_dried"},
+        {chance = 1.2,  item = "bonesoup"}, --骨头汤
+        {chance = 0.6,  item = "drumstick"}, --鸟腿
         -- tools
-        {chance = 1,    item = "shovel"}, -- Shovel, 1
-        {chance = 1,    item = "goldenshovel"}, -- Regal Shovel, 1
+        {chance = 1,    item = "shovel"},
+        {chance = 1,    item = "goldenshovel"},
         {chance = 1,    item = "torch"},
         {chance = 1,    item = "hammer"},
+        {chance = 1,    item = "heatrock"},
         {chance = 1,    item = "messagebottleempty"},
+        {chance = 0.67, item = "featherpencil"},
         {chance = 0.67, item = "blowdart_pipe"}, --吹箭
+        {chance = 0.67, item = "blowdart_fire"}, --火焰吹箭
+        {chance = 0.67, item = "blowdart_sleep"}, --催眠吹箭
+        {chance = 0.67, item = "blowdart_yellow"}, --闪电吹箭
         {chance = 0.67, item = "boomerang"},
         {chance = 0.33, item = "razor"},
         {chance = 0.67, item = "sewing_kit"},
@@ -377,10 +502,10 @@ local function MakeLoot(inst)
         {chance = 0.67, item = "beemine"},
         {chance = 1,    item = "bugnet"}, --捕虫网
         {chance = 1,    item = "miniflare"}, --信号弹
-        {chance = 0.33, item = "chum"}, --鱼食
         {chance = 0.33, item = "fertilizer"}, --便便桶
         {chance = 0.22, item = "rabbitkinghorn"},
         {chance = 0.67, item = "oar_driftwood"},
+        {chance = 0.67, item = "oar"},
         {chance = 0.33, item = "wateringcan"},
         {chance = 0.33, item = "minerhat"},
         {chance = 0.33, item = "reskin_tool"},
@@ -388,6 +513,19 @@ local function MakeLoot(inst)
         {chance = 1,    item = "giftwrap"}, -- 空包
         {chance = 0.67, item = "record"}, -- 唱片
         {chance = 0.67, item = "phonograph"}, -- 留声机
+        --wall
+        {chance = 1.2,  item = "wall_hay_item"},
+        {chance = 1.2,  item = "wall_wood_item"},
+        {chance = 1.2,  item = "wall_stone_item"},
+        {chance = 1.2,  item = "fence_item"},
+        {chance = 1.2,  item = "minisign_item"},
+        {chance = 0.3,  item = "fence_gate_item"},
+        --turf
+        {chance = 1.5,  item = "turf_carpetfloor"},
+        {chance = 1.5,  item = "turf_carpetfloor2"},
+        {chance = 1.5,  item = "turf_woodfloor"},
+        {chance = 1.5,  item = "turf_checkerfloor"},
+        {chance = 1.5,  item = "turf_road"},
         --heal
         {chance = 0.33, item = "lifeinjector"},
         {chance = 1,    item = "healingsalve"},
@@ -443,7 +581,12 @@ local function MakeLoot(inst)
         {chance = 0.33, item = "feather_robin"},
         {chance = 1,    item = "beefalowool"},
         {chance = 0.67, item = "papyrus"},
+        {chance = 0.67, item = "tentaclespots"},
         {chance = 1,    item = "marble"},
+        {chance = 1,    item = "guano"},
+        {chance = 1,    item = "poop"},
+        {chance = 1,    item = "manrabbit_tail"},
+        {chance = 1,    item = "pigskin"},
         ---- animals
         {chance = 2.222, item = "spider"},
         {chance = 1.111, item = "spider_warrior"},
@@ -454,36 +597,40 @@ local function MakeLoot(inst)
         {chance = 1.111, item = "killerbee"},
         {chance = 1.111, item = "mosquito"},
         {chance = 1.111, item = "fireflies"},
+        {chance = 1.111, item = "crow"},
+        {chance = 1.111, item = "puffin"},
+        {chance = 1.111, item = "wobster_sheller_land"},
+        {chance = 1.111, item = "wobster_moonglass_land"},
         {chance = 1,    item = "bat"}, --洞穴地面都有
         {chance = 1.111, item = "pondeel"}, --活鳗鱼
         ---- toy
-        {chance = 0.11, item = "trinket_1"},
-        {chance = 0.11, item = "trinket_2"},
-        {chance = 0.11, item = "trinket_3"},
-        {chance = 0.11, item = "trinket_4"},
-        {chance = 0.11, item = "trinket_5"},
-        {chance = 0.11, item = "trinket_6"},
-        {chance = 0.11, item = "trinket_7"},
-        {chance = 0.11, item = "trinket_8"},
-        {chance = 0.11, item = "trinket_9"},
-        {chance = 0.11, item = "trinket_10"},
-        {chance = 0.11, item = "trinket_11"},
-        {chance = 0.11, item = "trinket_12"},
-        {chance = 0.11, item = "trinket_13"},
-        {chance = 0.11, item = "trinket_14"},
+        {chance = 0.22, item = "trinket_1"},
+        {chance = 0.22, item = "trinket_2"},
+        {chance = 0.22, item = "trinket_3"},
+        {chance = 0.22, item = "trinket_4"},
+        {chance = 0.22, item = "trinket_5"},
+        {chance = 0.22, item = "trinket_6"},
+        {chance = 0.22, item = "trinket_7"},
+        {chance = 0.22, item = "trinket_8"},
+        {chance = 0.22, item = "trinket_9"},
+        {chance = 0.22, item = "trinket_10"},
+        {chance = 0.22, item = "trinket_11"},
+        {chance = 0.22, item = "trinket_12"},
+        {chance = 0.22, item = "trinket_13"},
+        {chance = 0.22, item = "trinket_14"},
         -- {chance = 0.1, item = "trinket_15"}, --白色主教
         -- {chance = 0.1, item = "trinket_16"}, --黑色主教
-        {chance = 0.11, item = "trinket_17"},
-        {chance = 0.11, item = "trinket_18"},
-        {chance = 0.11, item = "trinket_19"},
-        {chance = 0.11, item = "trinket_20"},
-        {chance = 0.11, item = "trinket_21"},
-        {chance = 0.11, item = "trinket_22"},
-        {chance = 0.11, item = "trinket_23"},
-        {chance = 0.11, item = "trinket_24"},
-        {chance = 0.11, item = "trinket_25"},
-        {chance = 0.11, item = "trinket_26"},
-        {chance = 0.11, item = "trinket_27"},
+        {chance = 0.22, item = "trinket_17"},
+        {chance = 0.22, item = "trinket_18"},
+        {chance = 0.22, item = "trinket_19"},
+        {chance = 0.22, item = "trinket_20"},
+        {chance = 0.22, item = "trinket_21"},
+        {chance = 0.22, item = "trinket_22"},
+        {chance = 0.22, item = "trinket_23"},
+        {chance = 0.22, item = "trinket_24"},
+        {chance = 0.22, item = "trinket_25"},
+        {chance = 0.22, item = "trinket_26"},
+        {chance = 0.22, item = "trinket_27"},
         -- {chance = 0.1, item = "trinket_28"}, --白色战车
         -- {chance = 0.1, item = "trinket_29"}, --黑色战车
         -- {chance = 0.1, item = "trinket_30"}, --白色骑士
@@ -497,6 +644,8 @@ local function MakeLoot(inst)
     ---- 天数奖励
     AddDays(inst, possible_loot)
 
+    ---- 裂隙奖励
+    AddRift(inst, possible_loot)
 
     local totalchance = 0
     for m, n in ipairs(possible_loot) do
@@ -552,6 +701,10 @@ local function shadow_fn()
 		return inst
 	end
 
+    inst.AnimState:SetHaunted(true)
+    -- Lost toys are permanently haunted.
+    inst:AddTag("haunted")
+
 	inst.persists = false
 	inst:ListenForEvent("animover", function(inst)
 		if inst.AnimState:IsCurrentAnimation("dissipate") then
@@ -567,10 +720,19 @@ local function shadow_fn()
 
             local gift = SpawnPrefab("gift")
             local loots = MakeLoot(inst)
+            gift.AnimState:SetHaunted(true)
+            gift:AddTag("haunted")
 
             gift.components.unwrappable:WrapItems(loots)
             gift.Transform:SetPosition(inst.Transform:GetWorldPosition())
             SpawnPrefab("carnival_confetti_fx").Transform:SetPosition(gift.Transform:GetWorldPosition())
+
+            gift:DoTaskInTime(5, function()
+                if gift:IsValid() then
+                    gift.AnimState:SetHaunted(false)
+                    gift:RemoveTag("haunted")
+                end
+            end)
 
             inst:Hide()
 		end

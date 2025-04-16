@@ -8,8 +8,12 @@ local HIRE_PIPSPOOK = Action({priority=1, rmb=false, distance=1, mount_valid=tru
 HIRE_PIPSPOOK.id = "HIRE_PIPSPOOK"
 HIRE_PIPSPOOK.str = STRINGS.ACTIONS.HIRE_PIPSPOOK
 HIRE_PIPSPOOK.fn = function(act)
-    -- act.target.taskTime = 60
-    -- act.target._farm_task = act.target:DoPeriodicTask(1.6, doFarmWork)
+    if act.target.inTask then
+        return
+    end
+    act.target.inTask = true
+    act.target:AddTag("FX")
+	act.target:AddTag("NOCLICK")
     -- 干掉一个
     if act.invobject and act.invobject.components.stackable then
         act.invobject.components.stackable:Get():Remove()
@@ -31,6 +35,8 @@ HIRE_PIPSPOOK.fn = function(act)
             -- 延迟删除是因为墓碑马上会生成
             inst:DoTaskInTime(lagTime, function(inst)
                 if inst and inst:IsValid() then
+                    inst:RemoveTag("FX")
+                    inst:RemoveTag("NOCLICK")
                     inst:Remove()
                 end
             end)
@@ -57,7 +63,7 @@ AddAction(HIRE_PIPSPOOK)
 -- 定义动作选择器
 --args: inst, doer, target, actions, right
 AddComponentAction("USEITEM", "hiresmallghost", function(inst, doer, target, actions, right)
-    if doer and doer.components.skilltreeupdater and doer.components.skilltreeupdater:IsActivated("wendy_smallghost_3") and target.prefab == "smallghost" then
+    if doer and doer.components.skilltreeupdater and doer.components.skilltreeupdater:IsActivated("wendy_smallghost_3") and target.prefab == "smallghost" and target.inTask == nil then
         table.insert(actions, ACTIONS.HIRE_PIPSPOOK)
     end
 end)
