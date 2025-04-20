@@ -1,16 +1,22 @@
 GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})--GLOBAL 相关照抄
 
 Assets = {
-	-- Asset("ANIM", "anim/ui_beard_3x1.zip"),
+	Asset("ANIM", "anim/lotus.zip"),
 
-    -- Asset("IMAGE", "images/inventoryimages/boat_shield_item.tex"),
-	-- Asset("ATLAS", "images/inventoryimages/boat_shield_item.xml"),
+    Asset("IMAGE", "images/inventoryimages/lotusflower_gestalt.tex"),
+	Asset("ATLAS", "images/inventoryimages/lotusflower_gestalt.xml"),
 
 }
 
 PrefabFiles = {
 	-- 注册新的 prefab
     "smallghost_giver",
+    "abigail_gestalt_buff",
+    "abigail_gestalt_lily",
+    "abigail_lutos_mutate_fx",
+    "moondial_lily_fx",
+    "abigail_tether",
+    "abigail_tether_charge",
     -- 其他 prefab 名称...
 }
 
@@ -54,8 +60,8 @@ end
 if GetModConfigData("SisturnSetting") then
     modimport("scripts/sisturn_update.lua")
 end
-if GetModConfigData("GhostflowerSetting") then
-    modimport("scripts/ghostflower_update.lua")
+if GetModConfigData("CraftingSetting") then
+    modimport("scripts/crafting_update.lua")
 end
 if GetModConfigData("PartingSetting") then
     modimport("scripts/parting_update.lua")

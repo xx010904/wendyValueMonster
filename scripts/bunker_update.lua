@@ -77,11 +77,16 @@ local function OnGraveMoundUpdate(inst)
     inst:DoPeriodicTask(1, function()
         if inst.components.upgradeable then
             if inst.components.upgradeable.stage >= 2 then
-                print("inst.components.upgradeable.stage", inst.components.upgradeable.stage)
                 AddSleepingBag(inst)
             else
-                print("inst.components.upgradeable.stage", inst.components.upgradeable.stage)
                 RemoveSleepingBag(inst)
+            end
+        end
+        if inst.components.sleepingbag then
+            if inst.components.sleepingbag:InUse() then
+                TheWorld.components.decoratedgrave_ghostmanager:UnregisterDecoratedGrave(inst)
+            else
+                TheWorld.components.decoratedgrave_ghostmanager:RegisterDecoratedGrave(inst)
             end
         end
     end)

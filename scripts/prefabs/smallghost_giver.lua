@@ -165,7 +165,6 @@ local function AddDays(inst, possible_loot)
             {chance = 1,    item = "rock_avocado_fruit"}, --石果
             {chance = 1,    item = "cave_banana"},
             {chance = 1,    item = "wormlight"},
-            {chance = 1,    item = "ice"},
             {chance = 1,    item = "kelp_cooked"},
             {chance = 1,    item = "cutlichen"}, --苔藓
             --meat
@@ -434,6 +433,8 @@ local function MakeLoot(inst)
         {chance = 2,    item = "moonbutterfly"},
         {chance = 2,    item = "moonbutterflywings"},
         {chance = 2,    item = "spidergland"},
+        {chance = 2,    item = "ice"},
+        {chance = 1,    item = "bluemooneye"},
         {chance = 1,    item = "reviver"},
         {chance = 1,    item = "honey"},
         {chance = 1,    item = "stinger"},

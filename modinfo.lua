@@ -36,6 +36,7 @@ configuration_options =
         default = "default",
     },
 	{
+		--√
 		name = "PipspookSetting",
 		label = isCh and "小惊吓任务" or "Pipspook Task",
 		hover = isCh and "反过来给小惊吓安排任务。"
@@ -72,10 +73,11 @@ configuration_options =
 		default = true,
 	},
 	{
-		name = "GhostflowerSetting",
+		--√
+		name = "CraftingSetting",
 		label = isCh and "积累荣耀" or "Accumulated Glory",
-		hover = isCh and "每次从多年生植物祭坛复活都能累加一天的buff。打不过就再来一次吧。"
-			or "Each time you resurrect from the Perennial Altar, you can accumulate a day's buff. If you can't beat it, come back again.",
+		hover = isCh and "每次从多年生植物祭坛复活，姐妹情会激发阿比盖尔更强的保护欲，让她变得更强！"
+			or "Each resurrection at the Perennial Altar amplifies Abigail's power through her bond with her sister!",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -96,9 +98,10 @@ configuration_options =
 		default = true,
 	},
 	{
+		--√
 		name = "BunkerSetting",
 		label = isCh and "躲进墓碑" or "Tombstone Bunker",
-		hover = isCh and "可以钻进墓碑躲避。"
+		hover = isCh and "可以钻进墓碑躲起来。"
 			or "Can hide in the tombstone.",
 		options =
 		{
@@ -120,10 +123,11 @@ configuration_options =
 		default = true,
 	},
 	{
+		--√
 		name = "LunarSetting",
-		label = isCh and "虚影流转" or "Transient Gestalt",
-		hover = isCh and "虚影阿比盖尔只会爆发持续一小段时间。"
-			or "The Gestalt Abigail will only explode for a short time.",
+		label = isCh and "月灵莲花" or "Gestalt Lotus",
+		hover = isCh and "满月日可以在月晷旁边采集月灵莲花，月灵莲花能变异阿比盖尔为普通或者虚影形态。"
+			or "Gestalt Lotus can be gathered on full moon days near the Moon Dial. It can mutate Abigail between her normal and Gestalt forms.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
