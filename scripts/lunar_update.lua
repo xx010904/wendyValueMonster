@@ -2,13 +2,13 @@
 AddPrefabPostInit("moondial", function(inst)
 
     -- 在周围生成特效
-    local function createLily(inst)
+    local function createLotus(inst)
         local maxNum = 9 --采9朵莲
         local radius = 1.2
-        if inst.lily_fx == nil then
-            inst.lily_fx = {}
+        if inst.lotus_fx == nil then
+            inst.lotus_fx = {}
         end
-        for _, fx in ipairs(inst.lily_fx) do
+        for _, fx in ipairs(inst.lotus_fx) do
             if fx:IsValid() then
                 fx:Remove()  -- 删除现有特效
             end
@@ -16,10 +16,10 @@ AddPrefabPostInit("moondial", function(inst)
         for i = 1, maxNum do
             local angle = (i - 1) * (360 / maxNum) * DEGREES
             local offset = Vector3(math.cos(angle), 0, math.sin(angle)) * radius
-            local fx = SpawnPrefab("moondial_lily_fx")
+            local fx = SpawnPrefab("moondial_lotus_fx")
             local pos_x, pos_y, pos_z = inst.Transform:GetWorldPosition()
             fx.Transform:SetPosition(pos_x + offset.x, pos_y, pos_z + offset.z)
-            table.insert(inst.lily_fx, fx)
+            table.insert(inst.lotus_fx, fx)
         end
     end
 
@@ -28,13 +28,13 @@ AddPrefabPostInit("moondial", function(inst)
         -- -- 靠近特效
         -- inst:AddComponent("playerprox")
         -- inst.components.playerprox:SetDist(TUNING.GHOST_HUNT.TOY_FADE.IN, TUNING.GHOST_HUNT.TOY_FADE.IN)
-        -- inst.components.playerprox:SetOnPlayerNear(showLilyFx)
-        -- inst.components.playerprox:SetOnPlayerFar(clearLilyFx)
+        -- inst.components.playerprox:SetOnPlayerNear(showLotusFx)
+        -- inst.components.playerprox:SetOnPlayerFar(clearLotusFx)
 
         -- 生成莲花数量
         inst:WatchWorldState("moonphase", function(inst, phase)
             if TheWorld.state.moonphase == "full" then
-                createLily(inst)
+                createLotus(inst)
             end
         end)
     end

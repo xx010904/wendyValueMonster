@@ -79,4 +79,4 @@ local function fn()
     return inst
 end
 
-return Prefab("abigail_gestalt_lily", fn, {})
+return Prefab("abigail_gestalt_lotus", fn, {})

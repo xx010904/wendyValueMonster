@@ -2,21 +2,49 @@ GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) en
 
 Assets = {
 	Asset("ANIM", "anim/lotus.zip"),
+	Asset("ANIM", "anim/unstable_ghostlyelixir_revive.zip"),
+	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_revive.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_speed.zip"),
+	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_speed.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_attack.zip"),
+	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_attack.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_retaliation.zip"),
+	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_retaliation.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_shield.zip"),
+	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_shield.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_fastregen.zip"),
+	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_fastregen.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_slowregen.zip"),
+	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_slowregen.zip"),
 
     Asset("IMAGE", "images/inventoryimages/lotusflower_gestalt.tex"),
 	Asset("ATLAS", "images/inventoryimages/lotusflower_gestalt.xml"),
-
+    Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_revive.tex"),
+	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_revive.xml"),
+    Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_speed.tex"),
+	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_speed.xml"),
+    Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_attack.tex"),
+	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_attack.xml"),
+    Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_retaliation.tex"),
+	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_retaliation.xml"),
+    Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_shield.tex"),
+	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_shield.xml"),
+    Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_fastregen.tex"),
+	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_fastregen.xml"),
+    Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_slowregen.tex"),
+	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_slowregen.xml"),
 }
 
 PrefabFiles = {
 	-- 注册新的 prefab
     "smallghost_giver",
     "abigail_gestalt_buff",
-    "abigail_gestalt_lily",
+    "abigail_gestalt_lotus",
     "abigail_lutos_mutate_fx",
-    "moondial_lily_fx",
+    "moondial_lotus_fx",
     "abigail_tether",
     "abigail_tether_charge",
+    "unstable_ghostlyelixirs",
     -- 其他 prefab 名称...
 }
 

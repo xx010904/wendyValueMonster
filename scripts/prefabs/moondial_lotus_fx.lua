@@ -37,12 +37,12 @@ local function moveToPlayer(inst, player)
                 inst.shake_task = nil  -- 清除引用
             end
 
-            -- 给玩家的背包添加 abigail_gestalt_lily
+            -- 给玩家的背包添加 abigail_gestalt_lotus
             if player.components.inventory then
                 player.SoundEmitter:KillSound("shaking_sound")
                 player.SoundEmitter:PlaySound("meta5/abigail/gestalt_abigail_dashattack_hit")
                 SpawnPrefab("abigail_gestalt_hit_fx").Transform:SetPosition(player.Transform:GetWorldPosition())
-                player.components.inventory:GiveItem(SpawnPrefab("abigail_gestalt_lily"))
+                player.components.inventory:GiveItem(SpawnPrefab("abigail_gestalt_lotus"))
                 inst:Remove()
             end
         end
@@ -145,6 +145,6 @@ local function fn()
     return inst
 end
 
-return Prefab("moondial_lily_fx", fn, {})
+return Prefab("moondial_lotus_fx", fn, {})
 
 

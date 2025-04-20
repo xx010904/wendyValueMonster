@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0" name="swap_unstable_ghostlyelixir_shield">
+        <file id="0" name="swap_unstable_ghostlyelixir_shield/swap_chum_pouch-0.png" width="138" height="179" pivot_x="0.284172" pivot_y="0.297222"/>
+    </folder>
+    <entity id="0" name="unstable_ghostlyelixir_shield">
+        <animation id="0" name="BUILD" length="1000" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="swap_chum_pouch-0">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="2.215828" y="-0.797222" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="idle" length="134" interval="100">
+            <mainline>
+                <key id="0"/>
+                <key id="1" time="34"/>
+                <key id="2" time="67"/>
+                <key id="3" time="100"/>
+                <key id="4" time="134"/>
+            </mainline>
+        </animation>
+        <animation id="2" name="spin_loop" length="600" interval="100">
+            <mainline>
+                <key id="0"/>
+                <key id="1" time="34"/>
+                <key id="2" time="67"/>
+                <key id="3" time="100"/>
+                <key id="4" time="134"/>
+                <key id="5" time="167"/>
+                <key id="6" time="200"/>
+                <key id="7" time="234"/>
+                <key id="8" time="267"/>
+                <key id="9" time="300"/>
+                <key id="10" time="334"/>
+                <key id="11" time="367"/>
+                <key id="12" time="400"/>
+                <key id="13" time="434"/>
+                <key id="14" time="467"/>
+                <key id="15" time="500"/>
+                <key id="16" time="534"/>
+                <key id="17" time="567"/>
+                <key id="18" time="600"/>
+            </mainline>
+        </animation>
+        <animation id="3" name="used" length="700" interval="100">
+            <mainline>
+                <key id="0"/>
+                <key id="1" time="34"/>
+                <key id="2" time="67"/>
+                <key id="3" time="100"/>
+                <key id="4" time="134"/>
+                <key id="5" time="167"/>
+                <key id="6" time="200"/>
+                <key id="7" time="234"/>
+                <key id="8" time="267"/>
+                <key id="9" time="300"/>
+                <key id="10" time="334"/>
+                <key id="11" time="367"/>
+                <key id="12" time="400"/>
+                <key id="13" time="434"/>
+                <key id="14" time="467"/>
+                <key id="15" time="500"/>
+                <key id="16" time="534"/>
+                <key id="17" time="567"/>
+                <key id="18" time="600"/>
+                <key id="19" time="634"/>
+                <key id="20" time="667"/>
+                <key id="21" time="700"/>
+            </mainline>
+        </animation>
+    </entity>
+</spriter_data>
