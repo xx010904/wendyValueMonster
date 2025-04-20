@@ -2,6 +2,14 @@ GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) en
 
 Assets = {
 	Asset("ANIM", "anim/lotus.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_speed.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_slowregen.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_shield.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_revive.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_retaliation.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_fastregen.zip"),
+    Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_attack.zip"),
+
 	Asset("ANIM", "anim/unstable_ghostlyelixir_revive.zip"),
 	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_revive.zip"),
     Asset("ANIM", "anim/unstable_ghostlyelixir_speed.zip"),
@@ -45,6 +53,9 @@ PrefabFiles = {
     "abigail_tether",
     "abigail_tether_charge",
     "unstable_ghostlyelixirs",
+    "unstable_ghostlyelixir_clouds",
+    "unstable_ghostlyelixir_cloud_brusts",
+    "unstable_ghostlyelixir_buffs",
     -- 其他 prefab 名称...
 }
 
