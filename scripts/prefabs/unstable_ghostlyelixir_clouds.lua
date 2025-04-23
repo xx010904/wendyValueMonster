@@ -1,5 +1,16 @@
 local TICK_PERIOD = .5
 
+local SLEEPBOMB_DURATION =
+{
+    revive = TUNING.GHOSTLYELIXIR_REVIVE_DURATION,
+    speed = TUNING.GHOSTLYELIXIR_SPEED_DURATION,
+    attack = TUNING.GHOSTLYELIXIR_DAMAGE_DURATION,
+    retaliation = TUNING.GHOSTLYELIXIR_RETALIATION_DURATION,
+    shield = TUNING.GHOSTLYELIXIR_SHIELD_DURATION,
+    fastregen = TUNING.GHOSTLYELIXIR_FASTREGEN_DURATION,
+    slowregen = TUNING.GHOSTLYELIXIR_SLOWREGEN_DURATION
+}
+
 local OVERLAY_COORDS =
 {
     { 0,0,0,               1 },
@@ -59,8 +70,8 @@ local function CreateBase(isnew)
     inst.AnimState:SetFinalOffset(3)
     local scale = 1.35
     inst.Transform:SetScale(scale, scale, scale)
-    inst.AnimState:SetDeltaTimeMultiplier(0.55)
-    inst.AnimState:SetMultColour(0, 0, 0, .46)
+    inst.AnimState:SetDeltaTimeMultiplier(0.35)
+    inst.AnimState:SetMultColour(1, 1, 1, .05)
     inst.AnimState:SetHaunted(true)
 
     inst:AddTag("haunted")
@@ -68,7 +79,7 @@ local function CreateBase(isnew)
     if isnew then
         inst.AnimState:PlayAnimation("attack1_ground_loop")
 		-- inst.AnimState:SetFrame(12)
-        inst.AnimState:PushAnimation("attack3_ground_loop", false)
+        inst.AnimState:PushAnimation("attack3_ground_loop", true)
     else
         inst.AnimState:PlayAnimation("attack3_ground_loop")
     end
@@ -265,8 +276,7 @@ local function MakeUnstableGhostlyElixirCloud(name)
         inst:ListenForEvent("animover", OnAnimOver)
 
         inst:AddComponent("timer")
-        local duration = (target:HasTag("player") and inst.potion_tunings.DURATION_PLAYER) or inst.potion_tunings.DURATION
-        inst.components.timer:StartTimer("disperse", TUNING.SLEEPBOMB_DURATION)
+        inst.components.timer:StartTimer("disperse", SLEEPBOMB_DURATION[name])
 
         inst:ListenForEvent("timerdone", OnTimerDone)
 

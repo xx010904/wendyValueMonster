@@ -5,15 +5,12 @@ local assets =
 }
 
 local function OnHit(inst, owner, target)
-    SpawnPrefab("abigail_tether_charge_hit").Transform:SetPosition(target.Transform:GetWorldPosition())
-    local reset_fx = SpawnPrefab("yotb_confetti")
-    reset_fx.Transform:SetScale(0.4, 0.4, 0.4)
-    reset_fx.Transform:SetPosition(target.Transform:GetWorldPosition())
+    SpawnPrefab("abigail_tether_charge_hit").Transform:SetPosition(inst.Transform:GetWorldPosition())
     inst:Remove()
 end
 
 local function OnAnimOver(inst)
-    inst:DoTaskInTime(2, inst.Remove)
+    inst:DoTaskInTime(1.4, inst.Remove)
 end
 
 local function OnThrown(inst)
@@ -33,9 +30,9 @@ local function fn()
 
     inst.Transform:SetFourFaced()
 
-    inst.AnimState:SetBuild("butterfly_moon")
-    inst.AnimState:SetBank("butterfly")
-    inst.AnimState:PlayAnimation("flight_cycle")
+    inst.AnimState:SetBank("ghost")
+    inst.AnimState:SetBuild("ghost_abigail_build")
+	inst.AnimState:PlayAnimation("gestalt_attack_loop", true)
 
     --projectile (from projectile component) added to pristine state for optimization
     inst:AddTag("projectile")
@@ -49,7 +46,7 @@ local function fn()
     inst.persists = false
 
     inst:AddComponent("projectile")
-    inst.components.projectile:SetSpeed(-14)
+    inst.components.projectile:SetSpeed(-9)
     inst.components.projectile:SetHoming(false)
     inst.components.projectile:SetHitDist(0.01)
     inst.components.projectile:SetOnHitFn(OnHit)
@@ -58,7 +55,7 @@ local function fn()
 
     inst:DoTaskInTime(0.4, function()
         inst.components.projectile:SetSpeed(24)
-        inst.components.projectile:SetHitDist(2)
+        inst.components.projectile:SetHitDist(0.75)
     end)
 
     return inst
@@ -79,13 +76,41 @@ local function PlayHitSound(proxy)
     inst:Remove()
 end
 
+local function PushColour(inst, r, g, b)
+	if inst.target:IsValid() then
+		if inst.target.components.colouradder == nil then
+			inst.target:AddComponent("colouradder")
+		end
+		inst.target.components.colouradder:PushColour(inst, r, g, b, 0)
+	end
+end
+
+local function PopColour(inst)
+	inst.OnRemoveEntity = nil
+	if inst.target.components.colouradder ~= nil and inst.target:IsValid() then
+		inst.target.components.colouradder:PopColour(inst)
+	end
+end
+
+local function PushFlash(inst, target)
+	inst.target = target
+	PushColour(inst, .1, .1, .1)
+	inst:DoTaskInTime(4 * FRAMES, PushColour, .075, .075, .075)
+	inst:DoTaskInTime(7 * FRAMES, PushColour, .05, .05, .05)
+	inst:DoTaskInTime(9 * FRAMES, PushColour, .025, .025, .025)
+	inst:DoTaskInTime(10 * FRAMES, PopColour)
+	inst.OnRemoveEntity = PopColour
+end
+
 local function hit_fn()
     local inst = CreateEntity()
 
-    inst.entity:AddTransform()
-    inst.entity:AddNetwork()
+	inst.entity:AddTransform()
+	inst.entity:AddAnimState()
+	inst.entity:AddNetwork()
 
-    inst:AddTag("FX")
+	inst:AddTag("FX")
+	inst:AddTag("NOCLICK")
 
     --Dedicated server does not need to spawn the local fx
     if not TheNet:IsDedicated() then
@@ -93,16 +118,30 @@ local function hit_fn()
         inst:DoTaskInTime(0, PlayHitSound)
     end
 
+	inst.AnimState:SetBank("rose_petals_fx")
+	inst.AnimState:SetBuild("rose_petals_fx")
+	inst.AnimState:PlayAnimation("fall")
+    inst.Transform:SetScale(1.7, 1.7, 1.7)
+	inst.AnimState:SetSymbolMultColour("light_bar", 1, 1, 1, .5)
+	inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
+	inst.AnimState:SetLightOverride(.5)
+
     inst.entity:SetPristine()
+	if not TheWorld.ismastersim then
+		return inst
+	end
 
-    if not TheWorld.ismastersim then
-        return inst
-    end
+	-- if math.random() < 0.5 then
+	-- 	inst.AnimState:PlayAnimation("fall")
+	-- end
+    inst:DoTaskInTime(.85, inst.Remove)
 
-    inst.persists = false
-    inst:DoTaskInTime(.5, inst.Remove)
+	inst:ListenForEvent("animover", inst.Remove)
+	inst.persists = false
 
-    return inst
+	inst.PushFlash = PushFlash
+
+	return inst
 end
 
 return Prefab("abigail_tether_charge", fn, assets),

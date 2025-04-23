@@ -129,14 +129,14 @@ local function OnDeath(inst)
 end
 
 local ATTACK_MUST_TAGS = { "_combat" }
-local EXCLUDE_TAGS = { "INLIMBO", "notarget", "noattack", "abigail_tether", "invisible", "playerghost", "player", "companion" }
+local EXCLUDE_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget", "player", "companion", "invisible", "noattack", "hiding", "abigail", "abigail_tether" }
 AddPrefabPostInit("abigail", function(inst)
     if inst then
         inst:ListenForEvent("pre_health_setval", OnSisterBondChange)
         inst:ListenForEvent("death", OnDeath)
 
         -- 侧翼机枪
-        local attack_interval = 2.4
+        local attack_interval = 1.6
         inst:DoPeriodicTask(attack_interval, function()
             local player = inst._playerlink
             if player and player.components.ghostlybond and player.components.ghostlybond.summoned and player.sisterBond and player.sisterBond > 0 then
@@ -149,7 +149,7 @@ AddPrefabPostInit("abigail", function(inst)
 
                         -- 获取 tether 手上的武器并修改攻击力
                         local weapon = tether.components.combat:GetWeapon()
-                        local attack_power = player.sisterBond * 4 -- 计算攻击力
+                        local attack_power = player.sisterBond * 8/3 -- 计算攻击力
                         if weapon then
                             weapon.components.weapon:SetDamage(attack_power)
                         end

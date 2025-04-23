@@ -313,34 +313,6 @@ local potion_tunings =
 		fx_player = "ghostlyelixir_player_retaliation_fx",
 		dripfx_player = "ghostlyelixir_player_retaliation_dripfx",
 	},
-
-	ghostlyelixir_shadow =
-	{
-		DURATION = TUNING.SKILLS.WENDY.SHADOWELIXIR_DURATION,
-        FLOATER = {"small", 0.2, 0.7},
-		fx = "ghostlyelixir_shadow_fx",
-		dripfx = "ghostlyelixir_shadow_dripfx",
-		skill_modifier_long_duration = true,
-		super_elixir = true,
-	},
-	ghostlyelixir_lunar =
-	{
-		DURATION = TUNING.SKILLS.WENDY.LUNARELIXIR_DURATION,
-        FLOATER = {"small", 0.3, 0.8},
-		fx = "ghostlyelixir_lunar_fx",
-		dripfx = "ghostlyelixir_lunar_dripfx",
-		ONAPPLY = function(inst, target)
-			target.components.planardamage:RemoveBonus(inst, "ghostlyelixir_lunarbonus")
-			local bonus_amount = (target:HasTag("gestalt") and TUNING.SKILLS.WENDY.LUNARELIXIR_DAMAGEBONUS_GESTALT)
-				or TUNING.SKILLS.WENDY.LUNARELIXIR_DAMAGEBONUS
-			target.components.planardamage:AddBonus(inst, bonus_amount, "ghostlyelixir_lunarbonus")
-		end,
-		ONDETACH = function(inst, target)
-			target.components.planardamage:RemoveBonus(inst, "ghostlyelixir_lunarbonus")
-		end,
-		skill_modifier_long_duration = true,
-		super_elixir = true,
-	},
 }
 
 local function OnTimerDone(inst, data)
@@ -370,6 +342,9 @@ local function buff_DripFx(inst, target)
 end
 
 local function OnAttached(inst, target)
+	local duration = inst.potion_tunings.DURATION
+	inst.components.timer:StartTimer("explode", duration * 0.25 + 0.25)
+
     inst.entity:SetParent(target.entity)
     inst.Transform:SetPosition(0, 0, 0) --in case of loading
 
@@ -387,7 +362,8 @@ local function OnAttached(inst, target)
         inst.task = inst:DoPeriodicTask(inst.potion_tunings.TICK_RATE, buff_OnTick, nil, target)
     end
 
-    inst.driptask = inst:DoPeriodicTask(TUNING.GHOSTLYELIXIR_DRIP_FX_DELAY, buff_DripFx, TUNING.GHOSTLYELIXIR_DRIP_FX_DELAY * 0.25, target)
+	-- 滴落效果
+    inst.driptask = inst:DoPeriodicTask(1.3, buff_DripFx, 0.44, target)
 
     inst:ListenForEvent("death", function()
         inst.components.debuff:Stop()
@@ -400,19 +376,20 @@ local function OnAttached(inst, target)
 end
 
 local function OnExtended(inst, target)
-
+	local duration = inst.potion_tunings.DURATION
 	inst.components.timer:StopTimer("explode")
-	inst.components.timer:StartTimer("explode", 10)
+	inst.components.timer:StartTimer("explode", duration * 0.25 + 0.25)
 
 	if inst.task ~= nil then
 		inst.task:Cancel()
 		inst.task = inst:DoPeriodicTask(inst.potion_tunings.TICK_RATE, buff_OnTick, nil, target)
 	end
 
-	if inst.potion_tunings.fx ~= nil and not target.inlimbo and not target:HasTag("player") then
-		local fx = SpawnPrefab(inst.potion_tunings.fx)
-	    fx.entity:SetParent(target.entity)
-	end
+	-- 多次特效
+	-- if inst.potion_tunings.fx ~= nil and not target.inlimbo and not target:HasTag("player") then
+	-- 	local fx = SpawnPrefab(inst.potion_tunings.fx)
+	--     fx.entity:SetParent(target.entity)
+	-- end
 
 	inst.slowed = nil
 end
@@ -464,9 +441,7 @@ local function MakeUnstableBuff(name)
         inst.components.debuff:SetExtendedFn(OnExtended)
 
         inst:AddComponent("timer")
-        inst.components.timer:StartTimer("explode", 10)
         inst:ListenForEvent("timerdone", OnTimerDone)
-        
 
         return inst
     end
