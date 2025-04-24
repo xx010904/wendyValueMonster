@@ -132,7 +132,7 @@ AddAction(BUNK)
 -- 定义动作选择器
 --args: inst, doer, target, actions, right
 AddComponentAction("SCENE", "gravebunker", function(inst, doer, actions, right)
-    if doer:HasTag("player") and not inst:HasTag("hashider") and inst:HasTag("gravebunker") then
+    if doer:HasTag("player") and not inst:HasTag("hashider") and inst:HasTag("gravebunker") and not inst:HasTag("bunkerCD") then
         table.insert(actions, ACTIONS.BUNK)
     end
 end)
@@ -158,32 +158,13 @@ local function SetSleeperSleepState(inst)
     inst:ShowActions(false)
 end
 
-local function SetSleeperAwakeState(inst)
-    if inst.components.grue ~= nil then
-        inst.components.grue:RemoveImmunity("sleeping")
-    end
-    if inst.components.talker ~= nil then
-        inst.components.talker:StopIgnoringAll("sleeping")
-    end
-    if inst.components.firebug ~= nil then
-        inst.components.firebug:Enable()
-    end
-    if inst.components.playercontroller ~= nil then
-        inst.components.playercontroller:EnableMapControls(true)
-        inst.components.playercontroller:Enable(true)
-    end
-    inst:OnWakeUp()
-    inst.components.inventory:Show()
-    inst:ShowActions(true)
-end
-
-
 AddStategraphState('wilson',
     State{
         name = "bunker",
         tags = { "bunker", "busy", "silentmorph" },
 
         onenter = function(inst)
+            inst.components.health:SetInvincible(true)
             inst.components.locomotor:Stop()
 
             local target = inst:GetBufferedAction().target --gravestone
@@ -215,7 +196,6 @@ AddStategraphState('wilson',
                 inst.sg:GoToState("idle", true)
             else
                 inst:PerformBufferedAction()
-                inst.components.health:SetInvincible(true)
                 inst:Hide()
                 if inst.Physics ~= nil then
                     inst.Physics:Teleport(inst.Transform:GetWorldPosition())
@@ -232,14 +212,10 @@ AddStategraphState('wilson',
         end,
 
         onexit = function(inst)
-            inst.components.health:SetInvincible(false)
-            inst:Show()
-            if inst.DynamicShadow ~= nil then
-                inst.DynamicShadow:Enable(true)
-            end
             local gravestone = inst.usingbunker
-            gravestone.components.gravebunker:DoLeave(inst)
-            SetSleeperAwakeState(inst)
+            if gravestone then
+                gravestone.components.gravebunker:DoLeave(inst, false)
+            end
         end,
     }
 )
