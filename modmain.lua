@@ -46,12 +46,16 @@ Assets = {
 PrefabFiles = {
 	-- 注册新的 prefab
     "smallghost_giver",
+    --
     "abigail_gestalt_buff",
     "abigail_gestalt_lotus",
     "abigail_lutos_mutate_fx",
     "moondial_lotus_fx",
+    --
     "abigail_tether",
     "abigail_tether_charge",
+    "soul_wave",
+    --
     "unstable_ghostlyelixirs",
     "unstable_ghostlyelixir_clouds",
     "unstable_ghostlyelixir_cloud_brusts",

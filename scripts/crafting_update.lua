@@ -117,13 +117,52 @@ AddPrefabPostInit("wendy", function(inst)
     end
 end)
 
+function SpawnSoulWaves(position, numWaves, waveSpeed, idleTime)
+    local wavePrefab = "soul_wave"
+    waveSpeed = waveSpeed or 6
+    idleTime = idleTime or 5
+    local totalAngle = (numWaves == 1 and 0) or 360
+
+    local anglePerWave = (totalAngle == 0 and 0) or
+            (totalAngle == 360 and totalAngle/numWaves) or
+            totalAngle/(numWaves - 1)
+
+    local startAngle = math.random(-180, 180)
+    local spawn_dist = 1
+
+    local wave_spawned = false
+    for i = 0, numWaves - 1 do
+        local angle = (startAngle - (totalAngle/2)) + (i * anglePerWave)
+        local offset_direction = Vector3(math.cos(angle*DEGREES), 0, -math.sin(angle*DEGREES)):Normalize()
+        local wavepos = position + (offset_direction * spawn_dist)
+
+        wave_spawned = true
+
+        local wave = SpawnPrefab(wavePrefab)
+        wave.Transform:SetPosition(wavepos:Get())
+        wave.Transform:SetRotation(angle)
+        if type(waveSpeed) == "table" then
+            wave.Physics:SetMotorVel(waveSpeed[1], waveSpeed[2], waveSpeed[3])
+        else
+            wave.Physics:SetMotorVel(waveSpeed, 0, 0)
+        end
+        wave.idle_time = idleTime
+    end
+
+    -- Let our caller know if we actually spawned at least 1 wave.
+    return wave_spawned
+end
+
 local function OnDeath(inst)
     local leader = inst._playerlink
     if leader and leader.prefab == "wendy" and leader.sisterBond then
         if leader.sisterBond > 0 then
             local reduction = math.ceil(leader.sisterBond / 3)
             -- print("阿比盖尔死亡reduction：", reduction)
-            leader.sisterBond = leader.sisterBond - math.max(1, reduction)
+            -- leader.sisterBond = leader.sisterBond - math.max(1, reduction)
+
+            --释放灵魂
+            SpawnSoulWaves(inst:GetPosition(), 10, 5, 4)
         end
     end
 end
