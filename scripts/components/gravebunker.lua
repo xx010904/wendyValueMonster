@@ -7,7 +7,7 @@ function GraveBunker:OnRemoveFromEntity()
     self.inst:RemoveTag("gravebunker")
 end
 
-local radius = 4.5 -- 定义半径
+local radius = 4 -- 定义半径
 local totalScares = 4
 function GraveBunker:DoBunk(doer)
 	self.inst:RemoveTag("gravediggable")
@@ -46,17 +46,22 @@ function GraveBunker:DoBunk(doer)
         -- 创建大惊吓实例
         local scare = SpawnPrefab("graveguard_ghost")
         if scare then
-            -- 去掉大惊吓的脑子和鬼魂属性
+            -- 去掉大惊吓的脑子
             scare:SetBrain(nil)
-			scare:RemoveTag("ghost")
-			scare:RemoveTag("graveghost")
 
 			if doer.components.skilltreeupdater and doer.components.skilltreeupdater:IsActivated("wendy_makegravemounds") then
 				if scare.components.health then
-					scare.components.health:SetMaxHealth(TUNING.ABIGAIL_HEALTH_LEVEL3)
+					scare.components.health:SetMaxHealth(TUNING.ABIGAIL_HEALTH_LEVEL3 / 0.75)
 				end
 				if scare.components.combat then
-					scare.components.combat:SetDefaultDamage(TUNING.ABIGAIL_DAMAGE.night)
+					scare.components.combat:SetDefaultDamage(TUNING.ABIGAIL_DAMAGE.night / 25)
+				end
+            else
+                if scare.components.health then
+					scare.components.health:SetMaxHealth(TUNING.ABIGAIL_HEALTH_LEVEL2 / 0.75)
+				end
+				if scare.components.combat then
+					scare.components.combat:SetDefaultDamage(TUNING.ABIGAIL_DAMAGE.dusk / 25)
 				end
 			end
             -- 设置初始位置
@@ -73,14 +78,15 @@ function GraveBunker:DoBunk(doer)
             -- 设定速度
             if scare.components.locomotor then
                 scare.components.locomotor:StopMoving()
-                scare.components.locomotor:SetExternalSpeedMultiplier(scare, "soldierspeedboost", 3)
+                scare.components.locomotor:SetExternalSpeedMultiplier(scare, "soldierspeedboost", 1.5)
             end
 
             -- 监听死亡事件
             scare:ListenForEvent("death", function()
                 if scare:IsValid() then
                     -- 调用 DoLeave 方法
-                    self:DoLeave(doer, true)
+                    self.inst:AddTag("hasScareDeath")
+                    self:DoLeave(doer)
                 end
             end)
 
@@ -98,7 +104,7 @@ function GraveBunker:DoBunk(doer)
         for i, scare in ipairs(self.inst.scares) do
             local index = i - 1 -- 从 0 开始索引
             local FORMATION_RADIUS = radius -- 使用定义的半径
-            local FORMATION_ROTATION_SPEED = 2 -- 设置旋转速度
+            local FORMATION_ROTATION_SPEED = 0.5 -- 设置旋转速度
             local theta = (index / maxScares) * (2 * math.pi) + time * FORMATION_ROTATION_SPEED -- 计算角度
 
             -- 获取中心点位置
@@ -114,22 +120,38 @@ function GraveBunker:DoBunk(doer)
                 scare:FacePoint(target_x, center_y, target_z) -- 朝向目标位置
             end
 
+            local scarex, scarey, scarez = scare.Transform:GetWorldPosition()
+            local scareradius = 4 -- 伤害范围
+            local AREAATTACK_MUST_TAGS = { "_combat" }
+            local AREA_EXCLUDE_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget", "player", "companion", "invisible", "noattack", "hiding", "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature" }
+            local targets = TheSim:FindEntities(scarex, scarey, scarez, scareradius, AREAATTACK_MUST_TAGS, AREA_EXCLUDE_TAGS)
+            for _, target in ipairs(targets) do
+                if target.components.health and scare.components.combat then
+                    scare.components.combat:DoAttack(target)
+                end
+            end
             -- print("Moved graveguard_ghost #", i, "to:", scare.Transform:GetWorldPosition())
         end
     end
 
-    -- 每帧更新大惊吓的位置
+    -- 更新大惊吓的位置
     self.scaretask = self.inst:DoPeriodicTask(0.1, MoveScares)
 
-    -- 每秒消耗 sanity
-    self.sanitytask = doer:DoPeriodicTask(1, function()
+    -- 消耗 sanity
+    if doer and doer.components.sanity then
+        if doer.components.skilltreeupdater and doer.components.skilltreeupdater:IsActivated("wendy_makegravemounds") then
+            doer.components.sanity:DoDelta(-5)
+        else
+            doer.components.sanity:DoDelta(-10)
+        end
+    end
+    self.sanitytask = doer:DoPeriodicTask(1.33, function()
         if doer and doer.components.sanity then
 			if doer.components.skilltreeupdater and doer.components.skilltreeupdater:IsActivated("wendy_makegravemounds") then
-				doer.components.sanity:DoDelta(-1)
+				doer.components.sanity:DoDelta(-2.5)
 			else
 				doer.components.sanity:DoDelta(-5)
 			end
-            -- print("Sanity reduced by 1, current sanity:", doer.components.sanity.current)
         end
     end)
     -- print("Scare task created to move ghosts.")
@@ -154,9 +176,10 @@ local function SetSleeperAwakeState(inst)
     inst:ShowActions(true)
 end
 
-local bunkCd = 10
-function GraveBunker:DoLeave(doer, isHard)
+
+function GraveBunker:DoLeave(doer)
     -- print("DoLeave called by:", doer.prefab)
+    doer.usingbunker = nil
 	self.inst:AddTag("gravediggable")
 
 	-- 设置更多冷却时间
@@ -171,18 +194,21 @@ function GraveBunker:DoLeave(doer, isHard)
 		self.cdtask = nil
 	end
 
-	local cd = isHard and (bunkCd * 10) or bunkCd
-	self.cdtask = self.inst:DoTaskInTime(cd, function()
+    local bunkCd = 10
+    if self.inst:HasTag("hasScareDeath") then
+        bunkCd = 60
+    end
+    self.cdtask = self.inst:DoTaskInTime(bunkCd, function()
 		self.inst.AnimState:SetHaunted(false)
 		self.inst:RemoveTag("haunted")
 		self.inst:RemoveTag("bunkerCD")
+        self.inst:RemoveTag("hasScareDeath")
 	end)
 
-	if isHard then
-		doer.sg:GoToState("washed_ashore")
+	if self.inst:HasTag("hasScareDeath") then
+		doer.sg:GoToState("getoffbunker")
 	end
 
-    doer.usingbunker = nil
     self.inst:RemoveTag("hashider")
 
     if self.scaretask then
@@ -199,29 +225,21 @@ function GraveBunker:DoLeave(doer, isHard)
 	if self.inst.scares then
 		for _, scare in ipairs(self.inst.scares) do
 			if scare and scare:IsValid() then
-				scare.components.locomotor:StopMoving()
-				-- 播放 dissipate 动画
-				scare.AnimState:PlayAnimation("dissipate")
-
-				-- 在动画结束后处理逻辑
-				scare:ListenForEvent("animover", function()
-					if scare and scare:IsValid() then
-						if scare.AnimState:IsCurrentAnimation("dissipate") then
-							-- 设置大惊吓为透明
-							scare.AnimState:SetMultColour(1, 1, 1, 0) -- RGBA，最后的 0 代表完全透明
-							scare:Remove() -- 移除大惊吓
-						else
-							scare.AnimState:PlayAnimation("dissipate")
-						end
-					end
-				end)
+                scare.components.locomotor:Stop()
+                scare.components.locomotor:Clear()
+                scare.AnimState:PlayAnimation("dissipate")
+                scare:ListenForEvent("animover", scare.Remove)
 			end
 		end
 	end
 
 	self.inst.scares = {} -- 清空记录
 
-	doer:DoTaskInTime(1, function (inst)
+    if self.inst.Physics ~= nil then
+        doer.Physics:Teleport(self.inst.Transform:GetWorldPosition())
+    end
+    -- 暂时无敌
+	doer:DoTaskInTime(0.5, function (inst)
 		inst.components.health:SetInvincible(false)
 	end)
 	doer:Show()

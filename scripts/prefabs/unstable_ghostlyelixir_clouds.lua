@@ -1,6 +1,6 @@
 local TICK_PERIOD = .5
 
-local SLEEPBOMB_DURATION =
+local CLOUD_DURATION =
 {
     revive = TUNING.GHOSTLYELIXIR_REVIVE_DURATION,
     speed = TUNING.GHOSTLYELIXIR_SPEED_DURATION,
@@ -229,8 +229,13 @@ local function DoElixirBuff(inst, name)
     local range = 3.5
     local t = GetTime()
     local ents = TheSim:FindEntities(x, y, z, range, nil, CANT_TAGS, ONEOF_TAGS)
-    for i, ent in ipairs(ents) do
-		ent:AddDebuff("unstable_ghostlyelixir_buff_"..name, "unstable_ghostlyelixir_buff_"..name)
+
+    -- 就是为了叠加不同名buff
+    local unstableBuffName = "unstable_ghostlyelixir_buff_" .. name
+    for _, ent in ipairs(ents) do
+        if not ent:HasDebuff(unstableBuffName) then
+            ent:AddDebuff(unstableBuffName, unstableBuffName)
+        end
     end
 end
 
@@ -276,7 +281,7 @@ local function MakeUnstableGhostlyElixirCloud(name)
         inst:ListenForEvent("animover", OnAnimOver)
 
         inst:AddComponent("timer")
-        inst.components.timer:StartTimer("disperse", SLEEPBOMB_DURATION[name])
+        inst.components.timer:StartTimer("disperse", CLOUD_DURATION[name] / 50 + 1.4) -- 短暂持续的云
 
         inst:ListenForEvent("timerdone", OnTimerDone)
 

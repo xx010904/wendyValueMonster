@@ -35,3 +35,17 @@ STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_BACK = {
     "可否告诉我，她的灵魂在哪里？",
     "我只想再次感受她的温暖，哪怕是片刻。",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_GET_OFF_BUNKER = {
+    "请不要让我离开，我还没准备好。",
+    "我不想被赶走，这里是我刚装饰过的。",
+    "再给我一点时间，我还没见到阿比。",
+    "再等等我一会儿，我还没见到阿比盖尔呢。",
+    "我好像见到阿比盖尔了。",
+    "尽管阴暗潮湿，我还是活下来了。",
+}
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_GET_OFF_BUNKER = {
+    "那些恶鬼又回来了。",
+    "呆在潮湿又阴暗的地方真让人反感。",
+    "这里又潮湿又阴暗。",
+    "阴暗潮湿的坟墓令人不适",
+}

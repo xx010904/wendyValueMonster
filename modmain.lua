@@ -60,6 +60,9 @@ PrefabFiles = {
     "unstable_ghostlyelixir_clouds",
     "unstable_ghostlyelixir_cloud_brusts",
     "unstable_ghostlyelixir_buffs",
+    --
+    "wendy_last_food",
+    "wendy_last_food_buff",
     -- 其他 prefab 名称...
 }
 

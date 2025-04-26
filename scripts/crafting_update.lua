@@ -1,6 +1,29 @@
 local healthBound = 50
 local speedBound = 0.05
 
+function SpawnSoulWaves(position, numWaves, waveSpeed, spawn_dist)
+    local totalAngle = 360
+    local anglePerWave = totalAngle/numWaves
+    local startAngle = math.random(-180, 180)
+
+    local wave_spawned = false
+    for i = 0, numWaves - 1 do
+        local angle = (startAngle - (totalAngle/2)) + (i * anglePerWave)
+        local offset_direction = Vector3(math.cos(angle*DEGREES), 0, -math.sin(angle*DEGREES)):Normalize()
+        local wavepos = position + (offset_direction * spawn_dist)
+
+        wave_spawned = true
+
+        local wave = SpawnPrefab("soul_wave")
+        wave.Transform:SetPosition(wavepos:Get())
+        wave.Transform:SetRotation(angle)
+        wave.Physics:SetMotorVel(waveSpeed, 0, 0)
+    end
+
+    -- Let our caller know if we actually spawned at least 1 wave.
+    return wave_spawned
+end
+
 -- 多年生植物祭坛复活事件监听
 local function onactivateresurrection(inst, resurrect_target)
     -- print("Resurrection activated!", inst, resurrect_target)
@@ -11,6 +34,8 @@ local function onactivateresurrection(inst, resurrect_target)
             resurrect_target.sisterBond = 1
         end
 
+        --回收灵魂
+        local wave_spawned = SpawnSoulWaves(inst:GetPosition(), resurrect_target.sisterBond + 5, -3.5, 12)
         -- print("Resurrection sisterBond!", resurrect_target.sisterBond)
     end
 end
@@ -117,58 +142,22 @@ AddPrefabPostInit("wendy", function(inst)
     end
 end)
 
-function SpawnSoulWaves(position, numWaves, waveSpeed, idleTime)
-    local wavePrefab = "soul_wave"
-    waveSpeed = waveSpeed or 6
-    idleTime = idleTime or 5
-    local totalAngle = (numWaves == 1 and 0) or 360
-
-    local anglePerWave = (totalAngle == 0 and 0) or
-            (totalAngle == 360 and totalAngle/numWaves) or
-            totalAngle/(numWaves - 1)
-
-    local startAngle = math.random(-180, 180)
-    local spawn_dist = 1
-
-    local wave_spawned = false
-    for i = 0, numWaves - 1 do
-        local angle = (startAngle - (totalAngle/2)) + (i * anglePerWave)
-        local offset_direction = Vector3(math.cos(angle*DEGREES), 0, -math.sin(angle*DEGREES)):Normalize()
-        local wavepos = position + (offset_direction * spawn_dist)
-
-        wave_spawned = true
-
-        local wave = SpawnPrefab(wavePrefab)
-        wave.Transform:SetPosition(wavepos:Get())
-        wave.Transform:SetRotation(angle)
-        if type(waveSpeed) == "table" then
-            wave.Physics:SetMotorVel(waveSpeed[1], waveSpeed[2], waveSpeed[3])
-        else
-            wave.Physics:SetMotorVel(waveSpeed, 0, 0)
-        end
-        wave.idle_time = idleTime
-    end
-
-    -- Let our caller know if we actually spawned at least 1 wave.
-    return wave_spawned
-end
-
 local function OnDeath(inst)
     local leader = inst._playerlink
     if leader and leader.prefab == "wendy" and leader.sisterBond then
         if leader.sisterBond > 0 then
+            --释放灵魂
+            local wave_spawned = SpawnSoulWaves(inst:GetPosition(), leader.sisterBond + 5, 3.5, 1)
+
             local reduction = math.ceil(leader.sisterBond / 3)
             -- print("阿比盖尔死亡reduction：", reduction)
-            -- leader.sisterBond = leader.sisterBond - math.max(1, reduction)
-
-            --释放灵魂
-            SpawnSoulWaves(inst:GetPosition(), 10, 5, 4)
+            leader.sisterBond = leader.sisterBond - math.max(1, reduction)
         end
     end
 end
 
 local ATTACK_MUST_TAGS = { "_combat" }
-local EXCLUDE_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget", "player", "companion", "invisible", "noattack", "hiding", "abigail", "abigail_tether" }
+local EXCLUDE_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget", "player", "companion", "invisible", "noattack", "hiding", "abigail", "abigail_tether", "shadowcreature" }
 AddPrefabPostInit("abigail", function(inst)
     if inst then
         inst:ListenForEvent("pre_health_setval", OnSisterBondChange)

@@ -8,12 +8,14 @@ local elixir_suffix_map = {
     ghostlyelixir_speed = "speed",
     ghostlyelixir_retaliation = "retaliation"
 }
+
 ---- 给所有原版药剂加上组件
 for elixir, _ in pairs(elixir_suffix_map) do
     AddPrefabPostInit(elixir, function(inst)
         inst:AddComponent("unstableghostlyelixirbrewer")
     end)
 end
+
 ---- 调制一瓶不稳定的化合物 动作
 -- 定义
 local BREW_UNSTABLE = Action({priority=1, rmb=true, distance=1, mount_valid=true })

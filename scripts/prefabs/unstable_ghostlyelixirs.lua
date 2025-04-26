@@ -117,7 +117,7 @@ local function MakeUnstableGhostlyElixir(name)
         inst.components.weapon:SetDamage(TUNING.UNARMED_DAMAGE)
 
         inst:AddComponent("perishable")
-        inst.components.perishable:SetPerishTime(TUNING.PERISH_ONE_DAY)
+        inst.components.perishable:SetPerishTime(TUNING.PERISH_MED)
         inst.components.perishable:StartPerishing()
         inst.components.perishable.onperishreplacement = "ghostlyelixir_"..name
 

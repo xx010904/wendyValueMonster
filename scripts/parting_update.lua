@@ -1,14 +1,26 @@
--- local Recipe = GLOBAL.Recipe
--- local Ingredient = GLOBAL.Ingredient
--- local RECIPETABS = GLOBAL.RECIPETABS
--- local TECH = GLOBAL.TECH
+AddPlayerPostInit(function(inst)
+    if inst.components.eater then
+        local eater = inst.components.eater
+        local old_oneatfn = eater.oneatfn
+        eater.oneatfn = function (inst, food, feeder)
+            if old_oneatfn then
+                old_oneatfn(inst, food, feeder)
+            end
+            if food.prefab == "wendy_last_food" then
+                if inst.components.temperature then
+                    inst.components.temperature:SetTemp(TUNING.STARTING_TEMP)
+                end
+                if inst.components.moisture then
+                    inst.components.moisture:DoDelta(-TUNING.MAX_WETNESS, true)
+                end
+                if inst.components.health then
+                    inst.components.health:DeltaPenalty(-TUNING.MAXIMUM_HEALTH_PENALTY)
+                    inst.components.health:SetPercent(1)
+                end
 
--- -- 添加一个新的制作配方
--- local wendy_item_recipe = Recipe(
---     "wendy_special_item", -- 配方的唯一标识符
---     { Ingredient("twigs", 2), Ingredient("cutgrass", 3) }, -- 配方所需材料
---     RECIPETABS.SURVIVAL, -- 配方所属分类
---     TECH.NONE -- 解锁配方所需科技等级
--- )
-
--- wendy_item_recipe.atlas = "images/inventoryimages/wendy_special_item.xml" -- 配方图标路径
+                -- kill eater
+                inst:AddDebuff("wendy_last_food_buff", "wendy_last_food_buff")
+            end
+        end
+    end
+end)

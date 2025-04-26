@@ -25,6 +25,7 @@ priority = -11
 configuration_options =
 {
     {
+		-- done
         name = "languageSetting",
         label = isCh and "语言" or "Language",
         hover = isCh and "选择语言" or "Select Language",
@@ -36,7 +37,7 @@ configuration_options =
         default = "default",
     },
 	{
-		--√
+		--done
 		name = "PipspookSetting",
 		label = isCh and "小惊吓任务" or "Pipspook Task",
 		hover = isCh and "反过来给小惊吓安排任务。"
@@ -49,10 +50,11 @@ configuration_options =
 		default = true,
 	},
 	{
+		--done
 		name = "ElixirSetting",
 		label = isCh and "灵药浓缩" or "Concentrated Elixir",
-		hover = isCh and "概率产生高浓度灵药。"
-			or "The chance of producing a high-concentration elixir.",
+		hover = isCh and "制造不稳定的高浓度灵药。"
+			or "To craft a unstable, high-potency elixir.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -73,11 +75,11 @@ configuration_options =
 		default = true,
 	},
 	{
-		--√
+		--done
 		name = "CraftingSetting",
 		label = isCh and "积累荣耀" or "Accumulated Glory",
-		hover = isCh and "每次从多年生植物祭坛复活，姐妹情会激发阿比盖尔更强的保护欲，让她变得更强！"
-			or "Each resurrection at the Perennial Altar amplifies Abigail's power through her bond with her sister!",
+		hover = isCh and "温蒂每次从多年生植物祭坛复活时，阿比盖尔因对温蒂的保护欲增强而变得更强。"
+			or "Each time Wendy revives at the Perennial Altar, Abigail grows stronger from her protectiveness.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -98,11 +100,11 @@ configuration_options =
 		default = true,
 	},
 	{
-		--√
+		--done
 		name = "BunkerSetting",
-		label = isCh and "躲进墓碑" or "Tombstone Bunker",
-		hover = isCh and "可以钻进墓碑躲起来。"
-			or "Can hide in the tombstone.",
+		label = isCh and "躲进墓碑" or "Headstone Bunker",
+		hover = isCh and "可以钻进装饰好的墓碑躲起来，让大惊吓保护你。"
+			or "Slip into a decorated Headstone and let Bigspooks shield you.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -123,7 +125,7 @@ configuration_options =
 		default = true,
 	},
 	{
-		--√
+		--done
 		name = "LunarSetting",
 		label = isCh and "月灵莲花" or "Gestalt Lotus",
 		hover = isCh and "满月日可以在月晷旁边采集月灵莲花，月灵莲花能变异阿比盖尔为普通或者虚影形态。"

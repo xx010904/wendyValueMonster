@@ -35,3 +35,17 @@ STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_BACK = {
     "Could you tell me where her spirit is?",
     "I just want to feel her warmth again, even if just for a moment.",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_GET_OFF_BUNKER = {
+    "Please don't make me leave, I'm not ready yet.",
+    "I don't want to be pushed out, this is just decorated.",
+    "Give me a little more time, I haven't seen Abby yet.",
+    "Wait for me a little longer, I haven't seen Abigail yet.",
+    "I think I just saw Abigail.",
+    "Even in this dark and damp place, I'm still alive.",
+}
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_GET_OFF_BUNKER = {
+    "Those vile ghosts are back.",
+    "Staying in this damp and dark place is really disgusting.",
+    "It's both damp and dark here.",
+    "The dark, damp grave is unsettling.",
+}

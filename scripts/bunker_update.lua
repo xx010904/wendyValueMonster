@@ -1,98 +1,3 @@
-local function OnGraveMoundUpdate(inst)
-    local function PlaySleepLoopSoundTask(inst, stopfn)
-        inst.SoundEmitter:PlaySound("dontstarve/common/tent_sleep")
-    end
-    
-    local function stopsleepsound(inst)
-        if inst.sleep_tasks ~= nil then
-            for i, v in ipairs(inst.sleep_tasks) do
-                v:Cancel()
-            end
-            inst.sleep_tasks = nil
-        end
-    end
-    
-    local function startsleepsound(inst, len)
-        stopsleepsound(inst)
-        inst.sleep_tasks =
-        {
-            inst:DoPeriodicTask(len, PlaySleepLoopSoundTask, 33 * FRAMES),
-            inst:DoPeriodicTask(len, PlaySleepLoopSoundTask, 47 * FRAMES),
-        }
-    end
-    
-    local function temperaturetick(inst, sleeper)
-        if sleeper.components.temperature ~= nil then
-            if inst.is_cooling then
-                if sleeper.components.temperature:GetCurrent() > TUNING.SLEEP_TARGET_TEMP_TENT then
-                    sleeper.components.temperature:SetTemperature(sleeper.components.temperature:GetCurrent() - TUNING.SLEEP_TEMP_PER_TICK)
-                end
-            elseif sleeper.components.temperature:GetCurrent() < TUNING.SLEEP_TARGET_TEMP_TENT then
-                sleeper.components.temperature:SetTemperature(sleeper.components.temperature:GetCurrent() + TUNING.SLEEP_TEMP_PER_TICK)
-            end
-        end
-    end
-    
-    local function onwake(inst, sleeper, nostatechange)
-        -- inst.AnimState:PlayAnimation("cocoon_enter")
-        -- inst.AnimState:PushAnimation(inst.anims.idle, true)
-        inst.SoundEmitter:PlaySound("webber2/common/spiderden/out")
-        stopsleepsound(inst)
-    end
-    
-    local function onsleep(inst, sleeper)
-        -- inst.AnimState:PlayAnimation("cocoon_enter")
-        -- inst.AnimState:PushAnimation("cocoon_sleep_loop", true)
-        inst.SoundEmitter:PlaySound("webber2/common/spiderden/in")
-        startsleepsound(inst, 77)
-    end
-    
-    local function AddSleepingBag(inst)
-        if inst.components.sleepingbag == nil then
-            inst:AddComponent("sleepingbag")
-        end
-    
-        inst.components.sleepingbag.onsleep = onsleep
-        inst.components.sleepingbag.onwake = onwake
-    
-        inst.components.sleepingbag.health_tick = TUNING.SLEEP_HEALTH_PER_TICK * 1.5
-        inst.components.sleepingbag.hunger_tick = TUNING.SLEEP_HUNGER_PER_TICK * 1.5
-        inst.components.sleepingbag.dryingrate = math.max(0, -TUNING.SLEEP_WETNESS_PER_TICK / TUNING.SLEEP_TICK_PERIOD)
-    
-        inst.components.sleepingbag:SetTemperatureTickFn(temperaturetick)
-    
-        inst:AddTag("tent")
-    end
-
-    local function RemoveSleepingBag(inst)
-        if inst.components.sleepingbag ~= nil then
-            inst.components.sleepingbag:DoWakeUp()
-            inst:RemoveComponent("sleepingbag")
-            inst:RemoveTag("tent")
-        end
-    end
-
-    inst.entity:AddSoundEmitter()
-
-    inst:DoPeriodicTask(1, function()
-        if inst.components.upgradeable then
-            if inst.components.upgradeable.stage >= 2 then
-                AddSleepingBag(inst)
-            else
-                RemoveSleepingBag(inst)
-            end
-        end
-        if inst.components.sleepingbag then
-            if inst.components.sleepingbag:InUse() then
-                TheWorld.components.decoratedgrave_ghostmanager:UnregisterDecoratedGrave(inst)
-            else
-                TheWorld.components.decoratedgrave_ghostmanager:RegisterDecoratedGrave(inst)
-            end
-        end
-    end)
-end
-
--- AddPrefabPostInit("gravestone", OnGraveMoundUpdate)
 AddPrefabPostInit("gravestone", function (inst)
     inst:AddComponent("gravebunker")
     inst:DoPeriodicTask(1, function()
@@ -103,8 +8,8 @@ AddPrefabPostInit("gravestone", function (inst)
                 inst:RemoveTag("gravebunker")
             end
         end
-        if inst.components.sleepingbag then
-            if inst.components.sleepingbag:InUse() then
+        if TheWorld.components.decoratedgrave_ghostmanager then
+            if inst:HasTag("hashider") then
                 TheWorld.components.decoratedgrave_ghostmanager:UnregisterDecoratedGrave(inst)
             else
                 TheWorld.components.decoratedgrave_ghostmanager:RegisterDecoratedGrave(inst)
@@ -132,7 +37,7 @@ AddAction(BUNK)
 -- 定义动作选择器
 --args: inst, doer, target, actions, right
 AddComponentAction("SCENE", "gravebunker", function(inst, doer, actions, right)
-    if doer:HasTag("player") and not inst:HasTag("hashider") and inst:HasTag("gravebunker") and not inst:HasTag("bunkerCD") then
+    if doer and doer.prefab == "wendy" and not inst:HasTag("hashider") and inst:HasTag("gravebunker") and not inst:HasTag("bunkerCD") then
         table.insert(actions, ACTIONS.BUNK)
     end
 end)
@@ -214,7 +119,7 @@ AddStategraphState('wilson',
         onexit = function(inst)
             local gravestone = inst.usingbunker
             if gravestone then
-                gravestone.components.gravebunker:DoLeave(inst, false)
+                gravestone.components.gravebunker:DoLeave(inst)
             end
         end,
     }
@@ -257,3 +162,34 @@ AddStategraphState('wilson_client',
 -- -- Stategraph
 AddStategraphActionHandler("wilson",ActionHandler(ACTIONS.BUNK, function(inst, action) return "bunker" end))
 AddStategraphActionHandler("wilson_client",ActionHandler(ACTIONS.BUNK, function(inst, action) return "bunker" end))
+
+
+AddStategraphState('wilson',
+    State{
+        name = "getoffbunker",
+        tags = { "busy", "canrotate", "nopredict", "nomorph", "drowning", "nointerrupt" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("wakeup")
+            if inst and inst.components.drownable and inst.components.moisture then
+                inst.components.drownable:TakeDrowningDamage()
+            end
+
+            local puddle = SpawnPrefab("sanity_lower")
+            puddle.Transform:SetPosition(inst.Transform:GetWorldPosition())
+        end,
+
+        events =
+        {
+            EventHandler("animover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.components.talker:Say(GetString(inst, "ANNOUNCE_GET_OFF_BUNKER"))
+
+                    inst.sg:GoToState("idle")
+                end
+            end),
+        },
+    }
+)
+
