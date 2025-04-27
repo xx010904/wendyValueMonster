@@ -50,3 +50,16 @@ STRINGS.CHARACTERS.GENERIC.ANNOUNCE_GET_OFF_BUNKER = {
     "这里又潮湿又阴暗。",
     "阴暗潮湿的坟墓令人不适",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_PARTING = {
+    "一口下肚，灵魂便可飘离。",
+    "吃下它，我将轻轻离开这具躯壳。",
+    "这最后的滋味，送我灵魂出窍。",
+    "饱餐一顿，便能与肉体诀别。",
+    "只需一餐，我便能在空中游荡。",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_PARTING = {
+    "吃下去，我就能见到阿比盖尔了……",
+    "吃下它，我就能回到阿比盖尔身边。",
+    "再吃一口，灵魂就能与阿比同在。",
+    "我们曾经最爱吃的食物。",
+}

@@ -7,32 +7,33 @@ local function DoRemove(inst)
         inst.wating_task:Cancel()
         inst.wating_task = nil
     end
-    inst.AnimState:PlayAnimation("small_happy")
-    inst:ListenForEvent("animover", function(inst)
-        if inst.AnimState:IsCurrentAnimation("small_happy") then
-            -- print("小惊吓small_happy")
-            if inst then
-                if inst.components.inventory then
-                    local owner = GetOwner(inst)
-                    if owner and not owner:HasTag("playerghost") then
-                        inst.AnimState:PlayAnimation("quest_completed")
-                        inst.components.inventory:TransferInventory(owner)
-                    else
-                        inst.AnimState:PlayAnimation("dissipate")
-                        inst.components.inventory:DropEverything(true)
-                    end
-                else
-                    inst.AnimState:PlayAnimation("dissipate")
-                end
-            end
-        elseif inst.AnimState:IsCurrentAnimation("quest_completed") then
-            -- print("小惊吓quest_completed")
-            inst:Remove()
-        elseif inst.AnimState:IsCurrentAnimation("dissipate") then
-            -- print("小惊吓dissipate")
-            inst:Remove()
-        end
-    end)
+    inst:Remove()
+    -- inst.AnimState:PlayAnimation("wakeup")
+    -- inst:ListenForEvent("animover", function(inst)
+    --     if inst.AnimState:IsCurrentAnimation("wakeup") then
+    --         -- print("小惊吓small_happy")
+    --         if inst then
+    --             if inst.components.inventory then
+    --                 local owner = GetOwner(inst)
+    --                 if owner and not owner:HasTag("playerghost") then
+    --                     inst.AnimState:PlayAnimation("hornblow_lag")
+    --                     inst.components.inventory:TransferInventory(owner)
+    --                 else
+    --                     inst.AnimState:PlayAnimation("death2")
+    --                     inst.components.inventory:DropEverything(true)
+    --                 end
+    --             else
+    --                 inst.AnimState:PlayAnimation("death2")
+    --             end
+    --         end
+    --     elseif inst.AnimState:IsCurrentAnimation("hornblow_lag") then
+    --         -- print("小惊吓quest_completed")
+    --         inst:Remove()
+    --     elseif inst.AnimState:IsCurrentAnimation("death2") then
+    --         -- print("小惊吓dissipate")
+    --         inst:Remove()
+    --     end
+    -- end)
 end
 
 local function OnInit(inst)
@@ -42,16 +43,22 @@ local function OnInit(inst)
         if inst.time_left > 0 then
             inst.time_left = inst.time_left - 1
         else
+            if inst.components.inventory then
+                inst.components.inventory:DropEverything(true)
+            end
             DoRemove(inst)
         end
         -- 玩家回来消失
         local x, y, z = inst.Transform:GetWorldPosition()
         local nearest_player = FindClosestPlayerInRange(x, y, z, 4, true)
         local owner = GetOwner(inst)
-        if owner and nearest_player and nearest_player == owner then
+        if owner and nearest_player and nearest_player == owner and not owner:HasTag("playerghost") and not owner:HasTag("playerghost_fake") then
+            if inst.components.inventory and owner.components.inventory then
+                inst.components.inventory:TransferInventory(owner)
+            end
             DoRemove(inst)
         end
-    end, 10) --至少保管10秒
+    end, 1)
 end
 
 local function OnSave(inst, data)
@@ -69,32 +76,44 @@ local function fn()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddDynamicShadow()
-    inst.entity:AddLight()
+    -- inst.entity:AddLight()
     inst.entity:AddNetwork()
 
-    MakeTinyGhostPhysics(inst, 0.5, 0.5)
+    inst:SetPhysicsRadiusOverride(.5)
+    -- MakeGhostPhysics(inst, 1, inst.physicsradiusoverride)
 
-	inst.DynamicShadow:SetSize(0.75, 0.75)
+    inst.Transform:SetFourFaced(inst)
 
-    inst.AnimState:SetBloomEffectHandle("shaders/anim_bloom_ghost.ksh")
+    inst.AnimState:SetBank("wilson")
+    inst.AnimState:SetBuild("wendy") -- "waxwell_shadow_mod" Deprecated.
+    -- inst.AnimState:PlayAnimation("death2")
+    inst.AnimState:PushAnimation("death2_idle", true)
 
-    inst.AnimState:SetBank("ghost_kid")
-    inst.AnimState:SetBuild("ghost_kid")
-    inst.AnimState:PlayAnimation("appear")
-    inst.AnimState:PushAnimation("idle_sad")
+    -- inst.AnimState:SetMultColour(1, 1, 1, 1)
+
+    --Dedicated server does not need to spawn the local fx
+    if not TheNet:IsDedicated() then
+        inst.ripple_pool = {}
+        -- inst:DoPeriodicTask(.6, TryRipple, math.random() * .6, TheWorld.Map)
+        -- inst.OnRemoveEntity = OnRemoveEntity
+    end
+
+    inst.entity:SetPristine()
 
     inst:AddTag("ghost")
-    inst:AddTag("ghostkid")
     inst:AddTag("flying")
     inst:AddTag("girl")
     inst:AddTag("noauradamage")
     inst:AddTag("NOBLOCK")
+    inst:AddTag("NOCLICK")
+    inst:AddTag("FX")
+    inst:AddTag("wendy_last_keeper")
 
-    inst.Light:SetRadius(1.5)
-    inst.Light:SetIntensity(.75)
-    inst.Light:SetFalloff(0.5)
-    inst.Light:SetColour(111/255, 111/255, 111/255)
-    inst.Light:Enable(true)
+    -- inst.Light:SetRadius(1.5)
+    -- inst.Light:SetIntensity(.75)
+    -- inst.Light:SetFalloff(0.5)
+    -- inst.Light:SetColour(111/255, 111/255, 111/255)
+    -- inst.Light:Enable(true)
 
     inst.entity:SetPristine()
 
@@ -104,6 +123,9 @@ local function fn()
     if not TheWorld.ismastersim then
         return inst
     end
+
+    inst:AddComponent("skinner")
+    inst.components.skinner:SetupNonPlayerData()
 
     local inventory = inst:AddComponent("inventory")
     inventory.maxslots = 100
