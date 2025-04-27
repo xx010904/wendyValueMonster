@@ -1,7 +1,10 @@
 GLOBAL.setmetatable(env,{__index=function(t,k) return GLOBAL.rawget(GLOBAL,k) end})--GLOBAL 相关照抄
 
 Assets = {
+    ---- animations
+    --lunar
 	Asset("ANIM", "anim/lotus.zip"),
+    --elixir cloud
     Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_speed.zip"),
     Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_slowregen.zip"),
     Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_shield.zip"),
@@ -9,8 +12,8 @@ Assets = {
     Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_retaliation.zip"),
     Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_fastregen.zip"),
     Asset("ANIM", "anim/unstable_ghostlyelixir_cloud_attack.zip"),
-
 	Asset("ANIM", "anim/unstable_ghostlyelixir_revive.zip"),
+    --elixir button
 	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_revive.zip"),
     Asset("ANIM", "anim/unstable_ghostlyelixir_speed.zip"),
 	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_speed.zip"),
@@ -24,9 +27,14 @@ Assets = {
 	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_fastregen.zip"),
     Asset("ANIM", "anim/unstable_ghostlyelixir_slowregen.zip"),
 	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_slowregen.zip"),
+    --parting
+	Asset("ANIM", "anim/wendy_last_food.zip"),
 
+    ---- images
+    --lunar
     Asset("IMAGE", "images/inventoryimages/lotusflower_gestalt.tex"),
 	Asset("ATLAS", "images/inventoryimages/lotusflower_gestalt.xml"),
+    --elixir button
     Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_revive.tex"),
 	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_revive.xml"),
     Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_speed.tex"),
@@ -41,6 +49,9 @@ Assets = {
 	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_fastregen.xml"),
     Asset("IMAGE", "images/inventoryimages/unstable_ghostlyelixir_slowregen.tex"),
 	Asset("ATLAS", "images/inventoryimages/unstable_ghostlyelixir_slowregen.xml"),
+    --parting
+    Asset("IMAGE", "images/inventoryimages/wendy_last_food.tex"),
+	Asset("ATLAS", "images/inventoryimages/wendy_last_food.xml"),
 }
 
 PrefabFiles = {
@@ -63,6 +74,7 @@ PrefabFiles = {
     --
     "wendy_last_food",
     "wendy_last_food_buff",
+    "wendy_last_keeper",
     -- 其他 prefab 名称...
 }
 
