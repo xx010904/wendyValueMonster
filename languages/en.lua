@@ -50,3 +50,16 @@ STRINGS.CHARACTERS.GENERIC.ANNOUNCE_GET_OFF_BUNKER = {
     "It's both damp and dark here.",
     "The dark, damp grave is unsettling.",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_PARTING = {
+    "One bite, and my soul will drift away.",
+    "By eating this, I will quietly leave this shell behind.",
+    "This final taste shall send my spirit adrift.",
+    "A full meal, and I shall part ways with my body.",
+    "Just one meal, and I will wander the skies.",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_PARTING = {
+    "If I eat this, I'll be able to see Abigail again...",
+    "By eating it, I'll return to Abigail's side.",
+    "One more bite, and my soul shall be with Abby once more.",
+    "It was once our favorite food...",
+}

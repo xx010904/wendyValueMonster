@@ -14,6 +14,7 @@ local function fn()
     MakeInventoryFloatable(inst, "small", 0.2, 0.95)
 
     inst:AddTag("wendy_last_food")
+    inst:AddTag("show_spoilage")
 
     inst.entity:SetPristine()
 
@@ -28,9 +29,14 @@ local function fn()
 
     inst:AddComponent("edible")
     inst.components.edible.foodtype = FOODTYPE.GOODIES
-    inst.components.edible.healthvalue = TUNING.HEALING_SUPERHUGE * 2
-    inst.components.edible.hungervalue = TUNING.CALORIES_SUPERHUGE * 2
-    inst.components.edible.sanityvalue = TUNING.SANITY_HUGE * 2
+    inst.components.edible.healthvalue = TUNING.HEALING_SMALL
+    inst.components.edible.hungervalue = TUNING.CALORIES_MED
+    inst.components.edible.sanityvalue = TUNING.SANITY_LARGE
+
+    inst:AddComponent("perishable")
+    inst.components.perishable:SetPerishTime(TUNING.PERISH_SLOW)
+    inst.components.perishable:StartPerishing()
+    inst.components.perishable.onperishreplacement = "bananapop"
 
     inst:AddComponent("stackable")
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
