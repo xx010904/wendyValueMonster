@@ -50,7 +50,10 @@ local function OnSave(inst, data)
 end
 
 local function OnLoad(inst, data)
-
+    if inst and inst.components.inventory then
+        inst.components.inventory:DropEverything(true)
+    end
+    DoRemove(inst)
 end
 
 local function fn()
@@ -101,6 +104,7 @@ local function fn()
 
     inst.entity:SetPristine()
 
+    inst.GetOwner = GetOwner
     inst.OnInit = OnInit
     OnInit(inst)
 
@@ -118,6 +122,8 @@ local function fn()
     inst.components.follower:KeepLeaderOnAttacked()
     inst.components.follower.keepdeadleader = true
     inst.components.follower.keepleaderduringminigame = true
+
+    -- inst:AddComponent("soulchain")
 
     inst.OnSave = OnSave
     inst.OnLoad = OnLoad

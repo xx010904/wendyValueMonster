@@ -72,6 +72,15 @@ AddStategraphState('wilson',
             local x, y, z = inst.Transform:GetWorldPosition()
             ---- 新增尸体保持原位拿东西
             local keeper = SpawnPrefab("wendy_last_keeper")
+            local name = inst.prefab
+            if name == "wanda" then
+                print("WandaSetBuild")
+                inst.AnimState:SetBuild(name.."_none")
+            else
+                inst.AnimState:SetBuild("wilson")
+            end
+            keeper.AnimState:PlayAnimation("death")
+            keeper.AnimState:PushAnimation("death_idle", true)
             keeper.Transform:SetPosition(x, y, z)
             keeper.components.follower:SetLeader(inst)
             keeper.components.skinner:CopySkinsFromPlayer(inst)

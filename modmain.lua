@@ -75,6 +75,7 @@ PrefabFiles = {
     "wendy_last_food",
     "wendy_last_food_buff",
     "wendy_last_keeper",
+    "soul_link",
     -- 其他 prefab 名称...
 }
 
