@@ -2,38 +2,22 @@ local function GetOwner(inst)
     return inst.components.follower and inst.components.follower.leader or nil
 end
 
+local MUST_HAVE_TAGS = {"_combat", "_health"}
+local CANTHAVE_TAGS = { "INLIMBO", "epic", "structure", "butterfly", "wall", "balloon", "groundspike", "smashable", "companion"}
 local function DoRemove(inst)
     if inst.wating_task then
         inst.wating_task:Cancel()
         inst.wating_task = nil
     end
+    local x, y, z = inst.Transform:GetWorldPosition()
+    -- 复活吓到周围的生物
+    local ents = TheSim:FindEntities(x, y, z, 10, MUST_HAVE_TAGS, CANTHAVE_TAGS)
+    for _, target in ipairs(ents) do
+        if target.components.hauntable ~= nil and target.components.hauntable.panicable then
+            target.components.hauntable:Panic(3)
+        end
+    end
     inst:Remove()
-    -- inst.AnimState:PlayAnimation("wakeup")
-    -- inst:ListenForEvent("animover", function(inst)
-    --     if inst.AnimState:IsCurrentAnimation("wakeup") then
-    --         -- print("小惊吓small_happy")
-    --         if inst then
-    --             if inst.components.inventory then
-    --                 local owner = GetOwner(inst)
-    --                 if owner and not owner:HasTag("playerghost") then
-    --                     inst.AnimState:PlayAnimation("hornblow_lag")
-    --                     inst.components.inventory:TransferInventory(owner)
-    --                 else
-    --                     inst.AnimState:PlayAnimation("death2")
-    --                     inst.components.inventory:DropEverything(true)
-    --                 end
-    --             else
-    --                 inst.AnimState:PlayAnimation("death2")
-    --             end
-    --         end
-    --     elseif inst.AnimState:IsCurrentAnimation("hornblow_lag") then
-    --         -- print("小惊吓quest_completed")
-    --         inst:Remove()
-    --     elseif inst.AnimState:IsCurrentAnimation("death2") then
-    --         -- print("小惊吓dissipate")
-    --         inst:Remove()
-    --     end
-    -- end)
 end
 
 local function OnInit(inst)
@@ -86,8 +70,8 @@ local function fn()
 
     inst.AnimState:SetBank("wilson")
     inst.AnimState:SetBuild("wendy") -- "waxwell_shadow_mod" Deprecated.
-    -- inst.AnimState:PlayAnimation("death2")
-    inst.AnimState:PushAnimation("death2_idle", true)
+    inst.AnimState:PlayAnimation("death")
+    inst.AnimState:PushAnimation("death_idle", true)
 
     -- inst.AnimState:SetMultColour(1, 1, 1, 1)
 

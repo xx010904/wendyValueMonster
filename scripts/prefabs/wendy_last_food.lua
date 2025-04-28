@@ -36,10 +36,10 @@ local function fn()
     inst:AddComponent("perishable")
     inst.components.perishable:SetPerishTime(TUNING.PERISH_SLOW)
     inst.components.perishable:StartPerishing()
-    inst.components.perishable.onperishreplacement = "bananapop"
+    inst.components.perishable.onperishreplacement = "spoiled_food"
 
     inst:AddComponent("stackable")
-    inst.components.stackable.maxsize = TUNING.STACK_SIZE_LARGEITEM
+    inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     MakeHauntableLaunch(inst)
 

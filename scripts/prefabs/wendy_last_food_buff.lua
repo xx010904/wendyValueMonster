@@ -128,7 +128,7 @@ local function becomeGhost(inst)
     if inst:HasTag("playerghost_fake") then
         return
     end
-    inst:AddTag("epic")
+    inst:AddTag("noteleport")
 
     local x, y, z = inst.Transform:GetWorldPosition()
     inst.AnimState:SetBank("ghost")
@@ -348,7 +348,8 @@ local function respawnFromGhost(inst, data) -- from ListenForEvent "respawnfromg
     if not inst:HasTag("playerghost_fake") then
         return
     end
-    inst:RemoveTag("epic")
+    ---- 补上
+    inst:RemoveTag("noteleport")
 
     local followers = inst.components.leader:GetFollowersByTag("wendy_last_keeper")
     for _, follower in ipairs(followers) do
