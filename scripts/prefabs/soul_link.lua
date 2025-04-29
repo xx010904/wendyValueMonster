@@ -27,8 +27,26 @@ local function shadow_fn()
 	end
 
 	inst.persists = false
-	inst:DoTaskInTime(1*FRAMES,function(inst)
-		inst:Remove()
+	-- inst:DoTaskInTime(1*FRAMES,function(inst)
+	-- 	inst:Remove()
+	-- end)
+	inst:ListenForEvent("animover", function(inst)
+		if inst.AnimState:IsCurrentAnimation("link_1") then
+			inst.AnimState:PlayAnimation("link_break_1", false)
+		elseif inst.AnimState:IsCurrentAnimation("link_2") then
+			inst.AnimState:PlayAnimation("link_break_2", false)
+		elseif inst.AnimState:IsCurrentAnimation("link_3") then
+			inst.AnimState:PlayAnimation("link_break_3", false)
+		elseif inst.AnimState:IsCurrentAnimation("link_4") then
+			inst.AnimState:PlayAnimation("link_break_4", false)
+		elseif inst.AnimState:IsCurrentAnimation("link_break_1") or
+			inst.AnimState:IsCurrentAnimation("link_break_2") or
+			inst.AnimState:IsCurrentAnimation("link_break_3") or
+			inst.AnimState:IsCurrentAnimation("link_break_4")
+		then
+			inst:Hide()
+			inst:Remove()
+		end
 	end)
 
 	return inst

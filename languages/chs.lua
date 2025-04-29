@@ -34,7 +34,7 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_RETALIATION = "反伤
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SHIELD = "保护罩时厚时薄。"
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "一次性大量恢复，但是会持续受伤。"
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "缓慢不稳定的恢复，偶尔会受伤。"
-STRINGS.CHARACTERS.WENDY.DESCRIBE.WENDY_LAST_FOOD = "阿比盖尔最爱吃的……"
+STRINGS.CHARACTERS.WENDY.DESCRIBE.WENDY_LAST_FOOD = {"是阿比最爱吃的吗？", "我不喜欢这个……"}
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.WENDY_LAST_FOOD = "看起来怪异又美味的食物。"
 
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_LEAVE = {
@@ -83,4 +83,25 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_PARTING = {
     "吃下它，我就能回到阿比盖尔身边。",
     "再吃一口，灵魂就能与阿比同在。",
     "我们曾经最爱吃的食物。",
+}
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_NOT_PARTING = {
+    "温蒂不在，没人能把我变成鬼魂！",
+    "安全了，温蒂没学会那个可怕的法术。",
+    "吃了也不会死！谢天谢地，温蒂没在。",
+    "没有温蒂，没有复仇，只有平静。",
+    "温蒂没在附近，我的灵魂暂时安全。",
+    "没人引导灵魂，我还能活得好好的。",
+    "温蒂不在场，我不用担心灵魂出窍。",
+    "这是安全的食物，我的灵魂还牢牢地在身体里。",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_NOT_PARTING = {
+    "我还不能踏上阿比盖尔的足迹。",
+    "我还不知道如何灵魂出窍。",
+    "没有鬼魂复仇的仪式，我只是一个孤独的凡人。",
+    "我变不成鬼魂，连见她一面都不能。",
+    "如果我知道怎么做，我早就跟上她了……",
+    "灵魂还困在这具身体里，我无能为力。",
+    "阿比盖尔……我还追不上你。",
+    "我只能等待命运带我去她身边。",
+    "我不知道那条鬼魂之路怎么走。",
 }

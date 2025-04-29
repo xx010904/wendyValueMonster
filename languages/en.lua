@@ -34,7 +34,7 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_RETALIATION = "Retali
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SHIELD = "The shield varies between thick and thin."
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "Instant large recovery, but will result in continuous damage."
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Slow and unstable recovery, with occasional damage."
-STRINGS.CHARACTERS.WENDY.DESCRIBE.WENDY_LAST_FOOD = "Abigail's favorite food..."
+STRINGS.CHARACTERS.WENDY.DESCRIBE.WENDY_LAST_FOOD = {"Is it Abby's favorite food?", "I don't like this..."}
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.WENDY_LAST_FOOD = "A food that looks strange yet delicious."
 
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_LEAVE = {
@@ -83,4 +83,25 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_PARTING = {
     "By eating it, I'll return to Abigail's side.",
     "One more bite, and my soul shall be with Abby once more.",
     "It was once our favorite food...",
+}
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_NOT_PARTING = {
+    "Wendy's not here—no one can turn me into a ghost!",
+    "I'm safe. Wendy hasn't learned that dreadful spell.",
+    "I won't die from this! Thank goodness Wendy's away.",
+    "No Wendy, no vengeance—just peace.",
+    "Wendy's not nearby, my soul is safe for now.",
+    "Without a guide for my soul, I'll stay among the living.",
+    "Wendy's not around, no need to worry about being disembodied.",
+    "This food is safe—my soul's staying right where it is.",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_NOT_PARTING = {
+    "I cannot yet follow in Abigail's footsteps.",
+    "I still don't know how to leave my body behind.",
+    "Without the ritual of ghostly vengeance, I'm just a lonely mortal.",
+    "I can't become a ghost... I can't even see her.",
+    "If I knew how... I would've joined her already.",
+    "My soul is trapped in this body... I'm helpless.",
+    "Abigail... I still can't reach you.",
+    "All I can do is wait for fate to take me to her.",
+    "I don't know the path to the spectral realm.",
 }

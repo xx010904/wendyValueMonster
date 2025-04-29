@@ -19,51 +19,12 @@ TECH.NONE,
 )
 AddRecipeToFilter("wendy_last_food", "CHARACTER")
 
-local function gotoparting(inst)
-    if inst.sg.currentstate.name ~= "parting" then
-        inst.sg:GoToState("parting")
-    end
-end
----- 修改玩家吃的方法
-AddPlayerPostInit(function(inst)
-    if inst.components.eater then
-        local eater = inst.components.eater
-        local old_oneatfn = eater.oneatfn
-        eater.oneatfn = function (inst, food, feeder)
-            if old_oneatfn then
-                old_oneatfn(inst, food, feeder)
-            end
-            if food.prefab == "wendy_last_food" then
-                if inst.components.rider then
-                    local mount = inst.components.rider:GetMount()
-                    if mount then
-                        inst.components.rider:Dismount()
-                        if mount.components.hauntable ~= nil and mount.components.hauntable.panicable then
-                            mount.components.hauntable:Panic(20)
-                        end
-                    end
-                end
-                if inst.components.temperature then
-                    inst.components.temperature:SetTemp(TUNING.STARTING_TEMP)
-                end
-                if inst.components.moisture then
-                    inst.components.moisture:DoDelta(-TUNING.MAX_WETNESS, true)
-                end
-
-                -- kill eater, because I want to use the meter badge
-                inst:ListenForEvent("animover", gotoparting)
-            end
-        end
-    end
-end)
-
 AddStategraphState('wilson',
     State{
         name = "parting",
         tags = { "busy", "canrotate", "nopredict", "nomorph", "drowning", "nointerrupt" },
 
         onenter = function(inst)
-            inst:RemoveEventCallback("animover", gotoparting)
             inst.components.locomotor:Stop()
 
             SpawnPrefab("attune_out_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -72,15 +33,15 @@ AddStategraphState('wilson',
             local x, y, z = inst.Transform:GetWorldPosition()
             ---- 新增尸体保持原位拿东西
             local keeper = SpawnPrefab("wendy_last_keeper")
-            local name = inst.prefab
-            if name == "wanda" then
-                print("WandaSetBuild")
-                inst.AnimState:SetBuild(name.."_none")
-            else
-                inst.AnimState:SetBuild("wilson")
-            end
-            keeper.AnimState:PlayAnimation("death")
-            keeper.AnimState:PushAnimation("death_idle", true)
+            -- local name = inst.prefab
+            -- if name == "wanda" then
+            --     print("WandaSetBuild")
+            --     inst.AnimState:SetBuild(name.."_none")
+            -- else
+            --     inst.AnimState:SetBuild("wilson")
+            -- end
+            -- keeper.AnimState:PlayAnimation("death")
+            -- keeper.AnimState:PushAnimation("death_idle", true)
             keeper.Transform:SetPosition(x, y, z)
             keeper.components.follower:SetLeader(inst)
             keeper.components.skinner:CopySkinsFromPlayer(inst)
