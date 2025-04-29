@@ -147,10 +147,14 @@ function GraveBunker:DoBunk(doer)
     end
     self.sanitytask = doer:DoPeriodicTask(1.33, function()
         if doer and doer.components.sanity then
+            -- 不然无限卡在墓碑里面了
+            if doer.components.sanity:GetPercent() <= 0 then
+                self:DoLeave(doer)
+            end
 			if doer.components.skilltreeupdater and doer.components.skilltreeupdater:IsActivated("wendy_makegravemounds") then
-				doer.components.sanity:DoDelta(-2.5)
+				doer.components.sanity:DoDelta(-1)
 			else
-				doer.components.sanity:DoDelta(-5)
+				doer.components.sanity:DoDelta(-2)
 			end
         end
     end)

@@ -17,11 +17,6 @@ local function OnFadeDirty(inst)
 end
 
 local function AlignToTarget(inst, target)
-    -- 持续掉血
-    -- if target.components.health then
-    --     local delta = target.components.health.maxhealth * (0.13/4)
-    --     target.components.health:DoDelta(-delta)
-    -- end
     inst.Transform:SetRotation(target.Transform:GetRotation())
 end
 
@@ -177,7 +172,7 @@ local function OnAttached(inst, target, followsymbol, followoffset)
     -- OnChangeFollowSymbol(inst, target, followsymbol, Vector3(followoffset.x, -255, followoffset.z)) --y越小，位置越高
     OnChangeFollowSymbol(inst, target, followsymbol, Vector3(followoffset.x, -15, followoffset.z)) --y越小，位置越高
 
-    -- buff效果跟随，并且持续掉血
+    -- buff效果跟随
     if inst._followtask ~= nil then
         inst._followtask:Cancel()
     end
@@ -190,7 +185,12 @@ local function OnAttached(inst, target, followsymbol, followoffset)
 
     ---- 开始死亡                
     becomeGhost(target)
-    target.components.avengingghost:StartAvenging()
+    target.components.avengingghost:StartAvenging(30)
+
+    ---- 温蒂灵魂出窍的 AOE
+    if target.components.astrowraith then
+        target.components.astrowraith:EnableAOE()
+    end
 end
 
 local function ShouldKnockout(inst)
@@ -397,6 +397,11 @@ local function respawnFromGhost(inst, data) -- from ListenForEvent "respawnfromg
         inst.speedupdater_task = nil
     end
     inst.components.locomotor:RemoveExternalSpeedMultiplier(inst, "last_dash")
+
+    ---- 温蒂灵魂出窍的 AOE
+    if inst.components.astrowraith then
+        inst.components.astrowraith:DisableAOE()
+    end
 end
 
 local function OnDetached(inst)

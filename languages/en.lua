@@ -105,3 +105,11 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_NOT_PARTING = {
     "All I can do is wait for fate to take me to her.",
     "I don't know the path to the spectral realm.",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_LOST_GHOST_POWER = {
+    "Once again, I've lost the strength and courage of the ghosts.",
+    "The vengeful power they gave me has faded.",
+    "Abigail... are you still watching over me?",
+    "Without you, even vengeance feels impossible...",
+    "I'm alone again, Abigail.",
+    "Her strength has left me... and with it, her gentle warmth.",
+}

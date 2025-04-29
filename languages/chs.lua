@@ -105,3 +105,11 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_NOT_PARTING = {
     "我只能等待命运带我去她身边。",
     "我不知道那条鬼魂之路怎么走。",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_LOST_GHOST_POWER = {
+    "再次失去了鬼魂的力量和勇气。",
+    "鬼魂复仇给我的力量消失了。",
+    "阿比盖尔……你还在看着我吗？",
+    "没有你，我连复仇都做不到……",
+    "我又孤单一人了，阿比盖尔。",
+    "她的力量离开了我，温柔也一并消散了。",
+}

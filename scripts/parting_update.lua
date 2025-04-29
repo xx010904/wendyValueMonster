@@ -1,3 +1,5 @@
+local AvengingGhostBadge = require "widgets/avengingghostbadge"
+
 ---- 添加制作配方
 AddRecipe2("wendy_last_food",
 {
@@ -18,6 +20,32 @@ TECH.NONE,
 }
 )
 AddRecipeToFilter("wendy_last_food", "CHARACTER")
+
+
+AddPrefabPostInit("wendy", function(inst)
+    inst:AddComponent("astrowraith")
+end)
+
+-- 修改 astrowraithbadge 位置，保证存活的时候也不遮挡
+AddClassPostConstruct("widgets/statusdisplays", function(self)
+    self.astrowraithbadge = self:AddChild(AvengingGhostBadge(self.owner, nil, "status_abigail" ))
+    self.astrowraithbadge:SetPosition(-140, 20)
+    self.astrowraithbadge:Hide()
+end)
+
+AddClientModRPCHandler("WendyValueMonster", "UpdateGhostPowerBadge", function(count, max)
+    -- print("UpdateGhostPowerBadgeRPC", count, max)
+    local badge = ThePlayer.HUD and ThePlayer.HUD.controls and ThePlayer.HUD.controls.status and ThePlayer.HUD.controls.status.astrowraithbadge
+    -- print("UpdateGhostPowerBadge", badge, ThePlayer.HUD.controls)
+    if badge then
+        if count > 0 then
+            badge:Show()
+            badge:SetValues(nil, count, max)
+        else
+            badge:Hide()
+        end
+    end
+end)
 
 AddStategraphState('wilson',
     State{
