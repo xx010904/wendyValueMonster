@@ -185,7 +185,7 @@ local function OnAttached(inst, target, followsymbol, followoffset)
 
     ---- 开始死亡                
     becomeGhost(target)
-    target.components.avengingghost:StartAvenging(30)
+    target.components.avengingghost:StartAvenging()
 
     ---- 温蒂灵魂出窍的 AOE
     if target.components.astrowraith then
@@ -404,13 +404,20 @@ local function respawnFromGhost(inst, data) -- from ListenForEvent "respawnfromg
     end
 end
 
+local function avengetimedirty(inst) -- from ListenForEvent "avengetimedirty")
+    local val = inst.components.avengingghost._avengetime:value()
+    -- print("val", val)
+    if val <= 0 then
+        respawnFromGhost(inst)
+        inst:RemoveEventCallback("avengetimedirty", avengetimedirty)
+    end
+end
+
 local function OnDetached(inst)
     local target = inst.entity:GetParent()
     ---- 恢复骨架
     target.skeleton_prefab = target.old_skeleton_prefab
-    target:DoTaskInTime(15, function()
-        respawnFromGhost(target)
-    end)
+    target:ListenForEvent("avengetimedirty", avengetimedirty)
     inst:Remove()
 end
 

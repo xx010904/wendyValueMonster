@@ -90,8 +90,8 @@ configuration_options =
 	{
 		name = "PartingSetting",
 		label = isCh and "临别一餐" or "Parting Dinner",
-		hover = isCh and "制作最后的晚餐，吃下这餐，暂时灵魂出窍。"
-			or "Make the last supper, eat this meal, temporarily out of body.",
+		hover = isCh and "食用后灵魂出窍，攻击敌人可积累鬼魂复仇力量并修改攻击倍率为1.0。"
+			or "Eat to astral project; attacks build Vengeful Ghost Power and deal damage at a 1.0.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -113,10 +113,11 @@ configuration_options =
 		default = true,
 	},
 	{
+		--done
 		name = "CallingSetting",
-		label = isCh and "唤魂" or "The Calling",
-		hover = isCh and "召唤数个亡魂环绕地点并造成伤害。"
-			or "Summons several souls to surround the area and deal damage.",
+		label = isCh and "灵魂隔断" or "Soul Sunder",
+		hover = isCh and "阿比盖尔的作祟指令可以对温蒂使用，交换血量百分比。"
+			or "Abigail can haunt Wendy to instantly swap their current health percentages.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -128,8 +129,8 @@ configuration_options =
 		--done
 		name = "LunarSetting",
 		label = isCh and "月灵莲花" or "Gestalt Lotus",
-		hover = isCh and "满月日可以在月晷旁边采集月灵莲花，月灵莲花能变异阿比盖尔为普通或者虚影形态。"
-			or "Gestalt Lotus can be gathered on full moon days near the Moon Dial. It can mutate Abigail between her normal and Gestalt forms.",
+		hover = isCh and "满月全天，可在月晷旁采集月灵莲花，用于将阿比盖尔转化为普通形态或虚影形态。"
+			or "Collect Gestalt Lotus near the Moon Dial during full moon to turn Abigail into Ghost or Gestalt.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },

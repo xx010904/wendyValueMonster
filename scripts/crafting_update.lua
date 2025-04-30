@@ -157,7 +157,12 @@ local function OnDeath(inst)
 end
 
 local ATTACK_MUST_TAGS = { "_combat" }
-local EXCLUDE_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget", "player", "companion", "invisible", "noattack", "hiding", "abigail", "abigail_tether", "shadowcreature" }
+local EXCLUDE_TAGS = {
+    "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget",
+    "player", "companion", "invisible", "noattack", "hiding",
+    "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature",
+    "playingcard", "deckcontainer"
+}
 AddPrefabPostInit("abigail", function(inst)
     if inst then
         inst:ListenForEvent("pre_health_setval", OnSisterBondChange)

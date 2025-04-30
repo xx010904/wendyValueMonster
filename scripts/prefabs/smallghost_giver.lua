@@ -740,6 +740,11 @@ local function shadow_fn()
 		if inst.AnimState:IsCurrentAnimation("appear") then
 			-- print("smallghost_giver appear")
 			inst.AnimState:PlayAnimation("quest_completed", false)
+            if inst._hotcold_fx == nil then
+                inst._hotcold_fx = SpawnPrefab("hotcold_fx")
+                inst._hotcold_fx.entity:SetParent(inst.entity)
+                inst._hotcold_fx.entity:AddFollower():FollowSymbol(inst.GUID, "smallghost_hair", 0, 0.2, 0)
+            end
 		end
 	end)
 

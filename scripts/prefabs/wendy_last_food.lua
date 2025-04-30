@@ -50,6 +50,19 @@ local function OnEaten(inst, eater)
     end
 end
 
+local function OnSave(inst, data)
+    if inst.components.perishable then
+        data.perish_percent = inst.components.perishable:GetPercent()
+    end
+end
+
+local function OnLoad(inst, data)
+    if data and data.perish_percent and inst.components.perishable then
+        inst.components.perishable:SetPercent(data.perish_percent)
+    end
+end
+
+
 local function fn()
     local inst = CreateEntity()
 
@@ -89,7 +102,8 @@ local function fn()
     inst.components.edible:SetOnEatenFn(OnEaten)
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(TUNING.PERISH_SUPERFAST)
+    inst.components.perishable:SetPerishTime(666 * 480) -- 666 days
+    inst.components.perishable:SetPercent(0.0197166864)
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 
@@ -97,6 +111,9 @@ local function fn()
     inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 
     MakeHauntableLaunch(inst)
+
+    inst.OnSave = OnSave
+    inst.OnLoad = OnLoad
 
     return inst
 end

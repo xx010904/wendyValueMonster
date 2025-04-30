@@ -1,4 +1,4 @@
-local AvengingGhostBadge = require "widgets/avengingghostbadge"
+local AstroWraithBadge = require "widgets/astrowraithbadge"
 
 ---- 添加制作配方
 AddRecipe2("wendy_last_food",
@@ -28,7 +28,7 @@ end)
 
 -- 修改 astrowraithbadge 位置，保证存活的时候也不遮挡
 AddClassPostConstruct("widgets/statusdisplays", function(self)
-    self.astrowraithbadge = self:AddChild(AvengingGhostBadge(self.owner, nil, "status_abigail" ))
+    self.astrowraithbadge = self:AddChild(AstroWraithBadge(self.owner, nil, "status_abigail" ))
     self.astrowraithbadge:SetPosition(-140, 20)
     self.astrowraithbadge:Hide()
 end)

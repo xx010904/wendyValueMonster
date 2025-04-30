@@ -123,7 +123,12 @@ function GraveBunker:DoBunk(doer)
             local scarex, scarey, scarez = scare.Transform:GetWorldPosition()
             local scareradius = 4 -- 伤害范围
             local AREAATTACK_MUST_TAGS = { "_combat" }
-            local AREA_EXCLUDE_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget", "player", "companion", "invisible", "noattack", "hiding", "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature" }
+            local AREA_EXCLUDE_TAGS = {
+                "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget",
+                "player", "companion", "invisible", "noattack", "hiding",
+                "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature",
+                "playingcard", "deckcontainer"
+            }
             local targets = TheSim:FindEntities(scarex, scarey, scarez, scareradius, AREAATTACK_MUST_TAGS, AREA_EXCLUDE_TAGS)
             for _, target in ipairs(targets) do
                 if target.components.health and scare.components.combat then

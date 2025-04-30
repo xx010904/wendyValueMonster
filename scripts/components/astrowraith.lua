@@ -6,11 +6,35 @@ local AstroWraith = Class(function(self, inst)
     self.aoe_task = nil
     self.update_timer = 0
     self.original_damagemultiplier = nil
-    self.max_attack_count = 480
+    self.max_attack_count = 100
+    self.drown_rate = 0.05
+    self.attack_rate = 0.15
+
+    inst:ListenForEvent("onattackother", function(inst, data)
+        if data and data.target and inst.components.astrowraith then
+            inst.components.astrowraith:OnAttackLanded(data.target)
+        end
+    end)
 
     -- 注册更新回调
     inst:StartUpdatingComponent(self)
 end)
+
+-- 每次攻击命中时掉 attack_rate 点
+function AstroWraith:OnAttackLanded(target)
+    if self.attack_count > 0 then
+        self.attack_count = self.attack_count - self.attack_rate
+
+        if self.attack_count == 0 and self.original_damagemultiplier then
+            self.inst.components.combat.damagemultiplier = self.original_damagemultiplier
+            self.original_damagemultiplier = nil
+
+            if self.inst.components.talker then
+                self.inst.components.talker:Say(GetString(self.inst, "ANNOUNCE_LOST_GHOST_POWER"), nil, true)
+            end
+        end
+    end
+end
 
 -- 每帧更新（由 StartUpdatingComponent 启动）
 function AstroWraith:OnUpdate(dt)
@@ -55,7 +79,7 @@ function AstroWraith:UpdateAttackCount()
     end
 
     if self.attack_count > 0 then
-        self.attack_count = self.attack_count - 1
+        self.attack_count = self.attack_count - self.drown_rate
 
         -- 如果没有记录原始倍率，则记录一次
         if self.original_damagemultiplier == nil then
@@ -100,7 +124,7 @@ end
 
 -- 增加攻击计数
 function AstroWraith:AddAttackCount(num)
-    num = num or 1
+    num = num or 0.5
     if self.max_attack_count > self.attack_count then
         self.attack_count = self.attack_count + num
     end
@@ -119,7 +143,8 @@ function AstroWraith:DoAOEAttack()
     local EXCLUDE_TAGS = {
         "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget",
         "player", "companion", "invisible", "noattack", "hiding",
-        "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature"
+        "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature",
+        "playingcard", "deckcontainer"
     }
 
     local targets = TheSim:FindEntities(x, y, z, radius, MUST_TAGS, EXCLUDE_TAGS)
@@ -129,9 +154,9 @@ function AstroWraith:DoAOEAttack()
             self.inst.components.combat:DoAttack(target)
 
             if target:HasTag("epic") then
-                self:AddAttackCount(5)
+                self:AddAttackCount(2.5)
             end
-            self:AddAttackCount(1)
+            self:AddAttackCount(0.5)
         end
     end
 end
