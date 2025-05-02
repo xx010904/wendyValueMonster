@@ -29,6 +29,9 @@ Assets = {
 	Asset("ANIM", "anim/swap_unstable_ghostlyelixir_slowregen.zip"),
     --parting
 	Asset("ANIM", "anim/wendy_last_food.zip"),
+	Asset("ANIM", "anim/wendy_ghost_power.zip"),
+    --sisturn
+    Asset("ANIM", "anim/sisturn_salting_fx.zip"),
 
     ---- images
     --lunar
@@ -56,27 +59,30 @@ Assets = {
 
 PrefabFiles = {
 	-- 注册新的 prefab
+    --pipspook
     "smallghost_giver",
-    --
+    --lunar
     "abigail_gestalt_buff",
     "abigail_gestalt_lotus",
     "abigail_lutos_mutate_fx",
     "moondial_lotus_fx",
-    --
+    --crafting
     "abigail_tether",
     "abigail_tether_charge",
     "soul_wave",
-    --
+    --elixir
     "unstable_ghostlyelixirs",
     "unstable_ghostlyelixir_clouds",
     "unstable_ghostlyelixir_cloud_brusts",
     "unstable_ghostlyelixir_buffs",
-    --
+    --parting
     "wendy_last_food",
     "wendy_last_food_buff",
     "wendy_last_keeper",
     "soul_link",
     "soul_link_endpoint",
+    --sisturn
+    "sisturn_salting_fx",
     -- 其他 prefab 名称...
 }
 
@@ -98,7 +104,7 @@ GLOBAL.modvalueconfig.languageSetting = GetModConfigData("languageSetting")
 
 -- 本地化
 local lan = (_G.LanguageTranslator.defaultlang == "zh") and "zh" or "en"
-if GetModConfigData("languageSetting") == "default" then
+if GetModConfigData("LanguageSetting") == "default" then
     if lan == "zh" then
         modimport("languages/chs")
     else

@@ -26,20 +26,21 @@ configuration_options =
 {
     {
 		-- done
-        name = "languageSetting",
+        name = "LanguageSetting",
         label = isCh and "语言" or "Language",
         hover = isCh and "选择语言" or "Select Language",
         options =
         {
             {description = "中文", data = "chinese", hover = "中文"},
             {description = "English", data = "english", hover = "English"},
+            {description = "Default", data = "default", hover = "Default"},
         },
         default = "default",
     },
 	{
 		--done
 		name = "PipspookSetting",
-		label = isCh and "小惊吓任务" or "Pipspook Task",
+		label = isCh and "小惊吓任务 IV" or "Pipspook Task",
 		hover = isCh and "反过来给小惊吓安排任务。"
 			or "Assign tasks to Pipspook in reverse.",
 		options =
@@ -52,7 +53,7 @@ configuration_options =
 	{
 		--done
 		name = "ElixirSetting",
-		label = isCh and "灵药浓缩" or "Concentrated Elixir",
+		label = isCh and "不稳定化合物" or "Unstable Concoction",
 		hover = isCh and "制造不稳定的高浓度灵药。"
 			or "To craft a unstable, high-potency elixir.",
 		options =
@@ -64,8 +65,8 @@ configuration_options =
 	},
 	{
 		name = "SisturnSetting",
-		label = isCh and "姐妹骨灰盒IV" or "Sisturn IV",
-		hover = isCh and "暂时不知道。"
+		label = isCh and "瘦肉姐妹骨灰罐" or "Fleshed Sisturn",
+		hover = isCh and "满花瓣激活时无限产出骨灰供舔盐动物使用，供奉瘦肉强化阿比。"
 			or "I don't know for now.",
 		options =
 		{

@@ -17,7 +17,7 @@ local function SpawnSoulLink(source, target)
     local step_dx = dx / steps
     local step_dz = dz / steps
 
-    local total_time = 1.2
+    local total_time = 0.5
     local time_per_step = total_time / steps
 
     -- 从 i = 1 到 steps - 1（跳过0和steps）
@@ -51,19 +51,23 @@ local function doSunder(inst, player)
     SpawnSoulLink(player, inst)
     -- inst发出soul_link连接player
     SpawnSoulLink(inst, player)
-    if player and player.components.combat then
-        player.components.combat:GetAttacked(player, 1)
-    end
-    if inst and inst.components.combat then
-        inst.components.combat:GetAttacked(inst, 1)
+    -- if player and player.components.combat then
+    --     player.components.combat:GetAttacked(player, 1)
+    -- end
+    -- if inst and inst.components.combat then
+    --     inst.components.combat:GetAttacked(inst, 1)
+    -- end
+
+    -- 核心转向逻辑
+    if player then
+        player:ForceFacePoint(inst.Transform:GetWorldPosition())
     end
 
     -- 锁定动作
     inst.sg:GoToState("abigail_transform")
     player.sg:GoToState("soul_sunder")
 
-
-    player:DoTaskInTime(1, function()
+    player:DoTaskInTime(0.25, function()
         local player_health = player.components.health
         local inst_health = inst.components.health
         if player_health and inst_health then

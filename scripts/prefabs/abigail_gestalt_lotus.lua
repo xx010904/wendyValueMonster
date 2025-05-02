@@ -1,25 +1,41 @@
 local MIN_FADE_VALUE = 0.40
 local MIN_FADE_COLOUR = {1.00, 1.00, 1.00, MIN_FADE_VALUE}
 local function mutation(inst, caster)
-	if caster ~= nil then
-		if caster.components.ghostlybond and caster.components.ghostlybond.ghost then
-            if not caster.components.ghostlybond.summoned then
-                return false, "NOGHOST"
-            end
-            local ghost = caster.components.ghostlybond.ghost
-            if ghost:HasTag("gestalt") then
-                ghost:ChangeToGestalt(false)
-            else
-                ghost:ChangeToGestalt(true)
-            end
-            if inst.components.stackable ~= nil and inst.components.stackable:IsStack() then
-                inst.components.stackable:Get():Remove()
-            else
-                inst:Remove()
-            end
-            return true
-        end
-	end
+    -- 参数校验层
+    if caster == nil or not caster:IsValid() then
+        return false, "INVALID_CASTER"
+    end
+
+    local ghostlybond = caster.components.ghostlybond
+    if not (ghostlybond and ghostlybond.ghost) then
+        return false, "NO_GHOSTLY_BOND"
+    end
+
+    if not ghostlybond.summoned then
+        return false, "GHOST_NOT_SUMMONED"
+    end
+
+    local ghost = ghostlybond.ghost
+    if not (ghost and ghost:IsValid()) then
+        return false, "INVALID_GHOST"
+    end
+
+    -- 核心转向逻辑
+    if caster then
+        caster:ForceFacePoint(ghost.Transform:GetWorldPosition())
+    end
+
+    -- 幽灵形态切换
+    ghost:ChangeToGestalt(not ghost:HasTag("gestalt"))
+
+    -- 物品消耗
+    if inst.components.stackable and inst.components.stackable:IsStack() then
+        inst.components.stackable:Get():Remove()
+    else
+        inst:Remove()
+    end
+
+    return true
 end
 
 local function fn()

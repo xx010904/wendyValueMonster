@@ -102,8 +102,7 @@ local function fn()
     inst.components.edible:SetOnEatenFn(OnEaten)
 
     inst:AddComponent("perishable")
-    inst.components.perishable:SetPerishTime(666 * 480) -- 666 days
-    inst.components.perishable:SetPercent(0.0197166864)
+    inst.components.perishable:SetPerishTime(13.04 * 480) -- 13.04 days
     inst.components.perishable:StartPerishing()
     inst.components.perishable.onperishreplacement = "spoiled_food"
 

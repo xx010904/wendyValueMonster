@@ -1,10 +1,10 @@
-STRINGS.ACTIONS.HIRE_PIPSPOOK = "Assign"
+STRINGS.ACTIONS.HIRE_PIPSPOOK = "Haunt-go"
 STRINGS.ACTIONS.LOTUSMUTATION = "Mutate Abby"
-STRINGS.ACTIONS.BREW_UNSTABLE = "Unstable Brew"
+STRINGS.ACTIONS.BREW_UNSTABLE = "Unstabilize"
 STRINGS.ACTIONS.BUNK = "Bunk"
 
-STRINGS.UI.CRAFTING.RECIPEACTION.BREW_UNSTABLE = "UNSTABLE BREW"
-STRINGS.UI.CRAFTING.RECIPEACTION.INFUSE = "INFUSE"
+STRINGS.UI.CRAFTING.RECIPEACTION.BREW_UNSTABLE = "Unstabilize"
+STRINGS.UI.CRAFTING.RECIPEACTION.SOULCHILLIFY = "Soulchilln"
 
 STRINGS.NAMES.ABIGAIL_GESTALT_LOTUS = "Gestalt Lotus"
 STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Unstable Ghastly Experience"
@@ -112,4 +112,12 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_LOST_GHOST_POWER = {
     "Without you, even vengeance feels impossible...",
     "I'm alone again, Abigail.",
     "Her strength has left me... and with it, her gentle warmth.",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_ASHES_LICK = {
+    "If ashes had a flavor... I hope it's at least a little salty.",
+    "So *die-hard fan* is literal now... sorry, that was in poor taste.",
+    "I don't think Abigail imagined her final form would be cow feed.",
+    "I swear this is the last time, Abigail... unless the beefalo gets hungry again.",
+    "If the beefalo dies... would that count as Abigail's reincarnation? No? Never mind.",
+    "Abigail... will you ever forgive me for this?",
 }

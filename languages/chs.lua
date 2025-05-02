@@ -1,10 +1,10 @@
-STRINGS.ACTIONS.HIRE_PIPSPOOK = "安排"
+STRINGS.ACTIONS.HIRE_PIPSPOOK = "遣灵术"
 STRINGS.ACTIONS.LOTUSMUTATION = "变异阿比"
 STRINGS.ACTIONS.BREW_UNSTABLE = "不稳定调制"
 STRINGS.ACTIONS.BUNK = "假寐"
 
 STRINGS.UI.CRAFTING.RECIPEACTION.BREW_UNSTABLE = "不稳定调制"
-STRINGS.UI.CRAFTING.RECIPEACTION.INFUSE = "赋能"
+STRINGS.UI.CRAFTING.RECIPEACTION.SOULCHILLIFY = "凝魂"
 
 STRINGS.NAMES.ABIGAIL_GESTALT_LOTUS = "月灵莲花"
 STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_REVIVE = "不稳定的恐怖经历"
@@ -112,4 +112,12 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_LOST_GHOST_POWER = {
     "没有你，我连复仇都做不到……",
     "我又孤单一人了，阿比盖尔。",
     "她的力量离开了我，温柔也一并消散了。",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_ASHES_LICK = {
+    "如果骨灰有味道，我希望它至少加点盐...",
+    "原来[骨灰级粉丝]的字面意思是这样... 对不起，我开玩笑的。",
+    "我猜阿比一定没想到，她的最终归宿会是牛饲料...",
+    "阿比，我发誓这是最后一次... 除非明天牛还想吃。",
+    "如果牛死了，算不算阿比的转世？……算了，当我没说。",
+    "阿比……你会原谅我吗？",
 }

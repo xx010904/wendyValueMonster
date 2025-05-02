@@ -10,8 +10,8 @@ local AstroWraithBadge = Class(Badge, function(self, owner, colour, iconbuild, b
 	self.default_symbol_build = iconbuild
 
     self.bufficon = self.underNumber:AddChild(UIAnim())
-    self.bufficon:GetAnimState():SetBank("status_ghost")
-    self.bufficon:GetAnimState():SetBuild("status_ghost")
+    self.bufficon:GetAnimState():SetBank("wendy_ghost_power")
+    self.bufficon:GetAnimState():SetBuild("wendy_ghost_power")
     self.bufficon:GetAnimState():PlayAnimation("frame")
 	self.bufficon:GetAnimState():AnimateWhilePaused(false)
     self.bufficon:SetClickable(false)

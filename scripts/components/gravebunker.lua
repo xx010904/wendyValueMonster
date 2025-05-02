@@ -29,7 +29,7 @@ function GraveBunker:DoBunk(doer)
 
     doer.usingbunker = self.inst
     self.inst:AddTag("hashider")
-    
+
     if self.callingtask ~= nil then
         self.callingtask:Cancel()
     end
@@ -87,6 +87,13 @@ function GraveBunker:DoBunk(doer)
                     -- 调用 DoLeave 方法
                     self.inst:AddTag("hasScareDeath")
                     self:DoLeave(doer)
+                end
+            end)
+
+            -- 监听被打事件
+            scare:ListenForEvent("death", function()
+                if scare:IsValid() then
+                    self.inst:AddTag("hasScareHurt")
                 end
             end)
 
@@ -204,7 +211,7 @@ function GraveBunker:DoLeave(doer)
 	end
 
     local bunkCd = 10
-    if self.inst:HasTag("hasScareDeath") then
+    if self.inst:HasTag("hasScareDeath") or self.inst:HasTag("hasScareHurt") then
         bunkCd = 60
     end
     self.cdtask = self.inst:DoTaskInTime(bunkCd, function()
@@ -212,6 +219,7 @@ function GraveBunker:DoLeave(doer)
 		self.inst:RemoveTag("haunted")
 		self.inst:RemoveTag("bunkerCD")
         self.inst:RemoveTag("hasScareDeath")
+        self.inst:RemoveTag("hasScareHurt")
 	end)
 
 	if self.inst:HasTag("hasScareDeath") then

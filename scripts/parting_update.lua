@@ -10,7 +10,7 @@ AddRecipe2("wendy_last_food",
 TECH.NONE,
 {
     product = "wendy_last_food", -- 唯一id
-    actionstr = "INFUSE", -- 动作id
+    actionstr = "SOULCHILLIFY", -- 动作id
     atlas = "images/inventoryimages/wendy_last_food.xml",
     image = "wendy_last_food.tex",
     builder_tag = "ghostlyfriend",
@@ -28,7 +28,7 @@ end)
 
 -- 修改 astrowraithbadge 位置，保证存活的时候也不遮挡
 AddClassPostConstruct("widgets/statusdisplays", function(self)
-    self.astrowraithbadge = self:AddChild(AstroWraithBadge(self.owner, nil, "status_abigail" ))
+    self.astrowraithbadge = self:AddChild(AstroWraithBadge(self.owner, nil, "wendy_ghost_power" ))
     self.astrowraithbadge:SetPosition(-140, 20)
     self.astrowraithbadge:Hide()
 end)
