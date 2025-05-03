@@ -1,3 +1,33 @@
+local containers = require("containers")
+local params = containers.params
+
+params.sisturn_filter = {
+    widget =
+    {
+        slotpos = {},
+        animbank = "ui_fish_box_5x4",
+        animbuild = "ui_fish_box_5x4",
+        slotbg = {},
+        pos = Vector3(0, 220, 0),
+        side_align_tip = 160,
+    },
+    acceptsstacks = false,
+    type = "chest",
+    openlimit = 1,
+    lowpriorityselection = true,
+}
+for y = 2.5, -0.5, -1 do
+    for x = -1, 3 do
+        table.insert(params.sisturn_filter.widget.slotpos, Vector3(75 * x - 75 * 2 + 75, 75 * y - 75 * 2 + 75, 0))
+        table.insert(params.sisturn_filter.widget.slotbg, { image = "inv_slot_morsel.tex" })
+    end
+end
+function params.sisturn_filter.itemtestfn(container, item, slot)
+    if item.prefab == "monstermeat" or item.prefab == "smallmeat" then
+        return true
+    end
+end
+
 AddPrefabPostInit("sisturn", function (inst)
     -- 播放撒骨灰特效
     inst:DoPeriodicTask(6, function()
@@ -31,6 +61,52 @@ AddPrefabPostInit("sisturn", function (inst)
             inst:AddTag("saltlick")
         end
     end
+
+    inst:ListenForEvent("onopen", function(inst, data)
+        if not inst._child_container or not inst._child_container:IsValid() then
+            -- 如果没有子容器，则创建一个新的子容器
+            local child = SpawnPrefab("sisturn_filter")
+            if child then
+                child.entity:SetParent(inst.entity)
+                -- child.Transform:SetPosition(0, 0, 0) -- 可根据需要微调位置
+                inst._child_container = child
+            end
+        end
+        inst._child_container.components.container:Open(data and data.doer or nil)
+    end)
+
+    inst:ListenForEvent("onclose", function(inst, data)
+        if inst._child_container ~= nil and inst._child_container:IsValid() then
+            inst._child_container.components.container:Close()
+        end
+    end)
+
+    inst:ListenForEvent("onbuilt", function(inst, data)
+        if not inst._child_container then
+            local child = SpawnPrefab("sisturn_filter")
+            if child then
+                child.entity:SetParent(inst.entity)
+                -- child.Transform:SetPosition(0, 0, 0) -- 可根据需要微调位置
+                inst._child_container = child
+            end
+        end
+    end)
+
+    inst:ListenForEvent("onremove", function()
+        if inst._child_container and inst._child_container:IsValid() then
+            inst._child_container.components.container:Close()
+            inst._child_container.components.container:DropEverything()
+            inst._child_container:Remove()
+        end
+    end)
+
+    inst:ListenForEvent("onburnt", function()
+        if inst._child_container and inst._child_container:IsValid() then
+            inst._child_container.components.container:Close()
+            inst._child_container.components.container:DropEverything()
+            inst._child_container:Remove()
+        end
+    end)
 end)
 
 AddPrefabPostInit("world", function(inst)

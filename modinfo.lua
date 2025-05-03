@@ -65,9 +65,9 @@ configuration_options =
 	},
 	{
 		name = "SisturnSetting",
-		label = isCh and "瘦肉姐妹骨灰罐" or "Fleshed Sisturn",
-		hover = isCh and "满花瓣激活时无限产出骨灰供舔盐动物使用，供奉瘦肉强化阿比。"
-			or "I don't know for now.",
+		label = isCh and "素肉姐妹骨灰罐" or "Planssed Sisturn",
+		hover = isCh and "满花瓣激活时，可以将怪物肉净化为素食和带盐骨灰。"
+			or "When ful of petals, it purifies monster meat into plant-based meat and Salted ashes.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -117,7 +117,7 @@ configuration_options =
 		--done
 		name = "CallingSetting",
 		label = isCh and "灵魂隔断" or "Soul Sunder",
-		hover = isCh and "阿比盖尔的作祟指令可以对温蒂使用，交换血量百分比。"
+		hover = isCh and "阿比盖尔的作祟指令可以对温蒂使用，交换当前血量百分比。"
 			or "Abigail can haunt Wendy to instantly swap their current health percentages.",
 		options =
 		{

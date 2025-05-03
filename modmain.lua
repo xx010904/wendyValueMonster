@@ -83,6 +83,8 @@ PrefabFiles = {
     "soul_link_endpoint",
     --sisturn
     "sisturn_salting_fx",
+    "sisturn_food",
+    "sisturn_filter",
     -- 其他 prefab 名称...
 }
 
