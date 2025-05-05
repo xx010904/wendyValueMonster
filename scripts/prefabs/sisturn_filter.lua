@@ -6,14 +6,29 @@ local function fn()
     inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
 
-    MakeInventoryPhysics(inst)
+    -- MakeInventoryPhysics(inst)
     inst:AddTag("filter_station")       -- 供主容器查找使用
     inst:AddTag("NOCLICK")              -- 玩家无法点击打开
     inst:AddTag("CLASSIFIED")           -- 防止UI显示名字
 
-    inst.AnimState:SetBank("chest")
-    inst.AnimState:SetBuild("treasure_chest")
-    inst.AnimState:PlayAnimation("closed")
+    -- inst:AddTag("saltlick")
+
+    -- inst.AnimState:SetBuild("moonglasspool_tile")
+    -- inst.AnimState:SetBank("moonglasspool_tile")
+    -- inst.AnimState:PlayAnimation("smallpool_idle", true)
+    -- inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    -- inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    -- inst.AnimState:SetSortOrder(3)
+    -- inst.AnimState:SetLightOverride(0.25)
+    -- inst.Transform:SetScale(0.65, 0.65, 0.65)
+
+    -- inst.AnimState:SetBuild("sisturn_salt_pool")
+    -- inst.AnimState:SetBank("sisturn_salt_pool")
+    -- inst.AnimState:PlayAnimation("idle4", true)
+    -- inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+    -- inst.AnimState:SetLayer(LAYER_BACKGROUND)
+    -- inst.AnimState:SetSortOrder(3)
+    -- inst.Transform:SetScale(1.25, 1.25, 1.25)
 
     inst.entity:SetPristine()
 
@@ -21,19 +36,17 @@ local function fn()
         return inst
     end
 
-    inst:AddComponent("inspectable")
+    -- inst:AddComponent("inspectable")
 
     inst:AddComponent("container")
-    inst.components.container:WidgetSetup("sisturn_filter") -- 你需要在containers.lua中注册它
+    inst.components.container:WidgetSetup("sisturn_filter")
 
     -- 设定为隐藏容器，永远不被自动关闭（仅由主容器控制）
     inst.components.container.skipclosesnd = true
     inst.components.container.skipopensnd = true
     inst.components.container.canbeopened = true
 
-    inst:DoTaskInTime(0, function()
-        inst:RemoveTag("structure") -- 禁止建筑类交互
-    end)
+    inst.salt_block = 0
 
     return inst
 end

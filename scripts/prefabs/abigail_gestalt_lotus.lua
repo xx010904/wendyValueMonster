@@ -1,5 +1,22 @@
+-- 添加无敌帧给变身者（caster）和幽灵（ghost）
+local function apply_invincibility(inst)
+    -- 检查是否拥有combat组件
+    if inst.components.combat then
+        -- 设置一个乘数为0的修饰符来实现免疫伤害
+        inst.components.combat.externaldamagetakenmultipliers:SetModifier(inst, 0, "lunar_lutos_invincible")
+
+        -- 2秒后移除该modifier，恢复正常伤害
+        inst:DoTaskInTime(2, function()
+            if inst.components.combat then
+                inst.components.combat.externaldamagetakenmultipliers:RemoveModifier(inst, "lunar_lutos_invincible")
+            end
+        end)
+    end
+end
+
 local MIN_FADE_VALUE = 0.40
 local MIN_FADE_COLOUR = {1.00, 1.00, 1.00, MIN_FADE_VALUE}
+local MUTATION_COOLDOWN = 2.5
 local function mutation(inst, caster)
     -- 参数校验层
     if caster == nil or not caster:IsValid() then
@@ -12,18 +29,34 @@ local function mutation(inst, caster)
     end
 
     if not ghostlybond.summoned then
-        return false, "GHOST_NOT_SUMMONED"
+        caster.components.talker:Say(GetString(caster, "ANNOUNCE_GHOST_NOT_SUMMONED"), nil, true)
+        return true
     end
 
     local ghost = ghostlybond.ghost
     if not (ghost and ghost:IsValid()) then
-        return false, "INVALID_GHOST"
+        caster.components.talker:Say(GetString(caster, "ANNOUNCE_GHOST_NOT_SUMMONED"), nil, true)
+        return true
     end
+
+    if ghost.mutation_cooldown then
+        caster.components.talker:Say(GetString(caster, "ANNOUNCE_GHOST_MUTATION_COOLDOWN"), nil, true)
+         return true
+    end
+
+    ghost.mutation_cooldown = true
+    ghost:DoTaskInTime(MUTATION_COOLDOWN, function()
+        ghost.mutation_cooldown = nil
+    end)
 
     -- 核心转向逻辑
     if caster then
         caster:ForceFacePoint(ghost.Transform:GetWorldPosition())
     end
+
+    -- 给施法者和幽灵都添加无敌帧
+    apply_invincibility(caster)
+    apply_invincibility(ghost)
 
     -- 幽灵形态切换
     ghost:ChangeToGestalt(not ghost:HasTag("gestalt"))

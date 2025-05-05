@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0" name="rockline_small">
+        <file id="0" name="rockline_small/rockline_small-0.png" width="538" height="484" pivot_x="0.477833" pivot_y="0.480874"/>
+        <file id="1" name="rockline_small/rockline_small-1.png" width="264" height="228" pivot_x="0.492424" pivot_y="0.482456"/>
+        <file id="2" name="rockline_small/rockline_small-2.png" width="252" height="195" pivot_x="0.464286" pivot_y="0.476923"/>
+        <file id="3" name="rockline_small/rockline_small-3.png" width="242" height="148" pivot_x="0.479339" pivot_y="0.47973"/>
+        <file id="4" name="rockline_small/rockline_small-4.png" width="234" height="103" pivot_x="0.491453" pivot_y="0.475728"/>
+    </folder>
+    <entity id="0" name="sisturn_salt_pool">
+        <animation id="0" name="idle0" length="4667" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="rockline_small">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-11.065707" y="-3.197103" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="1" name="idle1" length="4667" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="rockline_small">
+                <key id="0" spin="0">
+                    <object folder="0" file="1" x="12.284936" y="-0.080192" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="2" name="idle2" length="4667" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="rockline_small">
+                <key id="0" spin="0">
+                    <object folder="0" file="2" x="15.105072" y="-13.910175" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="3" name="idle3" length="4667" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="rockline_small">
+                <key id="0" spin="0">
+                    <object folder="0" file="3" x="18.955038" y="-12.88012" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+        <animation id="4" name="idle4" length="4667" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="rockline_small">
+                <key id="0" spin="0">
+                    <object folder="0" file="4" x="21.835002" y="-12.83016" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

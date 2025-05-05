@@ -4,8 +4,8 @@ local AstroWraithBadge = require "widgets/astrowraithbadge"
 AddRecipe2("wendy_last_food",
 {
     Ingredient("bananapop", 1),
-    Ingredient("nightmarefuel", 1),
-    Ingredient("ghostflower", 1)
+    Ingredient("nightmarefuel", 2),
+    Ingredient("ghostflower", 3)
 },
 TECH.NONE,
 {
@@ -47,12 +47,46 @@ AddClientModRPCHandler("WendyValueMonster", "UpdateGhostPowerBadge", function(co
     end
 end)
 
+-- 惊吓驯化的牛
+local function panicBeefalo(inst)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local nearby_ents = TheSim:FindEntities(x, y, z, 10.0, { "beefalo" }, { "player", "INLIMBO" })
+
+    for _, ent in ipairs(nearby_ents) do
+        if ent ~= inst and
+            ent.components.domesticatable and
+            ent.components.domesticatable.domestication and
+            ent.components.domesticatable.domestication > 0 and
+            ent.components.locomotor
+        then
+
+            ent:StopBrain()
+
+            local ex, ey, ez = ent.Transform:GetWorldPosition()
+            local dx = x - ex    -- 注意这里是 x - ex
+            local dz = z - ez    -- 注意这里是 z - ez
+            local angle = math.atan2(-dz, -dx) * (180 / math.pi)  -- 反向方向
+
+            ent:PushEvent("locomote")
+            ent.components.locomotor:RunInDirection(angle)
+
+            ent:DoTaskInTime(2.5, function()
+                if ent.components.locomotor then
+                    ent.components.locomotor:Stop()
+                    ent:RestartBrain()
+                end
+            end)
+        end
+    end
+end
+
 AddStategraphState('wilson',
     State{
         name = "parting",
         tags = { "busy", "canrotate", "nopredict", "nomorph", "drowning", "nointerrupt" },
 
         onenter = function(inst)
+            panicBeefalo(inst)
             inst.components.locomotor:Stop()
 
             SpawnPrefab("attune_out_fx").Transform:SetPosition(inst.Transform:GetWorldPosition())

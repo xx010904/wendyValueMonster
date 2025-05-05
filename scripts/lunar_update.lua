@@ -1,5 +1,34 @@
 -- 月晷可以采9朵莲
 AddPrefabPostInit("moondial", function(inst)
+    -- Hook onload and onsave methods to maintain lotus_create_cd
+    local _OnSave = inst.OnSave
+    inst.OnSave = function(inst, data)
+        if _OnSave then
+            _OnSave(inst, data)
+        end
+        -- 保存 lotus_create_cd
+        if inst.lotus_create_cd then
+            data.lotus_create_cd = inst.lotus_create_cd
+        end
+    end
+
+    local _OnLoad = inst.OnLoad
+    inst.OnLoad = function(inst, data)
+        if _OnLoad then
+            _OnLoad(inst, data)
+        end
+        -- 恢复 lotus_create_cd
+        if data and data.lotus_create_cd then
+            inst.lotus_create_cd = data.lotus_create_cd
+        else
+            inst.lotus_create_cd = 9  -- 默认值为9
+        end
+    end
+
+    -- 初始化lotus_create_cd字段，默认为9
+    if inst.lotus_create_cd == nil then
+        inst.lotus_create_cd = 9
+    end
 
     -- 在周围生成特效
     local function createLotus(inst)
@@ -25,16 +54,17 @@ AddPrefabPostInit("moondial", function(inst)
 
     if inst.components.ghostgestalter then
 
-        -- -- 靠近特效
-        -- inst:AddComponent("playerprox")
-        -- inst.components.playerprox:SetDist(TUNING.GHOST_HUNT.TOY_FADE.IN, TUNING.GHOST_HUNT.TOY_FADE.IN)
-        -- inst.components.playerprox:SetOnPlayerNear(showLotusFx)
-        -- inst.components.playerprox:SetOnPlayerFar(clearLotusFx)
-
         -- 生成莲花数量
         inst:WatchWorldState("moonphase", function(inst, phase)
-            if TheWorld.state.moonphase == "full" then
-                createLotus(inst)
+            if TheWorld.state.moonphase == "full" and not TheWorld.state.isalterawake then
+                -- 只有lotus_create_cd <= 0时才生成莲花
+                if inst.lotus_create_cd <= 0 then
+                    createLotus(inst)
+                    inst.lotus_create_cd = 9  -- 生成后重置lotus_create_cd为9
+                end
+                if inst.lotus_create_cd > 0 then
+                    inst.lotus_create_cd = inst.lotus_create_cd - 1
+                end
             end
         end)
     end

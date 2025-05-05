@@ -7,8 +7,8 @@ local AstroWraith = Class(function(self, inst)
     self.update_timer = 0
     self.original_damagemultiplier = nil
     self.max_attack_count = 100
-    self.drown_rate = 0.05
-    self.attack_rate = 0.15
+    self.drown_rate = 0.06
+    self.attack_rate = 0.66
 
     inst:ListenForEvent("onattackother", function(inst, data)
         if data and data.target and inst.components.astrowraith then

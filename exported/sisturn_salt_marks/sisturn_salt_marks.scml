@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="r11">
+    <folder id="0" name="x_spot">
+        <file id="0" name="x_spot/x_spot-0.png" width="333" height="170" pivot_x="0.48048" pivot_y="0.411471"/>
+        <file id="1" name="x_spot/x_spot-1.png" width="241" height="149" pivot_x="0.498963" pivot_y="0.359857"/>
+    </folder>
+    <entity id="0" name="sisturn_salt_marks">
+        <animation id="0" name="idle" length="417" interval="100">
+            <mainline>
+                <key id="0">
+                    <object_ref id="0" timeline="0" key="0" z_index="0"/>
+                </key>
+                <key id="1" time="84">
+                    <object_ref id="0" timeline="0" key="1" z_index="0"/>
+                </key>
+                <key id="2" time="167">
+                    <object_ref id="0" timeline="0" key="2" z_index="0"/>
+                </key>
+                <key id="3" time="250">
+                    <object_ref id="0" timeline="0" key="3" z_index="0"/>
+                </key>
+                <key id="4" time="334">
+                    <object_ref id="0" timeline="0" key="4" z_index="0"/>
+                </key>
+                <key id="5" time="417">
+                    <object_ref id="0" timeline="0" key="5" z_index="0"/>
+                </key>
+            </mainline>
+            <timeline id="0" name="x_spot">
+                <key id="0" spin="0">
+                    <object folder="0" file="0" x="-0.1" y="0.1" angle="0"/>
+                </key>
+                <key id="1" time="84" spin="0">
+                    <object folder="0" file="0" x="-0.1" y="0.1" angle="0"/>
+                </key>
+                <key id="2" time="167" spin="0">
+                    <object folder="0" file="0" x="-0.1" y="0.1" angle="0"/>
+                </key>
+                <key id="3" time="250" spin="0">
+                    <object folder="0" file="0" x="-0.1" y="0.1" angle="0"/>
+                </key>
+                <key id="4" time="334" spin="0">
+                    <object folder="0" file="0" x="-0.1" y="0.1" angle="0"/>
+                </key>
+                <key id="5" time="417" spin="0">
+                    <object folder="0" file="0" x="-0.1" y="0.1" angle="0"/>
+                </key>
+            </timeline>
+        </animation>
+    </entity>
+</spriter_data>

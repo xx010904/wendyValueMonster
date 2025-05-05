@@ -1,9 +1,3 @@
-local assets =
-{
-    Asset("ANIM", "anim/bishop_attack.zip"),
-    Asset("SOUND", "sound/chess.fsb"),
-}
-
 local function OnHit(inst, owner, target)
     SpawnPrefab("abigail_tether_charge_hit").Transform:SetPosition(inst.Transform:GetWorldPosition())
     inst:Remove()
@@ -54,7 +48,7 @@ local function fn()
     inst.components.projectile:SetOnThrownFn(OnThrown)
 
     inst:DoTaskInTime(0.4, function()
-        inst.components.projectile:SetSpeed(24)
+        inst.components.projectile:SetSpeed(19)
         inst.components.projectile:SetHitDist(0.75)
     end)
 
@@ -144,5 +138,5 @@ local function hit_fn()
 	return inst
 end
 
-return Prefab("abigail_tether_charge", fn, assets),
+return Prefab("abigail_tether_charge", fn, {}),
     Prefab("abigail_tether_charge_hit", hit_fn)

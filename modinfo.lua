@@ -65,9 +65,9 @@ configuration_options =
 	},
 	{
 		name = "SisturnSetting",
-		label = isCh and "素肉姐妹骨灰罐" or "Planssed Sisturn",
-		hover = isCh and "满花瓣激活时，可以将怪物肉净化为素食和带盐骨灰。"
-			or "When ful of petals, it purifies monster meat into plant-based meat and Salted ashes.",
+		label = isCh and "瘦肉姐妹骨灰罐" or "Fleshed Sisturn",
+		hover = isCh and "将瘦肉投入骨灰罐，可转化为阿比盖尔的肉盾值，并产出带盐骨灰与糟渣。"
+			or "Feed Lean Meat into Sisturn to convert it into Abigail's flesh shield and yield Salted Ashes and Mockmuck.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },

@@ -29,11 +29,9 @@ local function OnEaten(inst, eater)
             local mount = eater.components.rider:GetMount()
             if mount then
                 eater.components.rider:Dismount()
-                if mount.components.hauntable ~= nil and mount.components.hauntable.panicable then
-                    mount.components.hauntable:Panic(20)
-                end
             end
         end
+
         if eater.components.temperature then
             eater.components.temperature:SetTemp(TUNING.STARTING_TEMP)
         end

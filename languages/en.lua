@@ -4,7 +4,7 @@ STRINGS.ACTIONS.BREW_UNSTABLE = "Unstabilize"
 STRINGS.ACTIONS.BUNK = "Bunk"
 
 STRINGS.UI.CRAFTING.RECIPEACTION.BREW_UNSTABLE = "Unstabilize"
-STRINGS.UI.CRAFTING.RECIPEACTION.SOULCHILLIFY = "Soulchilln"
+STRINGS.UI.CRAFTING.RECIPEACTION.SOULCHILLIFY = "Farewell"
 
 STRINGS.NAMES.ABIGAIL_GESTALT_LOTUS = "Gestalt Lotus"
 STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Unstable Ghastly Experience"
@@ -15,6 +15,64 @@ STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_SHIELD = "Unstable Unyielding Draught"
 STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "Unstable Spectral Cure-All"
 STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Unstable Revenant Restorative"
 STRINGS.NAMES.WENDY_LAST_FOOD = "Parting Banana Pop"
+STRINGS.NAMES.SISTURN_SALTLICK = "Sister's Salted Endorsement"
+STRINGS.NAMES.SISTURN_FOOD = "MockMuck"
+STRINGS.NAMES.BIGSPOOK_ALT_NAMES = {
+    "BigSpook·Heir of the Tear Drop Kingdom",
+    "BigSpook·Supreme Guardian of the Wailing Souls",
+    "BigSpook·The Fearless Messenger of the Unmatched Realm",
+    "BigSpook·The Eternal Light in the Shadows",
+    "BigSpook·Companion of the Sleepless Monarch",
+    "BigSpook·Incarnation of the Tomb Goddess",
+    "BigSpook·Guide of the Nether Angels",
+    "BigSpook·The Beautiful Angel of the Final Moments",
+    "BigSpook·Guardian of the Tomb Star",
+    "BigSpook·Fate's Child Between the Gravestones",
+    "BigSpook·The Queen of Weeping Souls",
+    "BigSpook·Princess of the Ashen World",
+    "BigSpook·Preacher of the Fear Dynasty",
+    "BigSpook·The Messenger of the Perfect Nightmare",
+    "BigSpook·Eternal Goddess of the Nightmare Realm",
+    "BigSpook·Star Shine of the Soul's Guidance",
+    "BigSpook·The Queen of Ultimate Fright",
+    "BigSpook·Official Messenger of the Nightmare",
+    "BigSpook·Guardian of the Supreme Soul",
+    "BigSpook·Heir of the Vengeful Spirit King",
+    "BigSpook·Herald of the Yellow Springs",
+    "BigSpook·Empress of the Netherworld's Tremors",
+    "BigSpook·Princess of the Underworld Kingdom",
+    "BigSpook·Emissary of the Underworld Palace",
+    "BigSpook·Queen Above the Ghost Realm",
+    "BigSpook·Deity at the Edge of the Yellow Springs",
+    "BigSpook·Heavenly Chosen One of the Sanzu River",
+    "BigSpook·Goddess of the Underworld's Arrival",
+    "BigSpook·Ultimate Royalty of the Spirit Realm",
+    "BigSpook·Eternal King of the Revenge Souls",
+    "BigSpook·The Perfect Revenge Queen",
+    "BigSpook·Ruler of the Vengeful Spirits",
+    "BigSpook·Angel of the Lost Souls' Revenge",
+    "BigSpook·King of Revenge in the Netherworld",
+    "BigSpook·Sacred Princess of the Yellow Springs Abyss",
+    "BigSpook·Midnight Queen of Revenge",
+    "BigSpook·Arrival of the Revenge Goddess",
+    "BigSpook·Herald of the Revenge's Glory",
+    "BigSpook·Princess of the Golden Bloodline of the Underworld",
+    "BigSpook·Immortal Glory of the Yellow Springs Noble",
+    "BigSpook·Heir to the Yellow Springs with the Amethyst Crown",
+    "BigSpook·Noble Goddess of the Hell Throne",
+    "BigSpook·Glorious Messenger of the Netherworld Nobility",
+    "BigSpook·Lord of the Eternal Aristocracy of the Netherworld",
+    "BigSpook·Princess of the Crawling Mud",
+    "BigSpook·Roaring Princess of the Heart of Stone",
+    "BigSpook·Guardian of the Clay Eye",
+    "BigSpook·Heir of the Corrupted Soil Kingdom",
+    "BigSpook·Queen of the Ruins Beneath the City",
+    "BigSpook·Ethereal Empress Above the Muddy Marshes",
+    "BigSpook·Dark Lord of the Dampness",
+    "BigSpook·Decaying Goddess Climbing Up",
+    "BigSpook·Crawling Royalty of the Abyss Below",
+    "BigSpook·Contemplator in the Corrupted Mud",
+}
 
 STRINGS.RECIPE_DESC.WENDY_LAST_FOOD = "A parting food to reunite with Abigail."
 STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Brings you back from a terrifying experience."
@@ -36,6 +94,9 @@ STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "Instant 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Slow and unstable recovery, with occasional damage."
 STRINGS.CHARACTERS.WENDY.DESCRIBE.WENDY_LAST_FOOD = {"Is it Abby's favorite food?", "I don't like this..."}
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.WENDY_LAST_FOOD = "A food that looks strange yet delicious."
+STRINGS.CHARACTERS.WENDY.DESCRIBE.SISTURN_SALTLICK = "Abigail's salty remains... both spokesperson and seasoning."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.SISTURN_SALTLICK = "Salt—preserving grief like it preserves meat."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.SISTURN_FOOD = "Just right for feeding rough-eating beasts... or lining the bottom of a stewpot."
 
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_LEAVE = {
     "Poor soul, you should leave.",
@@ -120,4 +181,54 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_ASHES_LICK = {
     "I swear this is the last time, Abigail... unless the beefalo gets hungry again.",
     "If the beefalo dies... would that count as Abigail's reincarnation? No? Never mind.",
     "Abigail... will you ever forgive me for this?",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_NOT_FLESHEILD = {
+    "Abigail doesn't need a fleshield; she needs to rest in peace.",
+    "Sticking flesh on a corpse won't turn it into a warrior, only attract buzzards.",
+    "If a fleshield could protect her, Abigail wouldn't have died, right?",
+    "I don't konw how to make my sister a fleshield warrior.",
+    "Adding a fleshield for a ghost sounds like some kind of priest's bad taste.",
+    "A fleshield only delays death, it doesn't cancel the appointment.",
+    "I'm not very good at the fleshed sisturn skill tree.",
+}
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_NOT_FLESHEILD = {
+    "A meat shield? Sounds like asking for trouble; I don't want to get involved.",
+    "A meat shield doesn't solve problems; it just pushes the trouble onto others.",
+    "I don't want to be associated with corpses; it's too disgusting.",
+}
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_NOT_ENOUGH_FLESH = {
+    "Not enough meat is really a problem!",
+    "I need more meat to complete this task.",
+    "There isn't enough meat.",
+    "This is a hassle; I don't like lacking resources.",
+    "I hope to find more meat."
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_GHOST_NOT_SUMMONED = {
+    "Abigail... where are you?",
+    "I need you, Abigail.",
+    "Come forth, Abigail.",
+    "She's not here... Has she vanished again?",
+    "Stop hiding, Abigail!",
+    "I feel so alone without her.",
+    "I can't hear Abigail... It's too quiet.",
+    "Has even Abigail's spirit abandoned me?",
+    "Even she has left me now...",
+    "No echo in the wind... only silence.",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_GHOST_MUTATION_COOLDOWN = {
+    "Abigail needs time to respond.",
+    "She's still recovering...",
+    "She's not ready yet.",
+    "Her spirit slumbers still.",
+    "Her strength hasn't returned.",
+    "She can't mutate again... not yet.",
+    "The mutation drained her essence.",
+    "Even the dead grow weary.",
+    "Death is not generous—it demands patience.",
+}
+STRINGS.SISTURNFILTER =
+{
+    UI = {
+        BLESSED_FLESHED = "Blessed Fleshed",
+    }
 }

@@ -32,6 +32,9 @@ Assets = {
 	Asset("ANIM", "anim/wendy_ghost_power.zip"),
     --sisturn
     Asset("ANIM", "anim/sisturn_salting_fx.zip"),
+    Asset("ANIM", "anim/sisturn_salt_pool.zip"),
+    Asset("ANIM", "anim/sisturn_food.zip"),
+    Asset("ANIM", "anim/sisturn_salt_marks.zip"),
 
     ---- images
     --lunar
@@ -55,6 +58,9 @@ Assets = {
     --parting
     Asset("IMAGE", "images/inventoryimages/wendy_last_food.tex"),
 	Asset("ATLAS", "images/inventoryimages/wendy_last_food.xml"),
+    --sisturn
+    Asset("IMAGE", "images/inventoryimages/sisturn_food.tex"),
+	Asset("ATLAS", "images/inventoryimages/sisturn_food.xml"),
 }
 
 PrefabFiles = {
@@ -85,6 +91,7 @@ PrefabFiles = {
     "sisturn_salting_fx",
     "sisturn_food",
     "sisturn_filter",
+    "sisturn_saltlick",
     -- 其他 prefab 名称...
 }
 

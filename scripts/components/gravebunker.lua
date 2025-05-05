@@ -43,22 +43,39 @@ function GraveBunker:DoBunk(doer)
     for i = 1, totalScares do
         local angle = (i - 1) * (360 / totalScares) -- 计算每个惊吓的角度
 
+        -- 定义名字获取
+        local function BigSpook_DisplayNameFn(inst)
+            local names = STRINGS.NAMES.BIGSPOOK_ALT_NAMES
+            if names and #names > 0 then
+                local index = math.random(#names)
+                return names[index]
+            end
+            return "Grave Guard Plus!"
+        end
+
         -- 创建大惊吓实例
         local scare = SpawnPrefab("graveguard_ghost")
         if scare then
             -- 去掉大惊吓的脑子
             scare:SetBrain(nil)
+            -- 如果没有 Name 组件，添加一个 Name 组件
+            if not scare.components.named then
+                scare:AddComponent("named")
+            end
+
+            -- 设置名称为随机生成的名称
+            scare.components.named:SetName(BigSpook_DisplayNameFn(scare))
 
 			if doer.components.skilltreeupdater and doer.components.skilltreeupdater:IsActivated("wendy_makegravemounds") then
 				if scare.components.health then
-					scare.components.health:SetMaxHealth(TUNING.ABIGAIL_HEALTH_LEVEL3 / 0.75)
+					scare.components.health:SetMaxHealth(TUNING.ABIGAIL_HEALTH_LEVEL3)
 				end
 				if scare.components.combat then
 					scare.components.combat:SetDefaultDamage(TUNING.ABIGAIL_DAMAGE.night / 25)
 				end
             else
                 if scare.components.health then
-					scare.components.health:SetMaxHealth(TUNING.ABIGAIL_HEALTH_LEVEL2 / 0.75)
+					scare.components.health:SetMaxHealth(TUNING.ABIGAIL_HEALTH_LEVEL2)
 				end
 				if scare.components.combat then
 					scare.components.combat:SetDefaultDamage(TUNING.ABIGAIL_DAMAGE.dusk / 25)
@@ -210,9 +227,9 @@ function GraveBunker:DoLeave(doer)
 		self.cdtask = nil
 	end
 
-    local bunkCd = 10
+    local bunkCd = 5
     if self.inst:HasTag("hasScareDeath") or self.inst:HasTag("hasScareHurt") then
-        bunkCd = 60
+        bunkCd = 120
     end
     self.cdtask = self.inst:DoTaskInTime(bunkCd, function()
 		self.inst.AnimState:SetHaunted(false)
