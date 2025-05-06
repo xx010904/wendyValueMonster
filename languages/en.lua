@@ -226,6 +226,20 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_GHOST_MUTATION_COOLDOWN = {
     "Even the dead grow weary.",
     "Death is not generous—it demands patience.",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_NEED_APART = {
+    "Abigail's not ready yet.",
+    "Abigail's too tired to possess me.",
+    "Abigail can't do it right now.",
+    "Abigail needs a short break.",
+    "We need to stay apart for a while.",
+    "Merging isn't possible right now.",
+    "Abigail says not to rush.",
+    "Abigail needs a moment to rest.",
+    "She just separated. Don't force her.",
+    "She still needs some time.",
+    "Even ghosts need a breather.",
+    "Abigail doesn't want to cling right now.",
+}
 STRINGS.SISTURNFILTER =
 {
     UI = {

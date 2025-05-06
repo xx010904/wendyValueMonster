@@ -102,13 +102,32 @@ AddPrefabPostInit("abigail", function(inst)
 end)
 
 
-local PROCESS_TIME_EACH_FLESH = 0.5
+local PROCESS_TIME_EACH_FLESH = 2.5
+
+-- 封闭施法
+local function SpawnFossilSpikes(inst, item_count)
+    local spike_count = 9
+    local radius = 2.4
+    local x, y, z = inst.Transform:GetWorldPosition()
+    local random_offset_angle = math.random() * 2 * PI  -- 0 到 2π 的随机偏移
+
+    for i = 1, spike_count do
+        local angle = random_offset_angle + (i - 1) * (2 * PI / spike_count)
+        local offset = Vector3(math.cos(angle), 0, math.sin(angle)) * radius
+        local spike = SpawnPrefab("sisturn_spike")
+        if spike then
+            spike.Transform:SetPosition(x + offset.x, y, z + offset.z)
+            spike.task = spike:DoTaskInTime(0, spike.StartSpike, item_count * PROCESS_TIME_EACH_FLESH, math.random(7))
+        end
+    end
+end
 
 ---- 撒盐块
 local function dropSaltBlock(inst, item_count)
     if not item_count or item_count <= 0 then return end
 
     local x, y, z = inst.Transform:GetWorldPosition()
+    SpawnFossilSpikes(inst, item_count)
     local ents = TheSim:FindEntities(x, y, z, 1, { "sisturn_saltlick" })
 
     -- 查找已有的盐块
@@ -146,8 +165,8 @@ local function dropSaltBlock(inst, item_count)
         -- local current_max = target_saltlick.components.finiteuses.total
         local current_uses = target_saltlick.components.finiteuses:GetUses()
 
-        target_saltlick.components.finiteuses:SetMaxUses(current_uses + 1)
-        target_saltlick.components.finiteuses:SetUses(current_uses + 1)
+        target_saltlick.components.finiteuses:SetMaxUses(current_uses + 2)
+        target_saltlick.components.finiteuses:SetUses(current_uses + 2)
 
         local fx = SpawnPrefab("sisturn_salting_fx")
         local offset_x = math.random(-0.75, 0.75)
@@ -247,32 +266,53 @@ end
 
 -- 锁上容器，全部替换食物
 local function lockFilterContainer(inst, item_count)
-    if inst.components.container ~= nil then
-        inst.components.container:Close()
-        inst.components.container.canbeopened = false
-        if inst._link_sisturn and inst._link_sisturn.components.container then
-            inst._link_sisturn.components.container:Close()
-            inst._link_sisturn.components.container.canbeopened = false
+    if inst.components.container == nil then
+        return
+    end
+
+    inst.components.container:Close()
+    inst.components.container.canbeopened = false
+
+    if inst._link_sisturn and inst._link_sisturn.components.container then
+        inst._link_sisturn.components.container:Close()
+        inst._link_sisturn.components.container.canbeopened = false
+    end
+
+    local container = inst.components.container
+    local current_slot = 1
+
+    inst.replace_food_task = inst:DoPeriodicTask(PROCESS_TIME_EACH_FLESH, function()
+        if not inst:IsValid() or not container then
+            if inst.replace_food_task then
+                inst.replace_food_task:Cancel()
+                inst.replace_food_task = nil
+            end
+            return
         end
 
-        inst:DoTaskInTime(item_count * PROCESS_TIME_EACH_FLESH, function()
-            if inst.components.container ~= nil then
-                local container = inst.components.container
-                for i = 1, container:GetNumSlots() do
-                    local old_item = container:GetItemInSlot(i)
-                    if old_item ~= nil then
-                        old_item:Remove()
-                        local new_item = SpawnPrefab("sisturn_food")
-                        if new_item ~= nil then
-                            container:GiveItem(new_item, i)
-                        end
-                    end
-                end
-                container.canbeopened = true
+        if current_slot > container:GetNumSlots() then
+            -- 处理完成，解锁容器
+            container.canbeopened = true
+            if inst._link_sisturn and inst._link_sisturn.components.container then
                 inst._link_sisturn.components.container.canbeopened = true
             end
-        end)
-    end
+
+            inst.replace_food_task:Cancel()
+            inst.replace_food_task = nil
+            return
+        end
+
+        local old_item = container:GetItemInSlot(current_slot)
+        if old_item then
+            old_item:Remove()
+            local new_item = SpawnPrefab("sisturn_food")
+            if new_item then
+                container:GiveItem(new_item, current_slot)
+            end
+        end
+
+        current_slot = current_slot + 1
+    end)
 end
 
 -- 加工瘦肉

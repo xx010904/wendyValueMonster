@@ -226,6 +226,20 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_GHOST_MUTATION_COOLDOWN = {
     "连死者也有疲惫之时。",
     "死亡并不慷慨，它也设下等待的门槛。",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_NEED_APART = {
+    "阿比盖尔还没准备贴贴。",
+    "阿比盖尔太累了，附身不了。",
+    "阿比盖尔现在不行。",
+    "阿比盖尔要先歇一会。",
+    "我们得分开一阵子。",
+    "现在不能附身。",
+    "阿比盖尔说别急。",
+    "阿比盖尔要休息一下。",
+    "阿比盖尔刚刚才分开，别逼她。",
+    "阿比盖尔还需要点时间。",
+    "鬼魂也需要点时间。",
+    "阿比盖尔暂时不想和我贴贴。",
+}
 STRINGS.SISTURNFILTER =
 {
     UI = {

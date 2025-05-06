@@ -92,6 +92,7 @@ PrefabFiles = {
     "sisturn_food",
     "sisturn_filter",
     "sisturn_saltlick",
+    "sisturn_spike",
     -- 其他 prefab 名称...
 }
 

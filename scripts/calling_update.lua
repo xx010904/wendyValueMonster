@@ -106,8 +106,51 @@ local function doSunder(inst, player)
     end)
 end
 
+local POSSESSION_COOLDOWN = 10
+local function abigailPossession(inst, player)
+    inst.Transform:SetPosition(player.Transform:GetWorldPosition())
+    player.components.ghostlybond:Recall(false)
+
+    player:AddComponent("possessionaoe")
+    player.components.possessionaoe:Enable()
+
+    player:ListenForEvent("ghostlybond_summoncomplete", function()
+        if player.components.possessionaoe then
+            player.components.possessionaoe:Disable()
+            player:RemoveComponent("possessionaoe")
+            -- 需要分开一会
+            inst.needApart = true
+            inst:DoTaskInTime(POSSESSION_COOLDOWN, function()
+                inst.needApart = false
+            end)
+        end
+    end)
+end
+
 ---- 作祟修改
 AddPrefabPostInit("abigail", function(inst)
+    inst.needApart = false
+
+    local old_OnSave = inst.OnSave
+    inst.OnSave = function(inst, data)
+        if old_OnSave then
+            old_OnSave(inst, data)
+        end
+        if inst.needApart then
+            data.needApart = inst.needApart
+        end
+    end
+
+    local old_OnLoad = inst.OnLoad
+    inst.OnLoad = function(inst, data)
+        if old_OnLoad then
+            old_OnLoad(inst, data)
+        end
+        if data and data.needApart then
+            inst.needApart = data.needApart
+        end
+    end
+
     if inst and inst.ListenForEvent then
         inst:ListenForEvent("do_ghost_hauntat", function(inst, pos)
             if (inst.sg and inst.sg:HasStateTag("nocommand"))
@@ -120,6 +163,11 @@ AddPrefabPostInit("abigail", function(inst)
                 return
             end
 
+            if inst.needApart then
+                player.components.talker:Say(GetString(player, "ANNOUNCE_NEED_APART"))
+                return
+            end
+
             -- 获取位置坐标
             local px, py, pz = pos:Get()
 
@@ -129,7 +177,8 @@ AddPrefabPostInit("abigail", function(inst)
 
             -- 如果 player 和 pos 的距离小于等于2
             if distance <= 2 then
-                doSunder(inst, player)
+                -- doSunder(inst, player)
+                abigailPossession(inst, player)
 
                 -- 清除原本作祟的目标
                 inst._haunt_target = nil

@@ -25,8 +25,8 @@ local function fn()
     end
 
     inst:AddComponent("edible")
-    inst.components.edible.hungervalue = TUNING.CALORIES_TINY/2
-    inst.components.edible.healthvalue = TUNING.HEALING_TINY
+    inst.components.edible.hungervalue = TUNING.CALORIES_TINY/4
+    inst.components.edible.healthvalue = TUNING.HEALING_TINY/2
     inst.components.edible.sanityvalue = -TUNING.SANITY_SMALL
     inst.components.edible.foodtype = FOODTYPE.VEGGIE
 	inst.components.edible.secondaryfoodtype = FOODTYPE.ROUGHAGE
