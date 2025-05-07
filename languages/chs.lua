@@ -226,6 +226,20 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_GHOST_MUTATION_COOLDOWN = {
     "连死者也有疲惫之时。",
     "死亡并不慷慨，它也设下等待的门槛。",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_COOLDOWN = {
+    "她刚刚被灌注鲜血，灵魂尚未稳固。",
+    "灵与血才交汇，无法再次唤起她。",
+    "鲜血扰乱了她与彼岸的连结。",
+    "灵魂的通道仍在凝合中。",
+    "血液温热，而她仍在冷却。",
+    "刚才的共鸣太剧烈……她需要静默。",
+    "血液换新，灵魂却因此迟疑。",
+    "她在血与死之间踟蹰，尚未归来。",
+    "连死者也畏惧鲜血的喧嚣。",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_READY = {
+    "血与魂已协调。",
+}
 STRINGS.CHARACTERS.WENDY.ANNOUNCE_NEED_APART = {
     "阿比盖尔还没准备贴贴。",
     "阿比盖尔太累了，附身不了。",

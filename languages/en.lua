@@ -226,6 +226,20 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_GHOST_MUTATION_COOLDOWN = {
     "Even the dead grow weary.",
     "Death is not generous—it demands patience.",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_COOLDOWN = {
+    "She's just been given new blood... her spirit trembles.",
+    "The blood is fresh, and the bond is fragile.",
+    "The ritual stirred her too deeply. She needs time.",
+    "Her soul flickers, unready to cross again.",
+    "The lifeblood muddied her link to death.",
+    "Even the dead recoil from such vitality.",
+    "She hesitates between blood and beyond.",
+    "She must rest. The echo of life is still too loud.",
+    "Not even the grave is eager to answer again so soon.",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_READY = {
+    "The balance between blood and soul has returned.",
+}
 STRINGS.CHARACTERS.WENDY.ANNOUNCE_NEED_APART = {
     "Abigail's not ready yet.",
     "Abigail's too tired to possess me.",

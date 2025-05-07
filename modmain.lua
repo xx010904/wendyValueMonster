@@ -93,6 +93,8 @@ PrefabFiles = {
     "sisturn_filter",
     "sisturn_saltlick",
     "sisturn_spike",
+    -- shadow
+    "murder_abigail_buff",
     -- 其他 prefab 名称...
 }
 

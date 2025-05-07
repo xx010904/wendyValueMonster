@@ -125,7 +125,7 @@ AddPrefabPostInit("wendy", function(inst)
                     local ghost = inst.components.ghostlybond.ghost
                     if ghost.components.health then
                         data.ghostcurrenthealth = ghost.components.health.currenthealth
-                        -- print("save data.ghostcurrenthealth", data.ghostcurrenthealth)
+                        print("save data.ghostcurrenthealth", data.ghostcurrenthealth)
                     end
                 end
             end
@@ -143,7 +143,7 @@ AddPrefabPostInit("wendy", function(inst)
                         local ghost = inst.components.ghostlybond.ghost
                         if ghost.components.health then
                             OnSisterBondChange(ghost)
-                            -- print("load data.ghostcurrenthealth", data.ghostcurrenthealth)
+                            print("load data.ghostcurrenthealth", data.ghostcurrenthealth)
                             ghost.components.health.currenthealth = data.ghostcurrenthealth
                         end
                     end

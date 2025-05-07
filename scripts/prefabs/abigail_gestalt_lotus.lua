@@ -16,7 +16,7 @@ end
 
 local MIN_FADE_VALUE = 0.40
 local MIN_FADE_COLOUR = {1.00, 1.00, 1.00, MIN_FADE_VALUE}
-local MUTATION_COOLDOWN = 2.5
+local MUTATION_COOLDOWN = 4
 local function mutation(inst, caster)
     -- 参数校验层
     if caster == nil or not caster:IsValid() then
@@ -41,7 +41,7 @@ local function mutation(inst, caster)
 
     if ghost.mutation_cooldown then
         caster.components.talker:Say(GetString(caster, "ANNOUNCE_GHOST_MUTATION_COOLDOWN"), nil, true)
-         return true
+        return true
     end
 
     ghost.mutation_cooldown = true

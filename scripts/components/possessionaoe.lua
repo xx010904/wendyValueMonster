@@ -6,6 +6,31 @@ local PossessionAOE = Class(function(self, inst)
     self.radius = 4
 end)
 
+-- 添加debuff
+function ApplyDebuff(inst, target)
+	if target ~= nil then
+        local buff = "abigail_vex_debuff"
+
+        if inst:GetDebuff("super_elixir_buff") and inst:GetDebuff("super_elixir_buff").prefab == "ghostlyelixir_shadow_buff" then
+            buff = "abigail_vex_shadow_debuff"
+        end
+
+        local olddebuff = target:GetDebuff("abigail_vex_debuff")
+        if olddebuff and olddebuff.prefab ~= buff then
+            target:RemoveDebuff("abigail_vex_debuff")
+        end
+
+        target:AddDebuff("abigail_vex_debuff", buff, nil, nil, nil, inst)
+
+        local debuff = target:GetDebuff("abigail_vex_debuff")
+
+        local skin_build = inst:GetSkinBuild()
+        if skin_build ~= nil and debuff ~= nil then
+            debuff.AnimState:OverrideItemSkinSymbol("flower", skin_build, "flower", inst.GUID, "abigail_attack_fx" )
+        end
+	end
+end
+
 local function GetTimeBasedDamage(inst)
     local finalDamage = 15
     local attack_anim = "attack1"
@@ -41,6 +66,7 @@ function PossessionAOE:DoAOEAttack()
     for _, target in ipairs(targets) do
         if target ~= self.inst and target.components.health and not target.components.health:IsDead() then
             target.components.combat:GetAttacked(self.inst, damage, nil, nil, nil)
+            ApplyDebuff(self.inst, target)
             -- self.inst.components.combat:DoAttack(target, nil, nil, nil, damage)
         end
     end

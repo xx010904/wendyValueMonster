@@ -67,7 +67,7 @@ local function doSunder(inst, player)
     inst.sg:GoToState("abigail_transform")
     player.sg:GoToState("soul_sunder")
 
-    player:DoTaskInTime(0.25, function()
+    player:DoTaskInTime(0.25, function(player)
         local player_health = player.components.health
         local inst_health = inst.components.health
         if player_health and inst_health then
@@ -80,12 +80,16 @@ local function doSunder(inst, player)
             inst_health:SetPercent(player_health_percentage)
 
             -- 作祟期间不能再作祟
-            player.AnimState:SetHaunted(true)
-            player:AddTag("haunted")
-            player:DoTaskInTime(12, function()
-                if player:HasTag("haunted") then
-                    player.AnimState:SetHaunted(false)
-                    player:RemoveTag("haunted")
+            player._haunt_cooldown = 120
+            player._haunt_countdown_task = player:DoPeriodicTask(1, function()
+                if player._haunt_cooldown > 0 then
+                    player._haunt_cooldown = player._haunt_cooldown - 1
+                else
+                    if player._haunt_countdown_task then
+                        player.components.talker:Say(GetString(player, "ANNOUNCE_HAUNT_READY"), nil, true)
+                        player._haunt_countdown_task:Cancel()
+                        player._haunt_countdown_task = nil
+                    end
                 end
             end)
 
@@ -102,27 +106,6 @@ local function doSunder(inst, player)
                     player.components.hunger:DoDelta(-loss)
                 end
             end
-        end
-    end)
-end
-
-local POSSESSION_COOLDOWN = 10
-local function abigailPossession(inst, player)
-    inst.Transform:SetPosition(player.Transform:GetWorldPosition())
-    player.components.ghostlybond:Recall(false)
-
-    player:AddComponent("possessionaoe")
-    player.components.possessionaoe:Enable()
-
-    player:ListenForEvent("ghostlybond_summoncomplete", function()
-        if player.components.possessionaoe then
-            player.components.possessionaoe:Disable()
-            player:RemoveComponent("possessionaoe")
-            -- 需要分开一会
-            inst.needApart = true
-            inst:DoTaskInTime(POSSESSION_COOLDOWN, function()
-                inst.needApart = false
-            end)
         end
     end)
 end
@@ -153,18 +136,17 @@ AddPrefabPostInit("abigail", function(inst)
 
     if inst and inst.ListenForEvent then
         inst:ListenForEvent("do_ghost_hauntat", function(inst, pos)
-            if (inst.sg and inst.sg:HasStateTag("nocommand"))
-                    or (inst.components.health and inst.components.health:IsDead()) then
+            if (inst.sg and inst.sg:HasStateTag("nocommand")) or (inst.components.health and inst.components.health:IsDead()) then
                 return
             end
 
             local player = inst._playerlink
-            if not (player and player:IsValid()) or player:HasTag("haunted") then
+            if not (player and player:IsValid()) then
                 return
             end
 
-            if inst.needApart then
-                player.components.talker:Say(GetString(player, "ANNOUNCE_NEED_APART"))
+            if player._haunt_cooldown > 0 and player.components.talker then
+                player.components.talker:Say(GetString(player, "ANNOUNCE_HAUNT_COOLDOWN").." ("..player._haunt_cooldown.."s)", nil, true)
                 return
             end
 
@@ -177,14 +159,39 @@ AddPrefabPostInit("abigail", function(inst)
 
             -- 如果 player 和 pos 的距离小于等于2
             if distance <= 2 then
-                -- doSunder(inst, player)
-                abigailPossession(inst, player)
+                doSunder(inst, player)
 
                 -- 清除原本作祟的目标
                 inst._haunt_target = nil
             end
 
         end)
+    end
+end)
+
+AddPrefabPostInit("wendy", function(inst)
+    inst._haunt_cooldown = 0
+
+    -- Hook 原来的 OnSave
+    local _old_OnSave = inst.OnSave
+    inst.OnSave = function(inst, data)
+        if _old_OnSave then
+            _old_OnSave(inst, data)
+        end
+        data.haunt_cooldown = inst._haunt_cooldown
+    end
+
+    -- Hook 原来的 OnLoad
+    local _old_OnLoad = inst.OnLoad
+    inst.OnLoad = function(inst, data)
+        if _old_OnLoad then
+            _old_OnLoad(inst, data)
+        end
+        if data and data.haunt_cooldown ~= nil then
+            inst._haunt_cooldown = data.haunt_cooldown
+        else
+            inst._haunt_cooldown = 0
+        end
     end
 end)
 
