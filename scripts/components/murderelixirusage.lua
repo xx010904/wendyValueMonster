@@ -1,8 +1,13 @@
-local PossessionFlower = Class(function(self, inst)
-    self.inst = inst
+local MurderElixirUsage = Class(function(self, inst)
+	self.inst = inst
+	inst:AddTag("murderelixirusage")
 end)
 
-function PossessionFlower:DoMurder(doer)
+function MurderElixirUsage:OnRemoveFromEntity()
+    self.inst:RemoveTag("murderelixirusage")
+end
+
+function MurderElixirUsage:DoMurder(doer)
     local flower = self.inst
 
     if flower and flower.prefab == "abigail_flower"
@@ -28,4 +33,4 @@ function PossessionFlower:DoMurder(doer)
     return false
 end
 
-return PossessionFlower
+return MurderElixirUsage

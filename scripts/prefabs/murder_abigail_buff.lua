@@ -2,6 +2,7 @@ local TICK_RATE = 1 -- 每秒触发一次
 local RADIUS = 4 -- 攻击范围
 local FADE_FRAMES = 5
 local BUFF_DURATION = TUNING.SKILLS.WENDY.MURDER_BUFF_DURATION * 20
+local POSSESSION_COOLDOWN = 10
 
 local function OnUpdateFade(inst)
     if inst._fade:value() == FADE_FRAMES or inst._fade:value() > FADE_FRAMES * 2 then
@@ -10,7 +11,7 @@ local function OnUpdateFade(inst)
     end
 end
 
--- 添加debuff
+-- 添加易伤debuff
 function ApplyDebuff(inst, attack_target)
 	if attack_target ~= nil then
         local buff = "abigail_vex_debuff"
@@ -76,8 +77,24 @@ local function DoAOEDamage(inst)
     end
 end
 
-local function OnAttached(inst, target)
-    if target and target:IsValid() then
+local function DoMurderAbigail(player, ghost)
+    ghost.Transform:SetPosition(player.Transform:GetWorldPosition())
+    if player.components.ghostlybond then
+        player.components.ghostlybond:Recall(true)
+        player.components.ghostlybond:SetBondLevel(1)
+        if ghost.components.health then
+            ghost.components.health:SetVal(1, player, player)
+        end
+    end
+end
+
+
+local function OnAttached(inst, target, followsymbol, followoffset)
+    inst.entity:SetParent(target.entity)
+
+    local ghost = target.components.ghostlybond.ghost
+    if target and target:IsValid() and ghost and ghost:IsValid() then
+        DoMurderAbigail(target, ghost)
         inst._target = target
 
         target.murder_ghost_attack_fx = SpawnPrefab("abigail_attack_fx")
@@ -90,10 +107,19 @@ local function OnAttached(inst, target)
         target.murder_ghost_attack_fx.Light:SetColour(180 / 255, 195 / 255, 225 / 255)
 
         target._murder_ghost_damage_task = target:DoPeriodicTask(TICK_RATE, DoAOEDamage)
+
+        target.components.combat.externaldamagetakenmultipliers:SetModifier(target, 2, "shadow_murder_vulnerable")
+
+        target:ListenForEvent("ghostlybond_summoncomplete", function(target, ghost)
+            if inst.components.timer then
+                inst.components.timer:SetTimeLeft("expire", 0.01)
+            end
+        end)
     end
 end
 
 local function OnDetached(inst, target)
+    local player = inst.entity:GetParent()
     if target.murder_ghost_attack_fx then
         target.murder_ghost_attack_fx:Remove()
         target.murder_ghost_attack_fx = nil
@@ -103,13 +129,25 @@ local function OnDetached(inst, target)
         target._murder_ghost_damage_task:Cancel()
         target._murder_ghost_damage_task = nil
     end
-    inst:Remove()
+    target.components.combat.externaldamagetakenmultipliers:RemoveModifier(target, "shadow_murder_vulnerable")
+
+    -- 需要分开一会
+    target.needApart = true
+    target:DoTaskInTime(POSSESSION_COOLDOWN, function()
+        target.needApart = false
+    end)
+    inst.AnimState:PlayAnimation("pst")
+    inst:ListenForEvent("animover", inst.Remove)
 end
 
 local function OnTimerDone(inst, data)
     if data.name == "expire" then
         inst.components.debuff:Stop()
     end
+end
+
+local function OnEntityReplicated(inst)
+
 end
 
 local function fn()
@@ -123,10 +161,15 @@ local function fn()
     inst:AddTag("FX")
     inst:AddTag("NOCLICK")
 
-    inst.AnimState:SetBank("shadow_fire_fx")
-    inst.AnimState:SetBuild("shadow_fire_fx")
-    inst.AnimState:PlayAnimation("anim1")
-    inst.AnimState:PushAnimation("anim1", true)
+	inst.AnimState:SetBank("shadow_pillar_fx")
+	inst.AnimState:SetBuild("shadow_pillar_fx")
+	inst.AnimState:PlayAnimation("pre")
+	inst.AnimState:SetMultColour(1, 1, 1, .6)
+	inst.AnimState:UsePointFiltering(true)
+	inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
+	inst.AnimState:SetLayer(LAYER_BACKGROUND)
+	inst.AnimState:SetSortOrder(3)
+    inst.AnimState:PushAnimation("idle", true)
 
     inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
     inst.AnimState:SetFinalOffset(3)
@@ -137,10 +180,11 @@ local function fn()
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
+        inst.OnEntityReplicated = OnEntityReplicated
         return inst
     end
 
-    inst.persists = true
+    inst.persists = false
 
     inst:AddComponent("debuff")
     inst.components.debuff:SetAttachedFn(OnAttached)

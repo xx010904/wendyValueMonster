@@ -2,6 +2,7 @@ STRINGS.ACTIONS.HIRE_PIPSPOOK = "Haunt-go"
 STRINGS.ACTIONS.LOTUSMUTATION = "Mutate Abby"
 STRINGS.ACTIONS.BREW_UNSTABLE = "Unstabilize"
 STRINGS.ACTIONS.BUNK = "Bunk"
+STRINGS.ACTIONS.MURDER_ABIGAIL = "Murder Abigail!"
 
 STRINGS.UI.CRAFTING.RECIPEACTION.BREW_UNSTABLE = "Unstabilize"
 STRINGS.UI.CRAFTING.RECIPEACTION.SOULCHILLIFY = "Farewell"
@@ -253,6 +254,9 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_NEED_APART = {
     "She still needs some time.",
     "Even ghosts need a breather.",
     "Abigail doesn't want to cling right now.",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_NO_FLOWER_INVENTORY = {
+    "I truly need Abigail's flower... I can't do this without it.",
 }
 STRINGS.SISTURNFILTER =
 {

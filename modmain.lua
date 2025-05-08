@@ -61,6 +61,9 @@ Assets = {
     --sisturn
     Asset("IMAGE", "images/inventoryimages/sisturn_food.tex"),
 	Asset("ATLAS", "images/inventoryimages/sisturn_food.xml"),
+    --murder
+    Asset("IMAGE", "images/inventoryimages/ghostlyelixir_murder.tex"),
+	Asset("ATLAS", "images/inventoryimages/ghostlyelixir_murder.xml"),
 }
 
 PrefabFiles = {
@@ -95,6 +98,7 @@ PrefabFiles = {
     "sisturn_spike",
     -- shadow
     "murder_abigail_buff",
+    "murder_elixir",
     -- 其他 prefab 名称...
 }
 

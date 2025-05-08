@@ -87,6 +87,7 @@ end
 local function onactivateresurrection(inst, resurrect_target)
     -- print("Resurrection activated!", inst, resurrect_target)
     if resurrect_target and resurrect_target.components.skilltreeupdater and resurrect_target.components.skilltreeupdater:IsActivated("wendy_ghostflower_grave") then
+        resurrect_target.components.ghostlybond:SpawnGhost()
         if resurrect_target.sisterBond then
             resurrect_target.sisterBond = resurrect_target.sisterBond + 1
         else
