@@ -10,18 +10,16 @@ function PossessionFlower:DoMurder(doer)
        and doer.components.ghostlybond
        and doer.components.ghostlybond.ghost
     then
-        if not doer.needApart then
-            local fx = SpawnPrefab("abigailsummonfx")
-            fx.entity:SetParent(doer.entity)
+        local fx = SpawnPrefab("abigailsummonfx")
+        fx.entity:SetParent(doer.entity)
 
-            local skin_build = flower:GetSkinBuild()
-            if skin_build ~= nil then
-                fx.AnimState:OverrideItemSkinSymbol("flower", skin_build, "flower", flower.GUID, flower.AnimState:GetBuild())
-            end
-
-            flower:Remove()
-            doer:AddDebuff("murder_abigail_buff", "murder_abigail_buff")
+        local skin_build = flower:GetSkinBuild()
+        if skin_build ~= nil then
+            fx.AnimState:OverrideItemSkinSymbol("flower", skin_build, "flower", flower.GUID, flower.AnimState:GetBuild())
         end
+
+        flower:Remove()
+        doer:AddDebuff("murder_abigail_buff", "murder_abigail_buff")
         return true
     end
 

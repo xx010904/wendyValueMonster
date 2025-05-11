@@ -1,24 +1,20 @@
 local TICK_RATE = 1 -- 每秒触发一次
 local RADIUS = 4 -- 攻击范围
-local FADE_FRAMES = 5
-local BUFF_DURATION = TUNING.SKILLS.WENDY.MURDER_BUFF_DURATION * 20
-local POSSESSION_COOLDOWN = 10
+local BUFF_DURATION = 480
 
-local function OnUpdateFade(inst)
-    if inst._fade:value() == FADE_FRAMES or inst._fade:value() > FADE_FRAMES * 2 then
-        inst._fadetask:Cancel()
-        inst._fadetask = nil
-    end
+
+local function AlignToTarget(inst, target)
+    inst.Transform:SetRotation(target.Transform:GetRotation())
+end
+
+local function OnChangeFollowSymbol(inst, target, followsymbol, followoffset)
+    inst.Follower:FollowSymbol(target.GUID, followsymbol, followoffset.x, followoffset.y, followoffset.z)
 end
 
 -- 添加易伤debuff
 function ApplyDebuff(inst, attack_target)
 	if attack_target ~= nil then
-        local buff = "abigail_vex_debuff"
-
-        if inst:GetDebuff("super_elixir_buff") and inst:GetDebuff("super_elixir_buff").prefab == "ghostlyelixir_shadow_buff" then
-            buff = "abigail_vex_shadow_debuff"
-        end
+        local buff = "abigail_vex_shadow_debuff"
 
         local olddebuff = attack_target:GetDebuff("abigail_vex_debuff")
         if olddebuff and olddebuff.prefab ~= buff then
@@ -55,13 +51,18 @@ local function GetTimeBasedDamage(inst)
     return finalDamage
 end
 
+local MUST_TAGS = { "_combat" }
+local EXCLUDE_TAGS = {
+    "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget",
+    "player", "companion", "invisible", "noattack", "hiding",
+    "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature",
+    "playingcard", "deckcontainer"
+}
 local function DoAOEDamage(inst)
     if not inst:IsValid() then return end
 
     local x, y, z = inst.Transform:GetWorldPosition()
-    local targets = TheSim:FindEntities(x, y, z, RADIUS, { "_combat" }, {
-        "player", "FX", "INLIMBO", "ghost", "abigail", "wall", "noattack",
-    })
+    local targets = TheSim:FindEntities(x, y, z, RADIUS, MUST_TAGS, EXCLUDE_TAGS)
 
     local damage = GetTimeBasedDamage(inst)
 
@@ -78,9 +79,9 @@ local function DoAOEDamage(inst)
 end
 
 local function DoMurderAbigail(player, ghost)
-    ghost.Transform:SetPosition(player.Transform:GetWorldPosition())
+    -- ghost.Transform:SetPosition(player.Transform:GetWorldPosition())
     if player.components.ghostlybond then
-        player.components.ghostlybond:Recall(true)
+        player.components.ghostlybond:Recall(false)
         player.components.ghostlybond:SetBondLevel(1)
         if ghost.components.health then
             ghost.components.health:SetVal(1, player, player)
@@ -88,13 +89,38 @@ local function DoMurderAbigail(player, ghost)
     end
 end
 
+local function ExtendBuffTime(inst, ghost)
+    if ghost ~= nil and ghost.components ~= nil and ghost.components.health ~= nil and inst.components ~= nil and inst.components.timer ~= nil then
+        local health = ghost.components.health.currenthealth or 0
+        local extra_time = math.min(math.floor(health / 1.25), BUFF_DURATION) -- 最多延长480秒
+
+        local timer = inst.components.timer
+
+        if timer:TimerExists("expire") then
+            local current = timer:GetTimeLeft("expire") or 0
+            timer:SetTimeLeft("expire", current + extra_time)
+        else
+            timer:StartTimer("expire", extra_time)
+        end
+    end
+end
 
 local function OnAttached(inst, target, followsymbol, followoffset)
     inst.entity:SetParent(target.entity)
+    OnChangeFollowSymbol(inst, target, followsymbol, Vector3(followoffset.x, 120, followoffset.z)) --y越小，位置越高
+
+    if inst._followtask ~= nil then
+        inst._followtask:Cancel()
+    end
+    inst._followtask = inst:DoPeriodicTask(0, AlignToTarget, nil, target)
+    AlignToTarget(inst, target)
 
     local ghost = target.components.ghostlybond.ghost
     if target and target:IsValid() and ghost and ghost:IsValid() then
+        ExtendBuffTime(inst, ghost)
         DoMurderAbigail(target, ghost)
+        local current = inst.components.timer:GetTimeLeft("expire") or 0
+        print("OnAttachedcurrentbufftime:", current)
         inst._target = target
 
         target.murder_ghost_attack_fx = SpawnPrefab("abigail_attack_fx")
@@ -108,13 +134,20 @@ local function OnAttached(inst, target, followsymbol, followoffset)
 
         target._murder_ghost_damage_task = target:DoPeriodicTask(TICK_RATE, DoAOEDamage)
 
-        target.components.combat.externaldamagetakenmultipliers:SetModifier(target, 2, "shadow_murder_vulnerable")
+        target.components.combat.externaldamagetakenmultipliers:SetModifier("shadow_murder_vulnerable", 2)
+    end
 
-        target:ListenForEvent("ghostlybond_summoncomplete", function(target, ghost)
-            if inst.components.timer then
-                inst.components.timer:SetTimeLeft("expire", 0.01)
-            end
-        end)
+    target:ListenForEvent("ghostlybond_summoncomplete", function(target, ghost)
+        if inst.components.timer then
+            inst.components.timer:SetTimeLeft("expire", 0.01)
+        end
+    end)
+end
+
+local function OnExtended(inst, target, followsymbol, followoffset, data, buffer)
+    local ghost = target.components.ghostlybond.ghost
+    if target and target:IsValid() and ghost and ghost:IsValid() then
+        ExtendBuffTime(inst, ghost)
     end
 end
 
@@ -129,13 +162,8 @@ local function OnDetached(inst, target)
         target._murder_ghost_damage_task:Cancel()
         target._murder_ghost_damage_task = nil
     end
-    target.components.combat.externaldamagetakenmultipliers:RemoveModifier(target, "shadow_murder_vulnerable")
+    target.components.combat.externaldamagetakenmultipliers:RemoveModifier("shadow_murder_vulnerable")
 
-    -- 需要分开一会
-    target.needApart = true
-    target:DoTaskInTime(POSSESSION_COOLDOWN, function()
-        target.needApart = false
-    end)
     inst.AnimState:PlayAnimation("pst")
     inst:ListenForEvent("animover", inst.Remove)
 end
@@ -144,10 +172,6 @@ local function OnTimerDone(inst, data)
     if data.name == "expire" then
         inst.components.debuff:Stop()
     end
-end
-
-local function OnEntityReplicated(inst)
-
 end
 
 local function fn()
@@ -171,16 +195,11 @@ local function fn()
 	inst.AnimState:SetSortOrder(3)
     inst.AnimState:PushAnimation("idle", true)
 
-    inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
     inst.AnimState:SetFinalOffset(3)
 
-    inst._fade = net_smallbyte(inst.GUID, "sporebomb._fade", "fadedirty")
-
-    inst._fadetask = inst:DoPeriodicTask(FRAMES, OnUpdateFade)
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
-        inst.OnEntityReplicated = OnEntityReplicated
         return inst
     end
 
@@ -189,6 +208,9 @@ local function fn()
     inst:AddComponent("debuff")
     inst.components.debuff:SetAttachedFn(OnAttached)
     inst.components.debuff:SetDetachedFn(OnDetached)
+    inst.components.debuff:SetExtendedFn(OnExtended)
+    inst.components.debuff:SetChangeFollowSymbolFn(OnChangeFollowSymbol)
+    inst.components.debuff.keepondespawn = true
 
     inst:AddComponent("timer")
     inst.components.timer:StartTimer("expire", BUFF_DURATION)

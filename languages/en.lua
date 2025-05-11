@@ -3,9 +3,11 @@ STRINGS.ACTIONS.LOTUSMUTATION = "Mutate Abby"
 STRINGS.ACTIONS.BREW_UNSTABLE = "Unstabilize"
 STRINGS.ACTIONS.BUNK = "Bunk"
 STRINGS.ACTIONS.MURDER_ABIGAIL = "Murder Abigail!"
+STRINGS.ACTIONS.MOONDIALRITUAL = "Mutate Flower"
 
 STRINGS.UI.CRAFTING.RECIPEACTION.BREW_UNSTABLE = "Unstabilize"
-STRINGS.UI.CRAFTING.RECIPEACTION.SOULCHILLIFY = "Farewell"
+STRINGS.UI.CRAFTING.RECIPEACTION.SOULCHILLIFY = "Chillify"
+STRINGS.UI.CRAFTING.RECIPEACTION.THRIVING = "Thriving"
 
 STRINGS.NAMES.ABIGAIL_GESTALT_LOTUS = "Gestalt Lotus"
 STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Unstable Ghastly Experience"
@@ -18,6 +20,7 @@ STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Unstable Revenant Restorative"
 STRINGS.NAMES.WENDY_LAST_FOOD = "Parting Banana Pop"
 STRINGS.NAMES.SISTURN_SALTLICK = "Sister's Salted Endorsement"
 STRINGS.NAMES.SISTURN_FOOD = "MockMuck"
+STRINGS.NAMES.MURDER_ELIXIR = "Murder · Cursed Vexation"
 STRINGS.NAMES.BIGSPOOK_ALT_NAMES = {
     "BigSpook·Heir of the Tear Drop Kingdom",
     "BigSpook·Supreme Guardian of the Wailing Souls",
@@ -83,6 +86,7 @@ STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_RETALIATION = "Retaliation can be hig
 STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_SHIELD = "The shield varies between thick and thin."
 STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "Instant large recovery, but will result in continuous damage."
 STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Slow and unstable recovery, with occasional damage."
+STRINGS.RECIPE_DESC.MURDER_ELIXIR = "Inflict poison upon a thriving elixir."
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.ABIGAIL_GESTALT_LOTUS = "The power from the Moon."
 STRINGS.CHARACTERS.WENDY.DESCRIBE.ABIGAIL_GESTALT_LOTUS = "Can the Lunar power make Abby stronger?"
@@ -97,7 +101,10 @@ STRINGS.CHARACTERS.WENDY.DESCRIBE.WENDY_LAST_FOOD = {"Is it Abby's favorite food
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.WENDY_LAST_FOOD = "A food that looks strange yet delicious."
 STRINGS.CHARACTERS.WENDY.DESCRIBE.SISTURN_SALTLICK = "Abigail's salty remains... both spokesperson and seasoning."
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.SISTURN_SALTLICK = "Salt—preserving grief like it preserves meat."
+STRINGS.CHARACTERS.WENDY.DESCRIBE.SISTURN_FOOD = "It might feed a starving beast... or simmer into a broth, flavored with sorrow and Abigail's ashes."
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.SISTURN_FOOD = "Just right for feeding rough-eating beasts... or lining the bottom of a stewpot."
+STRINGS.CHARACTERS.WENDY.DESCRIBE.MURDER_ELIXIR = "Abigail... our elixir venture is going wonderfully, isn't it?"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.MURDER_ELIXIR = "Looks like the elixir is coming along... maybe."
 
 STRINGS.CHARACTERS.GENERIC.ANNOUNCE_SMALLGHOST_LEAVE = {
     "Poor soul, you should leave.",
@@ -133,7 +140,7 @@ STRINGS.CHARACTERS.GENERIC.ANNOUNCE_GET_OFF_BUNKER = {
     "It's both damp and dark here.",
     "The dark, damp grave is unsettling.",
 }
-STRINGS.CHARACTERS.WENDY.ANNOUNCE_PARTING = {
+STRINGS.CHARACTERS.GENERIC.ANNOUNCE_PARTING = {
     "One bite, and my soul will drift away.",
     "By eating this, I will quietly leave this shell behind.",
     "This final taste shall send my spirit adrift.",
@@ -227,6 +234,17 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_GHOST_MUTATION_COOLDOWN = {
     "Even the dead grow weary.",
     "Death is not generous—it demands patience.",
 }
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_FLOWER_MUTATION_COOLDOWN = {
+    "The moondial has not answered my call.",
+    "The echoes of the ritual still slumber.",
+    "The lunar light refuses to guide me again.",
+    "The time for cooling has not yet passed.",
+    "Even the moon must rest.",
+    "Time has yet to weave a second wreath.",
+    "The lunar power has not returned.",
+    "The gate to the Gestalts remains shut.",
+    "Fate does not heed impatience—it waits for the stars to align.",
+}
 STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_COOLDOWN = {
     "She's just been given new blood... her spirit trembles.",
     "The blood is fresh, and the bond is fragile.",
@@ -264,3 +282,40 @@ STRINGS.SISTURNFILTER =
         BLESSED_FLESHED = "Blessed Fleshed",
     }
 }
+
+if GetModConfigData("PipspookSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_SMALLGHOST_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_SMALLGHOST_3_DESC ..
+    " Assign tasks to Pipspook in reverse, asking her to find rare items."
+end
+if GetModConfigData("ElixirSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_POTION_YIELD_DESC = STRINGS.SKILLTREE.WENDY.WENDY_POTION_YIELD_DESC ..
+    " Craft unstable high-concentration elixirs that can be used on groups."
+end
+if GetModConfigData("SisturnSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_SISTURN_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_SISTURN_3_DESC ..
+    " Feed Lean Meat into Sisturn to convert it into Abigail's Flesh Shield and yield Salted Ashes and Mockmuck."
+end
+if GetModConfigData("CraftingSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_GHOSTFLOWER_GRAVE_DESC = STRINGS.SKILLTREE.WENDY.WENDY_GHOSTFLOWER_GRAVE_DESC ..
+    " Wendy's resurrection from the Perennial Altar strengthens Abigail, as her protective instincts toward Wendy grow stronger."
+end
+if GetModConfigData("PartingSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_AVENGING_GHOST_DESC = STRINGS.SKILLTREE.WENDY.WENDY_AVENGING_GHOST_DESC ..
+    " Can craft a Parting Banana Pop that sends into spirit form on consumption; spirit attacks build Vengeful Spirit Power to boost damage."
+end
+if GetModConfigData("BunkerSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_MAKEGRAVEMOUNDS_DESC = STRINGS.SKILLTREE.WENDY.WENDY_MAKEGRAVEMOUNDS_DESC ..
+    " Slip into a decorated Headstone and let Bigspooks shield ."
+end
+if GetModConfigData("CallingSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_GHOSTCOMMAND_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_GHOSTCOMMAND_3_DESC ..
+    " Abigail can haunt Wendy to instantly swap their current health percentages."
+end
+if GetModConfigData("LunarSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_LUNAR_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_LUNAR_3_DESC ..
+    " During a full moon, the moondial can transform Abigail's Flower into the Gestalt Lotus, used to shift Abigail between her ghost and Gestalt forms."
+end
+if GetModConfigData("ShadowSetting") then
+    STRINGS.SKILLTREE.WENDY.WENDY_SHADOW_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_SHADOW_3_DESC ..
+    " Use a elixir to muder Abigail, leaving Wendy haunted by her spirit; Wendy inherits Abigail's area damage and vulnerability buff."
+end

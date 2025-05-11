@@ -4,17 +4,17 @@ local params = containers.params
 local MAX_FLESHIELD = 600
 local EACH_FLESHIELD = 15
 AddPrefabPostInit("abigail", function(inst)
-    inst.meatshield = 0
+    inst.fresheild = 0
 
     local function UpdateAbsorbModifier(oldpercent)
         if inst.components.health then
-            local absorb_percent = inst.meatshield > 0 and 1 or 0
-            inst.components.health.externalabsorbmodifiers:SetModifier(inst, absorb_percent, "meatshield")
+            local absorb_percent = inst.fresheild > 0 and 1 or 0
+            inst.components.health.externalabsorbmodifiers:SetModifier(inst, absorb_percent, "fresheild")
             -- print("externalabsorbmodifierstoldpercent", oldpercent)
             -- 复用废案的盾
             local max = absorb_percent * MAX_FLESHIELD
             local op = oldpercent or 0
-            local np = max > 0 and inst.meatshield / max or 0
+            local np = max > 0 and inst.fresheild / max or 0
             -- print("PushEventoldpercent", oldpercent)
 
             inst:PushEvent("pethealthbar_bonuschange", {
@@ -25,13 +25,13 @@ AddPrefabPostInit("abigail", function(inst)
         end
     end
 
-    -- Hook onload and onsave methods to maintain the meatshield
+    -- Hook onload and onsave methods to maintain the fresheild
     local _OnSave = inst.OnSave
     inst.OnSave = function(inst, data)
         if _OnSave then
             _OnSave(inst, data)
         end
-        data.meatshield = inst.meatshield
+        data.fresheild = inst.fresheild
     end
 
     local _OnLoad = inst.OnLoad
@@ -39,60 +39,60 @@ AddPrefabPostInit("abigail", function(inst)
         if _OnLoad then
             _OnLoad(inst, data)
         end
-        if data and data.meatshield then
-            inst.meatshield = data.meatshield
-            local oldpercent = inst.meatshield / MAX_FLESHIELD
+        if data and data.fresheild then
+            inst.fresheild = data.fresheild
+            local oldpercent = inst.fresheild / MAX_FLESHIELD
             -- print("_OnLoadoldpercent", oldpercent)
             UpdateAbsorbModifier(oldpercent)
         end
     end
 
     -- 初始化
-    inst._init_meatsheild_badge_task = inst:DoPeriodicTask(2, function()
+    inst._init_fresheild_badge_task = inst:DoPeriodicTask(2, function()
         -- 计数器
-        if not inst._meatshield_task_count then
-            inst._meatshield_task_count = 0
+        if not inst._fresheild_task_count then
+            inst._fresheild_task_count = 0
         end
-        inst._meatshield_task_count = inst._meatshield_task_count + 1
+        inst._fresheild_task_count = inst._fresheild_task_count + 1
 
-        local oldpercent = inst.meatshield / MAX_FLESHIELD
+        local oldpercent = inst.fresheild / MAX_FLESHIELD
         -- print("当前oldpercent", oldpercent)
         if oldpercent > 0 then
             UpdateAbsorbModifier(oldpercent)
         else
             -- 取消任务并清除任务记录
-            if inst._init_meatsheild_badge_task then
-                inst._init_meatsheild_badge_task:Cancel()  -- 停止周期任务
-                inst._init_meatsheild_badge_task = nil
+            if inst._init_fresheild_badge_task then
+                inst._init_fresheild_badge_task:Cancel()  -- 停止周期任务
+                inst._init_fresheild_badge_task = nil
             end
         end
 
-        -- 满60次时取消任务
-        if inst._meatshield_task_count >= 30 then
-            if inst._init_meatsheild_badge_task then
-                inst._init_meatsheild_badge_task:Cancel()  -- 停止周期任务
-                inst._init_meatsheild_badge_task = nil
+        -- 满60秒取消任务
+        if inst._fresheild_task_count >= 30 then
+            if inst._init_fresheild_badge_task then
+                inst._init_fresheild_badge_task:Cancel()  -- 停止周期任务
+                inst._init_fresheild_badge_task = nil
             end
         end
     end)
 
-    -- 动态修改 meatshield 时手动调用这个方法
-    inst.ConsumeMeatShield = function(inst, damage)
-        local oldpercent = inst.meatshield / MAX_FLESHIELD
-        if inst.meatshield >= damage then
-            inst.meatshield = inst.meatshield - damage
+    -- 动态修改 fresheild 时手动调用这个方法
+    inst.Consumefresheild = function(inst, damage)
+        local oldpercent = inst.fresheild / MAX_FLESHIELD
+        if inst.fresheild >= damage then
+            inst.fresheild = inst.fresheild - damage
             damage = 0
         else
-            damage = damage - inst.meatshield
-            inst.meatshield = 0
+            damage = damage - inst.fresheild
+            inst.fresheild = 0
         end
         UpdateAbsorbModifier(oldpercent)
         return damage
     end
 
     inst:ListenForEvent("attacked", function(inst, data)
-        if inst.meatshield > 0 and data and data.damage then
-            local actual_damage = inst:ConsumeMeatShield(data.damage)
+        if inst.fresheild > 0 and data and data.damage then
+            local actual_damage = inst:Consumefresheild(data.damage)
             if actual_damage > 0 then
                 -- 手动补伤害，因为 absorb 是 100%
                 inst.components.health:DoDelta(-actual_damage, false, inst)
@@ -204,15 +204,15 @@ local function addFleshSheild(inst, item_count, doer)
                     return
                 end
 
-                ghost.meatshield = math.min(ghost.meatshield + EACH_FLESHIELD, MAX_FLESHIELD)
+                ghost.fresheild = math.min(ghost.fresheild + EACH_FLESHIELD, MAX_FLESHIELD)
 
                 ghost:PushEvent("pethealthbar_bonuschange", {
                     max = MAX_FLESHIELD,
                     oldpercent = 1,
-                    newpercent = ghost.meatshield / MAX_FLESHIELD,
+                    newpercent = ghost.fresheild / MAX_FLESHIELD,
                 })
 
-                ghost.components.health.externalabsorbmodifiers:SetModifier(ghost, 1, "meatshield")
+                ghost.components.health.externalabsorbmodifiers:SetModifier(ghost, 1, "fresheild")
 
                 added = added + 1
                 if added >= item_count then
@@ -279,8 +279,26 @@ local function lockFilterContainer(inst, item_count)
     end
 
     local container = inst.components.container
-    local current_slot = 1
+    local filled_slots = {}
+    local current_index = 1
 
+    -- 初始化阶段：记录所有非空格子的索引
+    for slot = 1, container:GetNumSlots() do
+        if container:GetItemInSlot(slot) then
+            table.insert(filled_slots, slot)
+        end
+    end
+
+    -- 没有需要处理的就直接返回
+    if #filled_slots == 0 then
+        container.canbeopened = true
+        if inst._link_sisturn and inst._link_sisturn.components.container then
+            inst._link_sisturn.components.container.canbeopened = true
+        end
+        return
+    end
+
+    -- 定期任务处理这些非空格子
     inst.replace_food_task = inst:DoPeriodicTask(PROCESS_TIME_EACH_FLESH, function()
         if not inst:IsValid() or not container then
             if inst.replace_food_task then
@@ -289,30 +307,25 @@ local function lockFilterContainer(inst, item_count)
             end
             return
         end
-
-        if current_slot > container:GetNumSlots() then
-            -- 处理完成，解锁容器
-            container.canbeopened = true
-            if inst._link_sisturn and inst._link_sisturn.components.container then
-                inst._link_sisturn.components.container.canbeopened = true
-            end
-
-            inst.replace_food_task:Cancel()
-            inst.replace_food_task = nil
-            return
-        end
-
-        local old_item = container:GetItemInSlot(current_slot)
+        local slot = filled_slots[current_index]
+        local old_item = container:GetItemInSlot(slot)
         if old_item then
             old_item:Remove()
             local new_item = SpawnPrefab("sisturn_food")
             if new_item then
-                container:GiveItem(new_item, current_slot)
+                container:GiveItem(new_item, slot)
             end
         end
-
-        current_slot = current_slot + 1
-    end)
+        current_index = current_index + 1
+        if current_index > #filled_slots then
+            container.canbeopened = true
+            if inst._link_sisturn and inst._link_sisturn.components.container then
+                inst._link_sisturn.components.container.canbeopened = true
+            end
+            inst.replace_food_task:Cancel()
+            inst.replace_food_task = nil
+        end
+    end)    
 end
 
 -- 加工瘦肉

@@ -112,27 +112,19 @@ end
 
 ---- 作祟修改
 AddPrefabPostInit("abigail", function(inst)
-    inst.needApart = false
+    -- local old_OnSave = inst.OnSave
+    -- inst.OnSave = function(inst, data)
+    --     if old_OnSave then
+    --         old_OnSave(inst, data)
+    --     end
+    -- end
 
-    local old_OnSave = inst.OnSave
-    inst.OnSave = function(inst, data)
-        if old_OnSave then
-            old_OnSave(inst, data)
-        end
-        if inst.needApart then
-            data.needApart = inst.needApart
-        end
-    end
-
-    local old_OnLoad = inst.OnLoad
-    inst.OnLoad = function(inst, data)
-        if old_OnLoad then
-            old_OnLoad(inst, data)
-        end
-        if data and data.needApart then
-            inst.needApart = data.needApart
-        end
-    end
+    -- local old_OnLoad = inst.OnLoad
+    -- inst.OnLoad = function(inst, data)
+    --     if old_OnLoad then
+    --         old_OnLoad(inst, data)
+    --     end
+    -- end
 
     if inst and inst.ListenForEvent then
         inst:ListenForEvent("do_ghost_hauntat", function(inst, pos)

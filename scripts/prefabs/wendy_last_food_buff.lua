@@ -472,6 +472,7 @@ local function fn()
     inst.components.debuff:SetAttachedFn(OnAttached)
     inst.components.debuff:SetDetachedFn(OnDetached)
     inst.components.debuff:SetChangeFollowSymbolFn(OnChangeFollowSymbol)
+    inst.components.debuff.keepondespawn = true
     inst.isTrigger = false
 
     inst:AddComponent("timer")

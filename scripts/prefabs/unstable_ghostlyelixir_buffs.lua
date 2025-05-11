@@ -566,6 +566,7 @@ local function MakeUnstableBuff(name)
         inst.components.debuff:SetAttachedFn(OnAttached)
         inst.components.debuff:SetDetachedFn(OnDetached)
         inst.components.debuff:SetExtendedFn(OnExtended)
+		inst.components.debuff.keepondespawn = true
 
         inst:AddComponent("timer")
         inst:ListenForEvent("timerdone", OnTimerDone)

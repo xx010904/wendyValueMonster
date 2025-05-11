@@ -1,39 +1,15 @@
-local healthBound = 50
-local speedBound = 0.05
+local HEALTH_BOUND = 50
+local SPEED_BOUND = 0.05
 
 -- 增加Abigail的属性
-local function SetVal(self, boneHealth, cause, afflicter)
-    -- local old_health = self.currenthealth
-    -- print("old_health and boneHealth", old_health, boneHealth)
-    -- local val = boneHealth + old_health
-    -- print("val::::1", val)
-    -- local max_health = self:GetMaxWithPenalty()
-    -- print("val::::2", val)
-    -- local min_health = math.min(self.minhealth or 0, max_health)
-    -- print("val::::3", val)
-    -- if val > max_health then
-    --     print("val::::4", val)
-    --     val = max_health
-    -- end
-    -- print("val::::5", val)
-    -- if val <= min_health then
-    --     print("val::::6", val)
-    --     self.currenthealth = min_health
-    --     self.inst:PushEvent("minhealth", { cause = cause, afflicter = afflicter })
-    -- else
-    --     print("self.currenthealth and val7", self.currenthealth, val)
-    --     self.currenthealth = val
-    -- end
-end
-
 local function OnSisterBondChange(inst)
     if inst._playerlink ~= nil and inst._playerlink.components.pethealthbar ~= nil then
         local leader = inst._playerlink
         local bondHealth = 0
         local bondSpeed = 0
         if leader and leader.prefab == "wendy" and leader.sisterBond then
-            bondHealth = leader.sisterBond * healthBound -- 每个sisterBond增加50点生命值
-            bondSpeed = leader.sisterBond * speedBound -- 每个sisterBond增加0.05速度
+            bondHealth = leader.sisterBond * HEALTH_BOUND -- 每个sisterBond增加50点生命值
+            bondSpeed = leader.sisterBond * SPEED_BOUND -- 每个sisterBond增加0.05速度
         end
 
         -- print("增加Abigail的生命", bondHealth)
@@ -42,10 +18,7 @@ local function OnSisterBondChange(inst)
             if health:IsDead() then
                 health.maxhealth = inst.base_max_health + bondHealth
             else
-                -- health:SetMaxHealth(inst.base_max_health + bondHealth)
                 inst.components.health.maxhealth = inst.components.health.maxhealth + bondHealth
-                SetVal(health, bondHealth, true)
-                -- health:DoDelta(0, true, nil, true, nil, true)
             end
 
             inst._playerlink.components.pethealthbar:SetMaxHealth(health.maxhealth)
@@ -79,7 +52,6 @@ function SpawnSoulWaves(position, numWaves, waveSpeed, spawn_dist)
         wave.Physics:SetMotorVel(waveSpeed, 0, 0)
     end
 
-    -- Let our caller know if we actually spawned at least 1 wave.
     return wave_spawned
 end
 
@@ -87,7 +59,6 @@ end
 local function onactivateresurrection(inst, resurrect_target)
     -- print("Resurrection activated!", inst, resurrect_target)
     if resurrect_target and resurrect_target.components.skilltreeupdater and resurrect_target.components.skilltreeupdater:IsActivated("wendy_ghostflower_grave") then
-        resurrect_target.components.ghostlybond:SpawnGhost()
         if resurrect_target.sisterBond then
             resurrect_target.sisterBond = resurrect_target.sisterBond + 1
         else
@@ -96,12 +67,19 @@ local function onactivateresurrection(inst, resurrect_target)
 
         -- 回收灵魂
         local wave_spawned = SpawnSoulWaves(inst:GetPosition(), resurrect_target.sisterBond, -3.5, 12)
-        -- print("Resurrection sisterBond!", resurrect_target.sisterBond)
+        print("Resurrection sisterBond!", resurrect_target.sisterBond)
 
         -- 更新一次abby血量
         if resurrect_target.components.ghostlybond and resurrect_target.components.ghostlybond.ghost then
-            print("Resurrection sisterBond!", resurrect_target.sisterBond)
-            OnSisterBondChange(resurrect_target.components.ghostlybond.ghost)
+            local ghost = resurrect_target.components.ghostlybond.ghost
+            print("ghost", ghost)
+            -- print("Resurrection sisterBond!", resurrect_target.sisterBond)
+            OnSisterBondChange(ghost)
+            -- 伪召唤一次，修正血量
+            ghost.entity:RemoveTag("INLIMBO")
+            ghost.entity:SetInLimbo(false)
+            ghost:PushEvent("exitlimbo")
+            -- resurrect_target.components.ghostlybond:Recall(false)
         end
     end
 end
@@ -175,68 +153,104 @@ local EXCLUDE_TAGS = {
     "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature",
     "playingcard", "deckcontainer"
 }
-AddPrefabPostInit("abigail", function(inst)
-    if inst then
-        inst:ListenForEvent("pre_health_setval", OnSisterBondChange)
-        inst:ListenForEvent("death", OnDeath)
-
-        -- 侧翼机枪
-        local attack_interval = 1.6
-        inst:DoPeriodicTask(attack_interval, function()
-            local player = inst._playerlink
-            if player and player.components.ghostlybond and player.components.ghostlybond.summoned and player.sisterBond and player.sisterBond > 0 then
-                if inst and inst.components.combat and inst.components.combat.target then
-                    local target = inst.components.combat.target
-                    -- 创建 abigail_tether
-                    local tether = SpawnPrefab("abigail_tether")
-                    if tether and target then
-                        tether.Transform:SetPosition(inst.Transform:GetWorldPosition())
-
-                        -- 获取 tether 手上的武器并修改攻击力
-                        local weapon = tether.components.combat:GetWeapon()
-                        local attack_power = player.sisterBond * 8/3 -- 计算攻击力
-                        if weapon then
-                            weapon.components.weapon:SetDamage(attack_power)
-                        end
-
-                        -- 检查目标生命值
-                        if target.components.health and target.components.health.currenthealth < attack_power * 2 then
-                            -- 寻找附近的其他目标
-                            local nearby_target = nil
-                            local x, y, z = target.Transform:GetWorldPosition()
-                            local radius = 4
-
-                            local entities = TheSim:FindEntities(x, y, z, radius, ATTACK_MUST_TAGS, EXCLUDE_TAGS)
-                            for _, entity in ipairs(entities) do
-                                if entity ~= target and entity.components.health and entity.components.health.currenthealth > 0 then
-                                    nearby_target = entity
-                                    break
-                                end
-                            end
-
-                            -- 如果找到附近的目标，就攻击它
-                            if nearby_target then
-                                target = nearby_target
-                            end
-                        end
-
-                        -- 攻击目标
-                        if target.components.health then
-                            tether.components.combat:DoAttack(target) -- 进行攻击
-                            -- target.components.combat:SetTarget(nil)
-                        end
-
-                        tether:DoTaskInTime(attack_interval, function()
-                            if tether and tether:IsValid() then
-                                tether:Remove() -- 删除 tether
-                            end
-                        end)
+local function FindAbigailAttackTarget(inst, player, attack_power)
+    local target = inst.components.combat.target
+    -- print("直接目标", target)
+    -- 如果当前没有直接目标，就找有debuff的
+    if not target then
+        -- print("no target")
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local vex_targets = TheSim:FindEntities(x, y, z, 8, ATTACK_MUST_TAGS, EXCLUDE_TAGS)
+        for _, entity in ipairs(vex_targets) do
+            if entity.components.health and entity.components.health.currenthealth > 0 then
+                -- print("找到附近目标", entity)
+                local debuffable = entity.components.debuffable
+                if debuffable then
+                    -- print("有debuff的目标吗？" ,entity, debuffable:HasDebuff("abigail_vex_debuff"))
+                    -- print("有shadowdebuff的目标吗？" ,entity, debuffable:HasDebuff("abigail_vex_shadow_debuff"))
+                    if (debuffable:HasDebuff("abigail_vex_debuff") or debuffable:HasDebuff("abigail_vex_shadow_debuff")) then
+                        target = entity
+                        break
                     end
                 end
             end
-        end)
+        end
+    end
+    -- 如果目标血量太低，尝试寻找新的附近目标
+    if target and target.components.health and target.components.health.currenthealth < attack_power * 2 then
+        local x, y, z = target.Transform:GetWorldPosition()
+        local entities = TheSim:FindEntities(x, y, z, 4, ATTACK_MUST_TAGS, EXCLUDE_TAGS)
+        for _, entity in ipairs(entities) do
+            if entity ~= target and entity.components.health and entity.components.health.currenthealth > 0 then
+                -- print("找到血量高一点的目标防止浪费伤害")
+                target = entity
+                break
+            end
+        end
+    end
+    return target
+end
+
+AddPrefabPostInit("abigail", function(inst)
+    if not TheWorld.ismastersim then return end
+
+    -- 监听者：死亡与治疗
+    inst:ListenForEvent("death", OnDeath)
+    inst:ListenForEvent("pre_health_setval", OnSisterBondChange)
+
+    local attack_interval = 1.6
+
+    -- 启动定时任务
+    local function StartTetherTask()
+        if inst._tether_task == nil and inst:IsValid() and not inst:IsInLimbo() then
+            inst._tether_task = inst:DoPeriodicTask(attack_interval, function()
+                local player = inst._playerlink
+                if player and player.components.ghostlybond and player.components.ghostlybond.ghost ~= inst then
+                    return -- 忽略错误绑定的 Abigail
+                end
+                -- print("_playerlink", player)
+                if player and player.components.ghostlybond and player.components.ghostlybond.summoned and player.sisterBond and player.sisterBond > 0 then
+                    -- print("inst.components.combat.target", inst.components.combat.target)
+                    if inst.components.combat then
+                        local attack_power = player.sisterBond * 8 / 3
+                        local target = FindAbigailAttackTarget(inst, player, attack_power)
+                        if target then
+                            local tether = SpawnPrefab("abigail_tether")
+                            tether.Transform:SetPosition(inst.Transform:GetWorldPosition())
+
+                            local weapon = tether.components.combat:GetWeapon()
+                            if weapon then
+                                weapon.components.weapon:SetDamage(attack_power)
+                            end
+
+                            tether.components.combat:DoAttack(target)
+                            tether:DoTaskInTime(attack_interval, function()
+                                if tether:IsValid() then
+                                    tether:Remove()
+                                end
+                            end)
+                        end
+                    end
+                end
+            end)
+        end
+    end
+
+    -- 停止定时任务
+    local function StopTetherTask()
+        if inst._tether_task then
+            inst._tether_task:Cancel()
+            inst._tether_task = nil
+        end
+    end
+
+    -- LIMBO 状态监听
+    inst:ListenForEvent("enterlimbo", StopTetherTask)
+    inst:ListenForEvent("exitlimbo", StartTetherTask)
+
+    -- 初始状态检查
+    if not inst:IsInLimbo() then
+        if inst._tether_task ~= nil then return end
+        StartTetherTask()
     end
 end)
-
-
-

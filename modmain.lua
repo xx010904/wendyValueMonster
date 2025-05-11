@@ -62,16 +62,16 @@ Assets = {
     Asset("IMAGE", "images/inventoryimages/sisturn_food.tex"),
 	Asset("ATLAS", "images/inventoryimages/sisturn_food.xml"),
     --murder
-    Asset("IMAGE", "images/inventoryimages/ghostlyelixir_murder.tex"),
-	Asset("ATLAS", "images/inventoryimages/ghostlyelixir_murder.xml"),
+    Asset("IMAGE", "images/inventoryimages/murder_elixir.tex"),
+	Asset("ATLAS", "images/inventoryimages/murder_elixir.xml"),
 }
 
 PrefabFiles = {
 	-- 注册新的 prefab
     --pipspook
     "smallghost_giver",
+    "smallghost_parasite_fx",
     --lunar
-    "abigail_gestalt_buff",
     "abigail_gestalt_lotus",
     "abigail_lutos_mutate_fx",
     "moondial_lotus_fx",
@@ -98,6 +98,7 @@ PrefabFiles = {
     "sisturn_spike",
     -- shadow
     "murder_abigail_buff",
+    "murder_abigail_fx",
     "murder_elixir",
     -- 其他 prefab 名称...
 }
@@ -160,3 +161,4 @@ end
 if GetModConfigData("ShadowSetting") then
     modimport("scripts/shadow_update.lua")
 end
+modimport("scripts/skilltree_update.lua")
