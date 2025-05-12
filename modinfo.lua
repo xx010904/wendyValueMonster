@@ -3,8 +3,18 @@ version = "1.0"
 name = isCh and "数值怪阿比盖尔" or "Abigail the Value Monster"
 author = "XJS"
 description = isCh and 
- "技能树的每个分组都加了新的效果，具体可以查看配置项。\n封面是阿比盖尔~" or 
- "The skill tree has added new effects to each group, which can be viewed in the configuration options. \nThe cover is Abigail~"
+"技能树的每个分组都加了新的效果，具体可以查看配置项。\n封面是阿比盖尔~"..
+"\n󰀐感谢赏玩！"..
+"\n\n〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓"..
+"\n󰀅完整更新日志可以在创意工坊查看"..
+"\n"
+or
+"The skill tree has added new effects to each group, which can be viewed in the configuration options. \nThe cover is Abigail~"..
+"\n󰀐Thanks to enjoy!"..
+"\n\n〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓"..
+"\n󰀅Full changelog available on the Workshop"..
+"\n"
+
 forumthread = ""
 api_version = 10
 icon_atlas = "images/modicon.xml"
