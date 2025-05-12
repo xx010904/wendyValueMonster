@@ -1,3 +1,4 @@
+local HAUNT_CD = 120
 local function SpawnSoulLink(source, target)
     local x1, y1, z1 = source.Transform:GetWorldPosition()
     local x2, y2, z2 = target.Transform:GetWorldPosition()
@@ -80,7 +81,7 @@ local function doSunder(inst, player)
             inst_health:SetPercent(player_health_percentage)
 
             -- 作祟期间不能再作祟
-            player._haunt_cooldown = 1
+            player._haunt_cooldown = HAUNT_CD
             player._haunt_countdown_task = player:DoPeriodicTask(1, function()
                 if player._haunt_cooldown > 0 then
                     player._haunt_cooldown = player._haunt_cooldown - 1
