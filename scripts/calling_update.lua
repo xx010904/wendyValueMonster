@@ -80,7 +80,7 @@ local function doSunder(inst, player)
             inst_health:SetPercent(player_health_percentage)
 
             -- 作祟期间不能再作祟
-            player._haunt_cooldown = 120
+            player._haunt_cooldown = 1
             player._haunt_countdown_task = player:DoPeriodicTask(1, function()
                 if player._haunt_cooldown > 0 then
                     player._haunt_cooldown = player._haunt_cooldown - 1

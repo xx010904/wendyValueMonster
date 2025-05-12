@@ -122,20 +122,25 @@ local potion_tunings =
 		-- ABIGAIL CONTENT
 		ONAPPLY = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health:DoDelta(math.random(250, 300), true, inst.prefab)
+				local damage = 70 -- 先扣70点
+				local current_health = target.components.health.currenthealth
+				local new_health = math.max(current_health - damage, 1)  -- 不会低于1血
+				local delta = new_health - current_health  -- 计算真正扣除的值（是负数）
+				target.components.health:DoDelta(delta, true, inst.prefab)
 			end
 		end,
 		ONDETACH = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health:DoDelta(120 + math.random(250, 300), true, inst.prefab) -- 补偿前面扣的120
+				target.components.health:DoDelta(100, true, inst.prefab) -- 最终回100，共计600+100-70=630
 			end
 		end,
 		TICK_FN = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health:DoDelta(-1, true, inst.prefab)
+				local healing = math.random() * (7.5 - 2.5) + 2.5 -- 一次5点，共600点
+				target.components.health:DoDelta(healing, true, inst.prefab)
 			end
 		end,
-		DURATION = TUNING.GHOSTLYELIXIR_FASTREGEN_DURATION, --30s
+		DURATION = TUNING.GHOSTLYELIXIR_FASTREGEN_DURATION, -- 30s, 120次
 		FLOATER = {"small", 0.15, 0.55},
 		fx = "ghostlyelixir_fastregen_fx",
 		dripfx = "ghostlyelixir_fastregen_dripfx",
@@ -143,17 +148,22 @@ local potion_tunings =
 		-- PLAYER CONTENT
 		ONAPPLY_PLAYER = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health:DoDelta(25, true, inst.prefab)
+				local damage = 50 -- 先扣50点
+				local current_health = target.components.health.currenthealth
+				local new_health = math.max(current_health - damage, 1)  -- 不会低于1血
+				local delta = new_health - current_health  -- 计算真正扣除的值（是负数）
+				target.components.health:DoDelta(delta, true, inst.prefab)
 			end
 		end,
 		ONDETACH_PLAYER = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health:DoDelta(20 + math.random(50, 100), true, inst.prefab)  -- 补偿前面扣的20
+				target.components.health:DoDelta(30, true, inst.prefab) -- 最终回30，合计120+30-50=100
 			end
 		end,
 		TICK_FN_PLAYER = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health:DoDelta(-0.25, true, inst.prefab)
+				local healing = math.random() * (1.5 - 0.5) + 0.5 -- 一次1点，共120点
+				target.components.health:DoDelta(healing, true, inst.prefab)
 			end
 		end,
 		DURATION_PLAYER = TUNING.GHOSTLYELIXIR_PLAYER_FASTREGEN_DURATION, --20s

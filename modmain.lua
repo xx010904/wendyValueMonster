@@ -35,6 +35,9 @@ Assets = {
     Asset("ANIM", "anim/sisturn_salt_pool.zip"),
     Asset("ANIM", "anim/sisturn_food.zip"),
     Asset("ANIM", "anim/sisturn_salt_marks.zip"),
+    -- calling
+    Asset("ANIM", "anim/wendy_soul_link.zip"),
+    Asset("ANIM", "anim/wendy_soul_link_endpoint.zip"),
 
     ---- images
     --lunar
