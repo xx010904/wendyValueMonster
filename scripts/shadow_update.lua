@@ -92,6 +92,7 @@ AddStategraphState('wilson',
             end),
             FrameEvent(14, function(inst)
                 local flower = inst.components.inventory:FindItem(find_abigail_flower)
+                -- print("findflower", flower)
                 if flower then
                     local skin_build = flower:GetSkinBuild()
                     if skin_build ~= nil then
@@ -134,14 +135,13 @@ AddStategraphState('wilson_client',
         server_states = { "murder_elixir" },
 
         onenter = function(inst)
+            -- print("onenter:",inst)
             inst.components.locomotor:Stop()
             inst.AnimState:PlayAnimation("wendy_elixir_pre")
             inst.AnimState:OverrideSymbol("ghostly_elixirs_swap", "ghostly_elixirs", "ghostly_elixirs_shadow_swap")
 
-            if inst.components.ghostlybond and inst.components.ghostlybond.ghost and inst.components.ghostlybond.summoned then
-                inst.AnimState:PushAnimation("wendy_elixir_lag", false)
-                inst:PerformPreviewBufferedAction()
-            end
+            inst.AnimState:PushAnimation("wendy_elixir_lag", false)
+            inst:PerformPreviewBufferedAction()
             inst.sg:SetTimeout(1)
         end,
 

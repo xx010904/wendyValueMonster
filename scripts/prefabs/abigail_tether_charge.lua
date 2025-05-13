@@ -48,7 +48,7 @@ local function fn()
     inst.components.projectile:SetOnThrownFn(OnThrown)
 
     inst:DoTaskInTime(0.4, function(inst)
-        SpawnPrefab("planar_resist_fx").entity:SetParent(inst.entity)
+        -- SpawnPrefab("planar_resist_fx").entity:SetParent(inst.entity)
         inst.components.projectile:SetSpeed(19)
         inst.components.projectile:SetHitDist(0.75)
     end)
@@ -66,8 +66,7 @@ local function PlayHitSound(proxy)
 
     inst.Transform:SetFromProxy(proxy.GUID)
 
-    inst.SoundEmitter:PlaySound("terraria1/skins/weapon_whoosh")
-    -- inst.SoundEmitter:PlaySound("dontstarve/common/butterfly_trap")
+    inst.SoundEmitter:PlaySound("dontstarve/common/butterfly_trap")
 
     inst:Remove()
 end

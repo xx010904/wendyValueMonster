@@ -1,6 +1,6 @@
 local isCh = locale == "zh" or locale == "zhr"
 version = "1.0"
-name = isCh and "数值怪阿比盖尔" or "Abigail the Value Monster"
+name = isCh and "数值怪阿比盖尔" or "The Value Monster: Abigail"
 author = "XJS"
 description = isCh and 
 "技能树的每个分组都加了新的效果，具体可以查看配置项。\n封面是阿比盖尔~"..
@@ -136,7 +136,7 @@ configuration_options =
 		--done
 		name = "LunarSetting",
 		label = isCh and "月灵莲花" or "Gestalt Lotus",
-		hover = isCh and "满月全天，可以用月晷转化阿比盖尔之花为月灵莲花，用于将阿比盖尔转化为普通形态或虚影形态。"
+		hover = isCh and "满月全天，可以用月晷将阿比盖尔之花转化为月灵莲花；月灵莲花可以切换阿比盖尔的鬼魂或虚影形态。"
 			or "During a full moon, the moondial can transform Abigail's Flower into a Lunar Lotus, used to shift Abigail between her ghost and Gestalt forms.",
 		options =
 		{

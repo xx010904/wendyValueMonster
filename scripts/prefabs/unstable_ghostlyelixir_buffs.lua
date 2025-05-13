@@ -1,27 +1,41 @@
 
---DSV uses 4 but ignores physics radius
+--免伤
 local function onattacked_shield(inst, data)
+	inst:RemoveEventCallback("attacked", onattacked_shield)
+	inst.components.health.externalreductionmodifiers:RemoveModifier(inst, "ghostlyelixir_shield")
+
     if data.redirected then
         return
     end
 
-	local fx = SpawnPrefab("elixir_player_forcefield")
+	local fxName = inst:HasTag("abigail") and "round_puff_fx_lg" or "round_puff_fx_sm"
+	local fx = SpawnPrefab(fxName)
 	inst:AddChild(fx)
 	inst.SoundEmitter:PlaySound("dontstarve/characters/wendy/abigail/shield/on")
 
-	inst.components.health.externalreductionmodifiers:RemoveModifier(inst, "ghostlyelixir_shield")
 end
 
-local EXCLUDE_TAGS = { "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget", "player", "companion", "invisible", "noattack", "hiding", "abigail", "abigail_tether", "shadowcreature" }
-local COMBAT_TARGET_TAGS = { "_combat" }
+-- aoe 反击
+local ATTACK_MUST_TAGS = { "_combat" }
+local EXCLUDE_TAGS = {
+    "playerghost", "FX", "DECOR", "INLIMBO", "wall", "notarget",
+    "player", "companion", "invisible", "noattack", "hiding",
+    "abigail", "abigail_tether", "graveghost", "ghost", "shadowcreature",
+    "playingcard", "deckcontainer"
+}
 local function onattacked_retaliation(inst, data)
 	inst:RemoveEventCallback("attacked", onattacked_retaliation)
-	local hitrange = 5
+	-- 单体伤害
 	local damage = math.random(10, 30)
+	local attacker = data.attacker
+	if attacker and attacker.components.combat then
+		attacker.components.combat:GetAttacked(inst, damage, nil, nil, inst.spdmg)
+	end
 
+	-- 群体伤害
+	local hitrange = 5
 	local x, y, z = inst.Transform:GetWorldPosition()
-
-	for i, v in ipairs(TheSim:FindEntities(x, y, z, hitrange, COMBAT_TARGET_TAGS, EXCLUDE_TAGS)) do
+	for i, v in ipairs(TheSim:FindEntities(x, y, z, hitrange, ATTACK_MUST_TAGS, EXCLUDE_TAGS)) do
 		if v:IsValid() and v.entity:IsVisible() and v.components.combat ~= nil then
 			local range = hitrange + v:GetPhysicsRadius(0)
 			if v:GetDistanceSqToPoint(x, y, z) < range * range then
@@ -48,8 +62,7 @@ local function onattacked_retaliation(inst, data)
 								v.components.combat.target:HasTag("player"))
 					end
 					if not isally then
-						v.components.combat:GetAttacked(inst, damage, nil, nil, inst.spdmg)
-						local retaliation = SpawnPrefab("abigail_retaliation")
+						local retaliation = SpawnPrefab("abigail_retaliation") -- AOE伤害
 						retaliation:SetRetaliationTarget(v)
 					end
 				end
@@ -174,7 +187,7 @@ local potion_tunings =
 	-- 夜影万金油 Nightshade Nostrum
 	ghostlyelixir_attack =
 	{
-		TICK_RATE = 0.9,
+		TICK_RATE = 0.999,
 		-- ABIGAIL CONTENT
 		ONAPPLY = function(inst, target)
 			if target.components.combat then
@@ -270,11 +283,11 @@ local potion_tunings =
 	-- 不屈药剂 Unyielding Draught
 	ghostlyelixir_shield =
 	{
-		TICK_RATE = 10,
+		TICK_RATE = 1,
 		-- ABIGAIL CONTENT
 		ONAPPLY = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health.externalreductionmodifiers:SetModifier(target, 75, "ghostlyelixir_shield")
+				target.components.health.externalreductionmodifiers:SetModifier(target, 99999, "ghostlyelixir_shield")
 				target:ListenForEvent("attacked", onattacked_shield)
 			end
 		end,
@@ -285,11 +298,21 @@ local potion_tunings =
 			end
 		end,
 		TICK_FN = function(inst, target)
-			if target.components.health ~= nil then
-				target.components.health.externalreductionmodifiers:RemoveModifier(target, "ghostlyelixir_shield")
-				target.components.health.externalreductionmodifiers:SetModifier(target, math.random(50, 100), "ghostlyelixir_shield")
+			if target ~= nil and target.components ~= nil and target.components.health ~= nil then
+				local health = target.components.health
+				local current_health = health.currenthealth or 0
+				local max_health = health.maxhealth or 1 -- 防止除0
+				local health_ratio = current_health / max_health
+				-- 基础35%，低血提升最高到70%
+				local chance = 0.35 + (1 - health_ratio) * 0.35
+				chance = math.min(math.max(chance, 0), 0.70)
+				-- 清除旧的效果
+				health.externalreductionmodifiers:RemoveModifier(target, "ghostlyelixir_shield")
 				target:RemoveEventCallback("attacked", onattacked_shield)
-				target:ListenForEvent("attacked", onattacked_shield)
+				if math.random() < chance then
+					health.externalreductionmodifiers:SetModifier(target, 99999, "ghostlyelixir_shield")
+					target:ListenForEvent("attacked", onattacked_shield)
+				end
 			end
 		end,
 		DURATION = TUNING.GHOSTLYELIXIR_SHIELD_DURATION,
@@ -302,7 +325,7 @@ local potion_tunings =
 		--PLAYER CONTENT
 		ONAPPLY_PLAYER = function(inst, target)
 			if target.components.health ~= nil then
-				target.components.health.externalreductionmodifiers:SetModifier(target, 50, "ghostlyelixir_shield")
+				target.components.health.externalreductionmodifiers:SetModifier(target, 5, "ghostlyelixir_shield")
 				target:ListenForEvent("attacked", onattacked_shield)
 			end
 		end,
@@ -315,7 +338,7 @@ local potion_tunings =
 		TICK_FN_PLAYER = function(inst, target)
 			if target.components.health ~= nil then
 				target.components.health.externalreductionmodifiers:RemoveModifier(target, "ghostlyelixir_shield")
-				target.components.health.externalreductionmodifiers:SetModifier(target, math.random(25, 75), "ghostlyelixir_shield")
+				target.components.health.externalreductionmodifiers:SetModifier(target, math.random(3, 7), "ghostlyelixir_shield")
 				target:RemoveEventCallback("attacked", onattacked_shield)
 				target:ListenForEvent("attacked", onattacked_shield)
 			end
@@ -346,7 +369,6 @@ local potion_tunings =
 			end
 		end,
 		DURATION = TUNING.GHOSTLYELIXIR_RETALIATION_DURATION,
-		-- ABIGAIL CONTENT
         FLOATER = {"small", 0.2, 0.4},
 		shield_prefab = "abigailforcefieldretaliation",
 		fx = "ghostlyelixir_retaliation_fx",
@@ -402,7 +424,6 @@ local potion_tunings =
 			end
 		end,
 		DURATION = TUNING.GHOSTLYELIXIR_REVIVE_DURATION, --2s
-		-- ABIGAIL CONTENT
         FLOATER = {"small", 0.1, 0.7},
 		fx = "ghostlyelixir_retaliation_fx",
 		dripfx = "ghostlyelixir_retaliation_dripfx",

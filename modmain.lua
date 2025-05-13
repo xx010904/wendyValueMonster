@@ -120,7 +120,6 @@ local net_entity = GLOBAL.net_entity
 
 GLOBAL.global("modvalueconfig")
 if GLOBAL.modvalueconfig == nil then GLOBAL.modvalueconfig = {} end
-GLOBAL.modvalueconfig.languageSetting = GetModConfigData("languageSetting")
 
 -- 本地化
 local lan = (_G.LanguageTranslator.defaultlang == "zh") and "zh" or "en"

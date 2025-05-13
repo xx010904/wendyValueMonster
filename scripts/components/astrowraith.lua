@@ -125,8 +125,11 @@ end
 -- 增加攻击计数
 function AstroWraith:AddAttackCount(num)
     num = num or 0.5
-    if self.max_attack_count > self.attack_count then
+    if self.attack_count < self.max_attack_count then
         self.attack_count = self.attack_count + num
+        if self.attack_count > self.max_attack_count then
+            self.attack_count = self.max_attack_count
+        end
     end
 end
 
@@ -154,7 +157,7 @@ function AstroWraith:DoAOEAttack()
             self.inst.components.combat:DoAttack(target)
 
             if target:HasTag("epic") then
-                self:AddAttackCount(2.5)
+                self:AddAttackCount(1.5)
             end
             self:AddAttackCount(0.5)
         end

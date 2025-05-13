@@ -108,7 +108,7 @@ function GraveBunker:DoBunk(doer)
             end)
 
             -- 监听被打事件
-            scare:ListenForEvent("death", function()
+            scare:ListenForEvent("attacked", function()
                 if scare:IsValid() then
                     self.inst:AddTag("hasScareHurt")
                 end
@@ -228,6 +228,7 @@ function GraveBunker:DoLeave(doer)
 	end
 
     local bunkCd = 5
+    print("hasScareHurt", self.inst:HasTag("hasScareHurt"))
     if self.inst:HasTag("hasScareDeath") or self.inst:HasTag("hasScareHurt") then
         bunkCd = 120
     end

@@ -198,8 +198,17 @@ AddPrefabPostInit("abigail", function(inst)
     inst:ListenForEvent("death", OnDeath)
     inst:ListenForEvent("pre_health_setval", OnSisterBondChange)
 
-    local attack_interval = 1.6
-
+    local attack_interval = 2.4
+    local tether_spawn_duration = 0.4 -- 0.4 秒内生成完 4 个
+    
+    -- 四个方向偏移
+    local offsets = {
+        {x = 1, z = 0},   -- 右
+        {x = -1, z = 0},  -- 左
+        {x = 0, z = 1},   -- 上
+        {x = 0, z = -1},  -- 下
+    }
+    
     -- 启动定时任务
     local function StartTetherTask()
         if inst._tether_task == nil and inst:IsValid() and not inst:IsInLimbo() then
@@ -208,25 +217,35 @@ AddPrefabPostInit("abigail", function(inst)
                 if player and player.components.ghostlybond and player.components.ghostlybond.ghost ~= inst then
                     return -- 忽略错误绑定的 Abigail
                 end
-                -- print("_playerlink", player)
+    
                 if player and player.components.ghostlybond and player.components.ghostlybond.summoned and player.sisterBond and player.sisterBond > 0 then
-                    -- print("inst.components.combat.target", inst.components.combat.target)
                     if inst.components.combat then
-                        local attack_power = player.sisterBond * 8 / 3
-                        local target = FindAbigailAttackTarget(inst, player, attack_power)
-                        if target then
-                            local tether = SpawnPrefab("abigail_tether")
-                            tether.Transform:SetPosition(inst.Transform:GetWorldPosition())
-
-                            local weapon = tether.components.combat:GetWeapon()
-                            if weapon then
-                                weapon.components.weapon:SetDamage(attack_power)
-                            end
-
-                            tether.components.combat:DoAttack(target)
-                            tether:DoTaskInTime(attack_interval, function()
-                                if tether:IsValid() then
-                                    tether:Remove()
+                        local attack_power = player.sisterBond * 1 -- 4个就是4攻击力
+                        local interval = tether_spawn_duration / (#offsets - 1)
+    
+                        for i, offset in ipairs(offsets) do
+                            inst:DoTaskInTime(interval * (i - 1), function()
+                                if inst:IsValid() then
+                                    local target = FindAbigailAttackTarget(inst, player, attack_power)
+                                    if target then
+                                        local tether = SpawnPrefab("abigail_tether")
+    
+                                        -- 计算偏移位置
+                                        local x, y, z = inst.Transform:GetWorldPosition()
+                                        tether.Transform:SetPosition(x + offset.x, y, z + offset.z)
+    
+                                        local weapon = tether.components.combat:GetWeapon()
+                                        if weapon then
+                                            weapon.components.weapon:SetDamage(attack_power)
+                                        end
+    
+                                        tether.components.combat:DoAttack(target)
+                                        tether:DoTaskInTime(attack_interval, function()
+                                            if tether:IsValid() then
+                                                tether:Remove()
+                                            end
+                                        end)
+                                    end
                                 end
                             end)
                         end
@@ -235,6 +254,7 @@ AddPrefabPostInit("abigail", function(inst)
             end)
         end
     end
+    
 
     -- 停止定时任务
     local function StopTetherTask()

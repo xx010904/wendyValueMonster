@@ -69,9 +69,15 @@ local function DoAOEDamage(inst)
     inst.SoundEmitter:PlaySound("dontstarve/characters/wendy/abigail/attack_LP", "angry")
     -- inst.AnimState:SetMultColour(207/255, 92/255, 92/255, 1)
 
+    -- 被鬼打了！
+    local attacker = inst.components.ghostlybond.ghost
+    if not attacker or not attacker:IsValid() then
+        attacker = inst
+    end
+
     for _, attack_target in ipairs(targets) do
         if attack_target ~= inst and attack_target.components.health and not attack_target.components.health:IsDead() then
-            attack_target.components.combat:GetAttacked(inst, damage, nil, nil, nil)
+            attack_target.components.combat:GetAttacked(attacker, damage, nil, nil, nil)
             ApplyDebuff(inst, attack_target)
             -- inst.components.combat:DoAttack(target, nil, nil, nil, damage)
         end

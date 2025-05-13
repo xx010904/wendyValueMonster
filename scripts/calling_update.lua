@@ -1,4 +1,4 @@
-local HAUNT_CD = 120
+local HAUNT_CD = 1
 local function SpawnSoulLink(source, target)
     local x1, y1, z1 = source.Transform:GetWorldPosition()
     local x2, y2, z2 = target.Transform:GetWorldPosition()

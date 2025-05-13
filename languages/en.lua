@@ -20,7 +20,7 @@ STRINGS.NAMES.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Unstable Revenant Restorative"
 STRINGS.NAMES.WENDY_LAST_FOOD = "Parting Banana Pop"
 STRINGS.NAMES.SISTURN_SALTLICK = "Sister's Salted Endorsement"
 STRINGS.NAMES.SISTURN_FOOD = "MockMuck"
-STRINGS.NAMES.MURDER_ELIXIR = "Murder · Cursed Vexation"
+STRINGS.NAMES.MURDER_ELIXIR = "Murder Cursed Vexation"
 STRINGS.NAMES.BIGSPOOK_ALT_NAMES = {
     "BigSpook·Heir of the Tear Drop Kingdom",
     "BigSpook·Supreme Guardian of the Wailing Souls",
@@ -79,23 +79,23 @@ STRINGS.NAMES.BIGSPOOK_ALT_NAMES = {
 }
 
 STRINGS.RECIPE_DESC.WENDY_LAST_FOOD = "A parting food to reunite with Abigail."
-STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Brings you back from a terrifying experience."
-STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_SPEED = "Speed varies from fast to slow."
-STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_ATTACK = "Attack power fluctuates, and vision is sometimes clear, sometimes not."
-STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_RETALIATION = "Retaliation can be high or low."
-STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_SHIELD = "The shield varies between thick and thin."
-STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "Instant large recovery, but will result in continuous damage."
+STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Fixes you up after life's rude interruptions."
+STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_SPEED = "Sometimes swift, sometimes... not so much."
+STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_ATTACK = "Attack power fluctuates, and night vision is sometimes clear, sometimes not."
+STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_RETALIATION = "Reflects damage... in varying amounts."
+STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_SHIELD = "Occasionally blocks damage"
+STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "A little pain at first for a lot of gain later."
 STRINGS.RECIPE_DESC.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Slow and unstable recovery, with occasional damage."
-STRINGS.RECIPE_DESC.MURDER_ELIXIR = "Inflict poison upon a thriving elixir."
+STRINGS.RECIPE_DESC.MURDER_ELIXIR = "Guess I'm officially haunted and hunted now."
 
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.ABIGAIL_GESTALT_LOTUS = "The power from the Moon."
 STRINGS.CHARACTERS.WENDY.DESCRIBE.ABIGAIL_GESTALT_LOTUS = "Can the Lunar power make Abby stronger?"
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Brings you back from a terrifying experience."
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SPEED = "Speed varies from fast to slow."
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_ATTACK = "Attack power fluctuates, and vision is sometimes clear, sometimes not."
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_RETALIATION = "Retaliation can be high or low."
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SHIELD = "The shield varies between thick and thin."
-STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "Instant large recovery, but will result in continuous damage."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_REVIVE = "Fixes you up after life's rude interruptions."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SPEED = "Sometimes swift, sometimes... not so much."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_ATTACK = "Attack power fluctuates, and night vision is sometimes clear, sometimes not."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_RETALIATION = "Reflects damage... in varying amounts."
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SHIELD = "Occasionally blocks damage"
+STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_FASTREGEN = "A little pain at first for a lot of gain later. "
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.UNSTABLE_GHOSTLYELIXIR_SLOWREGEN = "Slow and unstable recovery, with occasional damage."
 STRINGS.CHARACTERS.WENDY.DESCRIBE.WENDY_LAST_FOOD = {"Is it Abby's favorite food?", "I don't like this..."}
 STRINGS.CHARACTERS.GENERIC.DESCRIBE.WENDY_LAST_FOOD = "A food that looks strange yet delicious."
@@ -301,7 +301,7 @@ if GetModConfigData("CraftingSetting") then
 end
 if GetModConfigData("PartingSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_AVENGING_GHOST_DESC = STRINGS.SKILLTREE.WENDY.WENDY_AVENGING_GHOST_DESC ..
-    " Can craft a Parting Banana Pop that sends into spirit form on consumption; spirit attacks build Vengeful Spirit Power to boost damage."
+    " Craft a Parting Banana Pop that sends your soul adrift upon consumption. While out-of-body, colliding with creatures builds up Ghostly Vengeance, empowering your attacks up to a 1.0x multiplier."
 end
 if GetModConfigData("BunkerSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_MAKEGRAVEMOUNDS_DESC = STRINGS.SKILLTREE.WENDY.WENDY_MAKEGRAVEMOUNDS_DESC ..
