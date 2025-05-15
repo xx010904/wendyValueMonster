@@ -320,7 +320,8 @@ if GetModConfigData("BunkerSetting") then
 end
 if GetModConfigData("CallingSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_GHOSTCOMMAND_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_GHOSTCOMMAND_3_DESC ..
-    " Abigail can haunt Wendy to instantly swap their current health percentages."
+    -- " Abigail can haunt Wendy to instantly swap their current health percentages."
+    " Abigail can haunt Wendy, creating a soul link between them — damage dealt by one will heal the other."
 end
 if GetModConfigData("LunarSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_LUNAR_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_LUNAR_3_DESC ..
@@ -328,5 +329,5 @@ if GetModConfigData("LunarSetting") then
 end
 if GetModConfigData("ShadowSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_SHADOW_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_SHADOW_3_DESC ..
-    " Use a elixir to muder Abigail, leaving Wendy haunted by her spirit; Wendy inherits Abigail's area damage and vulnerability buff."
+    " Use a elixir to muder Abigail, leaving Wendy shadowed by her spirit; Wendy inherits Abigail's area damage and vulnerability buff."
 end

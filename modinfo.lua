@@ -119,12 +119,25 @@ configuration_options =
 		},
 		default = true,
 	},
+	-- {
+	-- 	--done
+	-- 	name = "CallingSetting",
+	-- 	label = isCh and "灵魂隔断" or "Soul Sunder",
+	-- 	hover = isCh and "阿比盖尔的作祟指令可以对温蒂使用，交换当前血量百分比。"
+	-- 		or "Abigail can haunt Wendy to instantly swap their current health percentages.",
+	-- 	options =
+	-- 	{
+	-- 		{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
+	-- 		{ description = isCh and "不开" or "Disable", data = false, hover = isCh and "不开" or "Disable" },
+	-- 	},
+	-- 	default = true,
+	-- },
 	{
 		--done
 		name = "CallingSetting",
-		label = isCh and "灵魂隔断" or "Soul Sunder",
-		hover = isCh and "阿比盖尔的作祟指令可以对温蒂使用，交换当前血量百分比。"
-			or "Abigail can haunt Wendy to instantly swap their current health percentages.",
+		label = isCh and "灵魂链接" or "Soul Link",
+		hover = isCh and "阿比盖尔可以对温蒂作祟，链接彼此灵魂，所造成的伤害会为对方恢复生命。"
+			or "Abigail can haunt Wendy, creating a soul link between them — damage dealt by one will heal the other.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },
@@ -148,8 +161,8 @@ configuration_options =
 	{
 		name = "ShadowSetting",
 		label = isCh and "谋杀" or "Murder",
-		hover = isCh and "用灵药谋杀阿比盖尔，使温蒂被鬼灵缠身，继承阿比盖尔的范围伤害与易伤增益。"
-			or "Use a elixir to muder Abigail, leaving Wendy haunted by her spirit; Wendy inherits Abigail's area damage and vulnerability buff.",
+		hover = isCh and "用灵药谋杀阿比盖尔，使温蒂被鬼灵的暗影笼罩，继承阿比盖尔的范围伤害与易伤增益。"
+			or "Use a elixir to muder Abigail, leaving Wendy shadowed by her spirit; Wendy inherits Abigail's area damage and vulnerability buff.",
 		options =
 		{
 			{ description = isCh and "开启" or "Enable", data = true, hover = isCh and "开启" or "Enable" },

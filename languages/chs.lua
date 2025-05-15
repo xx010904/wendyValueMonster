@@ -320,7 +320,8 @@ if GetModConfigData("BunkerSetting") then
 end
 if GetModConfigData("CallingSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_GHOSTCOMMAND_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_GHOSTCOMMAND_3_DESC ..
-    "\n阿比盖尔的作祟指令可以对温蒂使用，交换当前血量百分比。"
+    -- "\n阿比盖尔的作祟指令可以对温蒂使用，交换当前血量百分比。"
+    "\n阿比盖尔可以对温蒂作祟，链接彼此灵魂，所造成的伤害会为对方恢复生命。"
 end
 if GetModConfigData("LunarSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_LUNAR_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_LUNAR_3_DESC ..
@@ -328,5 +329,5 @@ if GetModConfigData("LunarSetting") then
 end
 if GetModConfigData("ShadowSetting") then
     STRINGS.SKILLTREE.WENDY.WENDY_SHADOW_3_DESC = STRINGS.SKILLTREE.WENDY.WENDY_SHADOW_3_DESC ..
-    "\n用灵药谋杀阿比盖尔，使温蒂被鬼灵缠身，继承阿比盖尔的范围伤害与易伤增益。"
+    "\n用灵药谋杀阿比盖尔，使温蒂被鬼灵的暗影笼罩，继承阿比盖尔的范围伤害与易伤增益。"
 end
