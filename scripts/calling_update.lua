@@ -111,22 +111,155 @@ local function doSunder(inst, player)
     end)
 end
 
+---- 灵魂链接
+local LINK_TIME = 60
+local function doLink(ghost, player)
+    if not (ghost and player) then return end
+
+    -- 检查 player 身上是否有 ghostflower
+    if player.components.inventory then
+        local flower = player.components.inventory:FindItem(function(item)
+            return item.prefab == "ghostflower"
+        end)
+
+        if flower then
+            if flower.components.stackable and flower.components.stackable:StackSize() > 1 then
+                flower.components.stackable:Get(1):Remove()  -- 消耗1个
+            else
+                flower:Remove()  -- 只有1个，直接移除
+                -- 链接就绪
+            end
+        else
+            player.components.talker:Say(GetString(player, "ANNOUNCE_HAUNT_NO_GHOSTFLOWER"), nil, true)
+            return
+        end
+    end
+    player.components.talker:Say(GetString(player, "ANNOUNCE_HAUNT_READY"), nil, true)
+
+    local ghost_cd = false
+    local player_cd = false
+    local heal_task = nil
+
+    -- ghost 攻击 -> player 回血 6.8 * 6，扣 3.4 * 6 理智
+    local function OnGhostAttack(ghost, data)
+        if not data or not data.target then return end
+        if ghost_cd then return end
+
+        if player.components.health and not player.components.health:IsDead() then
+            local playerhealth = player.components.health
+            if playerhealth.currenthealth >= playerhealth.maxhealth then
+                return -- 满血不执行
+            end
+
+            ghost_cd = true
+
+            playerhealth:DoDelta(6.8 * 6, nil, ghost)
+
+            if player.components.sanity then
+                player.components.sanity:DoDelta(-3.4 * 6)
+            end
+
+            SpawnPrefab("soul_link_endpoint").Transform:SetPosition(player.Transform:GetWorldPosition())
+            ghost:DoTaskInTime(0.1, function() ghost_cd = false end)
+        end
+    end
+
+    -- ghost startaura事件开始，定时给player回血+扣理智
+    local function OnStartAura()
+        if heal_task then return end
+
+        heal_task = ghost:DoPeriodicTask(1, function()
+            if player.components.health and not player.components.health:IsDead() then
+                local playerhealth = player.components.health
+                if playerhealth.currenthealth < playerhealth.maxhealth then
+                    SpawnPrefab("soul_link_endpoint").Transform:SetPosition(player.Transform:GetWorldPosition())
+                    playerhealth:DoDelta(6.8, nil, ghost)
+                    if player.components.sanity then
+                        player.components.sanity:DoDelta(-3.4)
+                    end
+                end
+            end
+        end)
+    end
+
+    local function OnStopAura()
+        if heal_task then
+            heal_task:Cancel()
+            heal_task = nil
+        end
+    end
+
+    -- player 攻击 -> ghost 回血 6.8，player 扣 3.4 饥饿
+    local function OnPlayerAttack(player, data)
+        if not data or not data.target then return end
+        if player_cd then return end
+
+        if ghost.components.health and not ghost.components.health:IsDead() then
+            local ghosthealth = ghost.components.health
+            if ghosthealth.currenthealth >= ghosthealth.maxhealth then
+                return -- 满血不执行
+            end
+
+            player_cd = true
+
+            ghosthealth:DoDelta(6.8, nil, player)
+
+            if player.components.hunger then
+                player.components.hunger:DoDelta(-3.4)
+            end
+
+            SpawnPrefab("soul_link_endpoint").Transform:SetPosition(ghost.Transform:GetWorldPosition())
+            player:DoTaskInTime(0.1, function() player_cd = false end)
+        end
+    end
+
+    -- 初始化标记（只初始化一次）
+    if not ghost._soul_linked_to_player then
+        ghost._soul_linked_to_player = player
+        player._soul_linked_to_ghost = ghost
+
+
+        -- 添加监听（只添加一次）
+        ghost:ListenForEvent("onattackother", OnGhostAttack)
+        ghost:ListenForEvent("startaura", OnStartAura)
+        ghost:ListenForEvent("stopaura", OnStopAura)
+        player:ListenForEvent("onattackother", OnPlayerAttack)
+
+        -- 记录 heal_task 给后面清理用
+        ghost._soul_link_heal_task = heal_task
+    end
+
+    -- 重置 LINK_TIME 倒计时
+    if ghost._soul_link_timer_task then
+        ghost._soul_link_timer_task:Cancel()
+    end
+
+    ghost._soul_link_timer_task = ghost:DoTaskInTime(LINK_TIME, function()
+        -- 解绑监听
+        ghost:RemoveEventCallback("onattackother", OnGhostAttack)
+        ghost:RemoveEventCallback("startaura", OnStartAura)
+        ghost:RemoveEventCallback("stopaura", OnStopAura)
+        player:RemoveEventCallback("onattackother", OnPlayerAttack)
+
+        -- 停止回血任务
+        if ghost._soul_link_heal_task then
+            ghost._soul_link_heal_task:Cancel()
+            ghost._soul_link_heal_task = nil
+        end
+
+        -- 清除标记
+        ghost._soul_linked_to_player = nil
+        player._soul_linked_to_ghost = nil
+        ghost._soul_link_timer_task = nil
+
+        -- 链接结束
+        player.components.talker:Say(GetString(player, "ANNOUNCE_HAUNT_COOLDOWN"), nil, true)
+    end)
+end
+
+
 ---- 作祟修改
 AddPrefabPostInit("abigail", function(inst)
-    -- local old_OnSave = inst.OnSave
-    -- inst.OnSave = function(inst, data)
-    --     if old_OnSave then
-    --         old_OnSave(inst, data)
-    --     end
-    -- end
-
-    -- local old_OnLoad = inst.OnLoad
-    -- inst.OnLoad = function(inst, data)
-    --     if old_OnLoad then
-    --         old_OnLoad(inst, data)
-    --     end
-    -- end
-
     if inst and inst.ListenForEvent then
         inst:ListenForEvent("do_ghost_hauntat", function(inst, pos)
             if (inst.sg and inst.sg:HasStateTag("nocommand")) or (inst.components.health and inst.components.health:IsDead()) then
@@ -152,12 +285,25 @@ AddPrefabPostInit("abigail", function(inst)
 
             -- 如果 player 和 pos 的距离小于等于2
             if distance <= 2 then
-                doSunder(inst, player)
+                -- player发出soul_link连接inst
+                SpawnSoulLink(player, inst)
+                -- inst发出soul_link连接player
+                SpawnSoulLink(inst, player)
+                -- 核心转向逻辑
+                if player then
+                    player:ForceFacePoint(inst.Transform:GetWorldPosition())
+                end
+                -- 锁定动作
+                inst.sg:GoToState("abigail_transform")
+                player.sg:GoToState("soul_sunder")
 
+                player:DoTaskInTime(0.25, function(player)
+                    -- doSunder(inst, player)
+                    doLink(inst, player)
+                end)
                 -- 清除原本作祟的目标
                 inst._haunt_target = nil
             end
-
         end)
     end
 end)

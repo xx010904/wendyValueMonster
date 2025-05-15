@@ -258,6 +258,17 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_COOLDOWN = {
 }
 STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_READY = {
     "The balance between blood and soul has returned.",
+    "The veil stirs... the bond is ready once more.",
+    "Fate has opened the path for us again.",
+    "The tether of life and death holds steady.",
+    "Our fragile link breathes anew, for now.",
+    "The circle of grief spins once again.",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_NO_GHOSTFLOWER = {
+    "Abigail, without the Mourning Glory, we cannot connect.",
+    "Without her flower, our souls will remain adrift.",
+    "No Mourning Glory, no path to the other side.",
+    "Without that bloom, even mourning feels impossible.",
 }
 STRINGS.CHARACTERS.WENDY.ANNOUNCE_NEED_APART = {
     "Abigail's not ready yet.",

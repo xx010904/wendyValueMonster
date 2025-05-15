@@ -257,7 +257,18 @@ STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_COOLDOWN = {
     "连死者也畏惧鲜血的喧嚣。",
 }
 STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_READY = {
-    "血与魂已协调。",
+    "血与魂的平衡已归于正轨。",
+    "迷雾微动……我们之间的纽带再次苏醒。",
+    "命运再次为我们敞开了通路。",
+    "生与死的细线，暂时稳固了。",
+    "脆弱的联系，再一次开始呼吸。",
+    "哀悼的轮回，又开始缓缓转动。",
+}
+STRINGS.CHARACTERS.WENDY.ANNOUNCE_HAUNT_NO_GHOSTFLOWER = {
+    "阿比盖尔，没有哀悼荣耀，我们无法连结。",
+    "没有她的花，我们的灵魂将永远游离。",
+    "哀悼荣耀不在，通往彼岸的路也被封死了。",
+    "若无那朵花，连哀悼都无法开始。",
 }
 STRINGS.CHARACTERS.WENDY.ANNOUNCE_NEED_APART = {
     "阿比盖尔还没准备贴贴。",

@@ -46,7 +46,14 @@ local function fn()
     inst.components.container.skipopensnd = true
     inst.components.container.canbeopened = true
 
-    inst.salt_block = 0
+    inst._link_sisturn = nil
+
+    inst:DoPeriodicTask(60, function()
+        if inst._link_sisturn == nil then
+            inst.components.container:DropEverything()
+            inst:Remove()
+        end
+    end)
 
     return inst
 end
