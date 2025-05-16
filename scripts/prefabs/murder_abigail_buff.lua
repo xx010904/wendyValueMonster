@@ -82,6 +82,24 @@ local function DoAOEDamage(inst)
             -- inst.components.combat:DoAttack(target, nil, nil, nil, damage)
         end
     end
+
+    -- 补上侧翼机枪的伤害，AOE是1秒1下，所以应该是侧翼机枪的2.4分之1的伤害，侧翼机枪是4下1倍sisterBond的伤害
+    if inst.sisterBond and #targets > 0 then
+        -- 过滤掉自己和死的
+        local valid_targets = {}
+        for _, target in ipairs(targets) do
+            if target ~= inst and target.components.health and not target.components.health:IsDead() then
+                table.insert(valid_targets, target)
+            end
+        end
+
+        if #valid_targets > 0 then
+            local sisterBondDamage = inst.sisterBond * 4 / 2.4
+            local random_target = valid_targets[math.random(#valid_targets)]
+            random_target.components.combat:GetAttacked(attacker, sisterBondDamage, nil, nil, nil)
+            SpawnPrefab("abigail_tether_charge_hit").Transform:SetPosition(inst.Transform:GetWorldPosition())
+        end
+    end
 end
 
 local function DoMurderAbigail(player, ghost)
