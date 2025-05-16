@@ -58,10 +58,14 @@ function GraveBunker:DoBunk(doer)
         if scare then
             -- 去掉大惊吓的脑子
             scare:SetBrain(nil)
+            scare.components.combat:SetKeepTargetFunction(nil)
+
             -- 如果没有 Name 组件，添加一个 Name 组件
             if not scare.components.named then
                 scare:AddComponent("named")
             end
+            scare:AddComponent("discoparty")
+            scare.components.discoparty:StartDisco()
 
             -- 设置名称为随机生成的名称
             scare.components.named:SetName(BigSpook_DisplayNameFn(scare))
@@ -260,6 +264,7 @@ function GraveBunker:DoLeave(doer)
 	if self.inst.scares then
 		for _, scare in ipairs(self.inst.scares) do
 			if scare and scare:IsValid() then
+                scare.components.discoparty:StopDisco()
                 scare.components.locomotor:Stop()
                 scare.components.locomotor:Clear()
                 scare.AnimState:PlayAnimation("dissipate")
