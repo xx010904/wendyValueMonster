@@ -1,3 +1,5 @@
+local DiscoLight = modvalueconfig.DiscoLight
+
 local GraveBunker = Class(function(self, inst)
 	self.inst = inst
 	inst:AddTag("gravebunker")
@@ -64,8 +66,10 @@ function GraveBunker:DoBunk(doer)
             if not scare.components.named then
                 scare:AddComponent("named")
             end
-            scare:AddComponent("discoparty")
-            scare.components.discoparty:StartDisco()
+            if DiscoLight then
+                scare:AddComponent("discoparty")
+                scare.components.discoparty:StartDisco()
+            end
 
             -- 设置名称为随机生成的名称
             scare.components.named:SetName(BigSpook_DisplayNameFn(scare))
@@ -264,7 +268,9 @@ function GraveBunker:DoLeave(doer)
 	if self.inst.scares then
 		for _, scare in ipairs(self.inst.scares) do
 			if scare and scare:IsValid() then
-                scare.components.discoparty:StopDisco()
+                if DiscoLight and scare.components.discoparty then
+                    scare.components.discoparty:StopDisco()
+                end
                 scare.components.locomotor:Stop()
                 scare.components.locomotor:Clear()
                 scare.AnimState:PlayAnimation("dissipate")

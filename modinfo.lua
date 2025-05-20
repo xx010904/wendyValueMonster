@@ -31,7 +31,14 @@ all_clients_require_mod = true
 api_version_dst = 10
 priority = -11
 
-
+local function Subtitle(name)
+	return {
+		name = name,
+		label = name,
+		options = { {description = "", data = false}, },
+		default = false,
+	}
+end
 configuration_options =
 {
     {
@@ -170,4 +177,16 @@ configuration_options =
 		},
 		default = true,
 	},
+	Subtitle(isCh and "其他配置" or "Other Settings"),
+	{
+		name = "DiscoLight",
+		label = isCh and "蹦迪光效" or "Disco Light",
+		hover = isCh and "钻墓碑的时候大惊吓的变化特效。" or "Bigspook transformation effects triggered when diving into a grave.",
+		options =
+		{
+			{ description = isCh and "开" or "Enable", data = true, hover = isCh and "开启五彩斑斓的光效" or "Enables colorful, flashy bloom visuals." },
+			{ description = isCh and "不开" or "Disable", data = false, hover = isCh and "不变色" or "No color changes" },
+		},
+		default = false,
+	}
 }
