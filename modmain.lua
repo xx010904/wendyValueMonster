@@ -123,6 +123,7 @@ if GLOBAL.modvalueconfig == nil then GLOBAL.modvalueconfig = {} end
 
 -- 其他配置
 GLOBAL.modvalueconfig.DiscoLight = GetModConfigData("DiscoLight")
+-- GLOBAL.modvalueconfig.PersistenceProtectiveInstinct = GetModConfigData("PersistenceProtectiveInstinct")
 
 -- 本地化
 local lan = (_G.LanguageTranslator.defaultlang == "zh") and "zh" or "en"

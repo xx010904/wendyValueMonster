@@ -188,5 +188,16 @@ configuration_options =
 			{ description = isCh and "不开" or "Disable", data = false, hover = isCh and "不变色" or "No color changes" },
 		},
 		default = false,
-	}
+	},
+	-- {
+	-- 	name = "PersistenceProtectiveInstinct",
+	-- 	label = isCh and "持久化保护欲" or "Persistent Protective Instinct",
+	-- 	hover = isCh and "换人、变猴不会消除多年生保护欲。" or "Changing characters or turning into monkeys won't eliminate protective instincts.",
+	-- 	options =
+	-- 	{
+	-- 		{ description = isCh and "开" or "Enable", data = true, hover = isCh and "持久化" or "Persistent" },
+	-- 		{ description = isCh and "不开" or "Disable", data = false, hover = isCh and "不持久化" or "No Persistent" },
+	-- 	},
+	-- 	default = false,
+	-- }
 }

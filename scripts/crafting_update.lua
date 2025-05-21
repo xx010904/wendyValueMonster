@@ -1,3 +1,5 @@
+local PlayerUIDData = require("player_uid_data")
+
 local HEALTH_BOUND = 50
 local SPEED_BOUND = 0.05
 
@@ -64,6 +66,8 @@ local function onactivateresurrection(inst, resurrect_target)
         else
             resurrect_target.sisterBond = 1
         end
+        -- 持久化
+        PlayerUIDData:Set(inst.userid, "sisterBond", resurrect_target.sisterBond)
 
         -- 回收灵魂
         local wave_spawned = SpawnSoulWaves(inst:GetPosition(), resurrect_target.sisterBond, -3.5, 12)
@@ -72,7 +76,7 @@ local function onactivateresurrection(inst, resurrect_target)
         -- 更新一次abby血量
         if resurrect_target.components.ghostlybond and resurrect_target.components.ghostlybond.ghost then
             local ghost = resurrect_target.components.ghostlybond.ghost
-            print("ghost", ghost)
+            -- print("ghost", ghost)
             -- print("Resurrection sisterBond!", resurrect_target.sisterBond)
             OnSisterBondChange(ghost)
             -- 伪召唤一次，修正血量
@@ -108,6 +112,11 @@ AddPrefabPostInit("wendy", function(inst)
                     end
                 end
             end
+            -- 持久化
+            if inst.userid ~= nil and inst.sisterBond then
+                print("持久化", inst.userid, inst.sisterBond)
+                PlayerUIDData:Set(inst.userid, "sisterBond", inst.sisterBond)
+            end
         end
 
         local old_OnLoad = inst.OnLoad
@@ -142,6 +151,11 @@ local function OnDeath(inst)
             local reduction = math.ceil(leader.sisterBond / 3)
             -- print("阿比盖尔死亡reduction：", reduction)
             leader.sisterBond = leader.sisterBond - math.max(1, reduction)
+            -- 持久化
+            if inst.userid ~= nil and inst.sisterBond then
+                print("持久化,阿比死亡", inst.userid, inst.sisterBond)
+                PlayerUIDData:Set(inst.userid, "sisterBond", inst.sisterBond)
+            end
         end
     end
 end
@@ -273,4 +287,13 @@ AddPrefabPostInit("abigail", function(inst)
         if inst._tether_task ~= nil then return end
         StartTetherTask()
     end
+end)
+
+AddPlayerPostInit(function(inst)
+    inst:DoTaskInTime(0, function()
+        if inst.userid then
+            inst.sisterBond = PlayerUIDData:Get(inst.userid, "sisterBond", 0)
+            print("加载sisterBond", inst.sisterBond)
+        end
+    end)
 end)
