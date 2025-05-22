@@ -7,12 +7,14 @@ description = isCh and
 "\n󰀐感谢赏玩！"..
 "\n\n〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓"..
 "\n󰀅完整更新日志可以在创意工坊查看"..
+"\n V1.0.2 变猴换人都能保持保护欲层数；添加了测试的配置，可以自己调节当前保护欲层数"..
 "\n"
 or
 "The skill tree has added new effects to each group, which can be viewed in the configuration options. \nThe cover is Abigail~"..
 "\n󰀐Thanks to enjoy!"..
 "\n\n〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓"..
 "\n󰀅Full changelog available on the Workshop"..
+"\n V1.0.2 Keeps Protective Instinct stacks when switching characters or transforming into a monkey; added a configuration option to manually adjust the current Protective Instinct."..
 "\n"
 
 forumthread = ""
@@ -200,4 +202,15 @@ configuration_options =
 	-- 	},
 	-- 	default = false,
 	-- }
+    {
+        name = "ENABLE_DEBUG_SISTERBOND",
+        label = isCh and "测试保护欲" or "Debug Protective Instinct",
+		hover = isCh and "在控制台输入 DebugSetSisterBond(5) ，即可设置为5层" or "Input DebugSetSisterBond(5) in the console to set it to 5 levels",
+		options =
+		{
+			{ description = isCh and "开" or "Enable", data = true, hover = isCh and "开" or "Enable" },
+			{ description = isCh and "不开" or "Disable", data = false, hover = isCh and "不开" or "Disable" },
+		},
+        default = false,
+    },
 }

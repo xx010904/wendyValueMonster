@@ -65,35 +65,9 @@ AddPrefabPostInit("world", function(inst)
 
     if not inst.components.playerbondtracker then
         inst:AddComponent("playerbondtracker")
-        print("[Bond] 世界组件 playerbondtracker 已添加")
+        -- print("[Bond] 世界组件 playerbondtracker 已添加")
     end
 end)
-
--- AddSimPostInit(function()
---     TheWorld:ListenForEvent("playeractivated", function(world, player)
---         -- 确保组件和玩家都有效
---         if TheWorld.components.playerbondtracker and player.userid then
---             local bond = TheWorld.components.playerbondtracker:GetBondData(player.userid, "sisterBond")
---             local ghostcurrenthealth = TheWorld.components.playerbondtracker:GetBondData(player.userid, "ghostcurrenthealth")
-
-
---             -- 在这里处理加载后的逻辑，例如重新设定玩家的某个状态
---             player.sisterBond = bond or 0
---             print(string.format("[Bond] 玩家加载完成，保护欲：", player:GetDisplayName(), bond))
-
---             if ghostcurrenthealth then
---                 if player.components.ghostlybond and player.components.ghostlybond.ghost then
---                     local ghost = player.components.ghostlybond.ghost
---                     if ghost.components.health then
---                         OnSisterBondChange(ghost)
---                         print("load data.ghostcurrenthealth", ghostcurrenthealth)
---                         ghost.components.health.currenthealth = ghostcurrenthealth
---                     end
---                 end
---             end
---         end
---     end)
--- end)
 
 -- 多年生植物祭坛复活事件监听
 local function onactivateresurrection(inst, resurrect_target)
@@ -108,13 +82,13 @@ local function onactivateresurrection(inst, resurrect_target)
         if tracker then
             local currentBond = tracker:GetBondData(resurrect_target.userid, "sisterBond") or 0
             tracker:SetBondData(resurrect_target.userid, "sisterBond", currentBond + 1)
-            print(string.format("复活加1次", resurrect_target.userid, tracker:GetBondData(resurrect_target.userid, "sisterBond")))
+            -- print(string.format("复活加1次", resurrect_target.userid, tracker:GetBondData(resurrect_target.userid, "sisterBond")))
             resurrect_target.sisterBond = tracker:GetBondData(resurrect_target.userid, "sisterBond")
         end
 
         -- 回收灵魂
         local wave_spawned = SpawnSoulWaves(inst:GetPosition(), resurrect_target.sisterBond, -3.5, 12)
-        print("Resurrection sisterBond!", resurrect_target.sisterBond)
+        -- print("Resurrection sisterBond!", resurrect_target.sisterBond)
 
         -- 更新一次abby血量
         if resurrect_target.components.ghostlybond and resurrect_target.components.ghostlybond.ghost then
@@ -180,14 +154,14 @@ AddPrefabPostInit("wendy", function(inst)
         inst:DoTaskInTime(0, function(inst)
             -- 确保组件和玩家都有效
             if TheWorld.components.playerbondtracker and inst.userid then
-                print("获取血量GetBondData")
+                -- print("获取血量GetBondData")
                 local bond = TheWorld.components.playerbondtracker:GetBondData(inst.userid, "sisterBond")
                 local ghostcurrenthealth = TheWorld.components.playerbondtracker:GetBondData(inst.userid, "ghostcurrenthealth")
 
 
                 -- 在这里处理加载后的逻辑，例如重新设定玩家的某个状态
                 inst.sisterBond = bond or 0
-                print(string.format("[Bond] 玩家跨世界加载完成，保护欲：", inst:GetDisplayName(), bond))
+                -- print(string.format("[Bond] 玩家跨世界加载完成，保护欲：", inst:GetDisplayName(), bond))
 
                 if ghostcurrenthealth then
                     if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
@@ -217,7 +191,7 @@ local function OnDeath(inst)
                 local currentBond = tracker:GetBondData(leader.userid, "sisterBond")
                 if currentBond > reduction then
                     tracker:SetBondData(leader.userid, "sisterBond", currentBond-reduction)
-                    print(string.format("阿比死亡减少", reduction, tracker:GetBondData(leader.userid, "sisterBond")))
+                    -- print(string.format("阿比死亡减少", reduction, tracker:GetBondData(leader.userid, "sisterBond")))
                     leader.sisterBond = tracker:GetBondData(leader.userid, "sisterBond")
                 end
             end
@@ -292,50 +266,52 @@ AddPrefabPostInit("abigail", function(inst)
     
     -- 启动定时任务
     local function StartTetherTask()
-        if inst._tether_task == nil and inst:IsValid() and not inst:IsInLimbo() then
-            inst._tether_task = inst:DoPeriodicTask(attack_interval, function()
-                local player = inst._playerlink
-                if player and player.components.ghostlybond and player.components.ghostlybond.ghost ~= inst then
-                    return -- 忽略错误绑定的 Abigail
-                end
-    
-                if player and player.components.ghostlybond and player.components.ghostlybond.summoned and player.sisterBond and player.sisterBond > 0 then
-                    if inst.components.combat then
-                        local attack_power = player.sisterBond * 1 -- 4个就是4攻击力
-                        local interval = tether_spawn_duration / (#offsets - 1)
-    
-                        for i, offset in ipairs(offsets) do
-                            inst:DoTaskInTime(interval * (i - 1), function()
-                                if inst:IsValid() then
-                                    local target = FindAbigailAttackTarget(inst, player, attack_power)
-                                    if target then
-                                        local tether = SpawnPrefab("abigail_tether")
-    
-                                        -- 计算偏移位置
-                                        local x, y, z = inst.Transform:GetWorldPosition()
-                                        tether.Transform:SetPosition(x + offset.x, y, z + offset.z)
-    
-                                        local weapon = tether.components.combat:GetWeapon()
-                                        if weapon then
-                                            weapon.components.weapon:SetDamage(attack_power)
-                                        end
-    
-                                        tether.components.combat:DoAttack(target)
-                                        tether:DoTaskInTime(attack_interval, function()
-                                            if tether:IsValid() then
-                                                tether:Remove()
+        local player = inst._playerlink
+        if player and player.components.skilltreeupdater and player.components.skilltreeupdater:IsActivated("wendy_ghostflower_grave") then
+            if inst._tether_task == nil and inst:IsValid() and not inst:IsInLimbo() then
+                inst._tether_task = inst:DoPeriodicTask(attack_interval, function()
+
+                    if player and player.components.ghostlybond and player.components.ghostlybond.ghost ~= inst then
+                        return -- 忽略错误绑定的 Abigail
+                    end
+
+                    if player and player.components.ghostlybond and player.components.ghostlybond.summoned and player.sisterBond and player.sisterBond > 0 then
+                        if inst.components.combat then
+                            local attack_power = player.sisterBond * 1 -- 4个就是4攻击力
+                            local interval = tether_spawn_duration / (#offsets - 1)
+
+                            for i, offset in ipairs(offsets) do
+                                inst:DoTaskInTime(interval * (i - 1), function()
+                                    if inst:IsValid() then
+                                        local target = FindAbigailAttackTarget(inst, player, attack_power)
+                                        if target then
+                                            local tether = SpawnPrefab("abigail_tether")
+
+                                            -- 计算偏移位置
+                                            local x, y, z = inst.Transform:GetWorldPosition()
+                                            tether.Transform:SetPosition(x + offset.x, y, z + offset.z)
+
+                                            local weapon = tether.components.combat:GetWeapon()
+                                            if weapon then
+                                                weapon.components.weapon:SetDamage(attack_power)
                                             end
-                                        end)
+
+                                            tether.components.combat:DoAttack(target)
+                                            tether:DoTaskInTime(attack_interval, function()
+                                                if tether:IsValid() then
+                                                    tether:Remove()
+                                                end
+                                            end)
+                                        end
                                     end
-                                end
-                            end)
+                                end)
+                            end
                         end
                     end
-                end
-            end)
+                end)
+            end
         end
     end
-    
 
     -- 停止定时任务
     local function StopTetherTask()
@@ -355,3 +331,31 @@ AddPrefabPostInit("abigail", function(inst)
         StartTetherTask()
     end
 end)
+
+-- DebugSetSisterBond(5)
+local ENABLE_DEBUG = GetModConfigData("ENABLE_DEBUG_SISTERBOND")
+if ENABLE_DEBUG then
+    GLOBAL.DebugSetSisterBond = function(number)
+        if number == nil then
+            print("没有数字！")
+            return
+        end
+        if TheWorld and TheWorld.components.playerbondtracker then
+            TheWorld.components.playerbondtracker:SetBondData(ThePlayer.userid, "sisterBond", number)
+            print("已设置 sisterBond 为", number)
+            local ghost = ThePlayer.components.ghostlybond and ThePlayer.components.ghostlybond.ghost
+            print("已找到 Abigail 为", ghost)
+            local tracker = TheWorld.components.playerbondtracker
+            ThePlayer.sisterBond = tracker:GetBondData(ThePlayer.userid, "sisterBond")
+            print("已找到 ThePlayer 为", ThePlayer.sisterBond)
+            if ghost ~= nil then
+                OnSisterBondChange(ghost)
+                print("已更新 Abigail层数！")
+            else
+                print("Abigail 不存在，未更新")
+            end
+        else
+            print("没有找到 playerbondtracker 组件")
+        end
+    end
+end
