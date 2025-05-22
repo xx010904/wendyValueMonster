@@ -213,4 +213,19 @@ configuration_options =
 		},
         default = false,
     },
+	{
+		name = "SoulLinkConsume",
+		label = isCh and "灵魂链接消耗" or "Soul Link Cost",
+		hover = isCh
+			and "消耗多少精神来恢复血量（默认和蝙蝠刀一样，3.4精神值恢复6.8血量）"
+			or "How much sanity is consumed to heal health (default is same as Bat Bat: 3.4 sanity heals 6.8 health)",
+		options = {
+			{ description = isCh and "默认（3.4）" or "Default (3.4)", data = 3.4 },
+			{ description = "2.6", data = 2.6 },
+			{ description = "1.8", data = 1.8 },
+			{ description = "1.0", data = 1.0 },
+			{ description = isCh and "无损" or "No Cost", data = 0 },
+		},
+		default = 3.4,
+	}
 }

@@ -1,3 +1,4 @@
+local SoulLinkConsume = GetModConfigData("SoulLinkConsume")
 local HAUNT_CD = 1
 local function SpawnSoulLink(source, target)
     local x1, y1, z1 = source.Transform:GetWorldPosition()
@@ -138,7 +139,6 @@ local function doLink(ghost, player)
 
     local ghost_cd = false
     local player_cd = false
-    local heal_task = nil
 
     -- ghost 攻击 -> player 回血 6.8 * 6，扣 3.4 * 6 理智
     local function OnGhostAttack(ghost, data)
@@ -166,16 +166,16 @@ local function doLink(ghost, player)
 
     -- ghost startaura事件开始，定时给player回血+扣理智
     local function OnStartAura()
-        if heal_task then return end
+        if ghost._soul_link_heal_task then return end
 
-        heal_task = ghost:DoPeriodicTask(1, function()
+        ghost._soul_link_heal_task = ghost:DoPeriodicTask(1, function()
             if player.components.health and not player.components.health:IsDead() then
                 local playerhealth = player.components.health
                 if playerhealth.currenthealth < playerhealth.maxhealth then
                     SpawnPrefab("soul_link_endpoint").Transform:SetPosition(player.Transform:GetWorldPosition())
                     playerhealth:DoDelta(6.8, nil, ghost)
                     if player.components.sanity then
-                        player.components.sanity:DoDelta(-3.4)
+                        player.components.sanity:DoDelta(-SoulLinkConsume)
                     end
                 end
             end
@@ -183,9 +183,9 @@ local function doLink(ghost, player)
     end
 
     local function OnStopAura()
-        if heal_task then
-            heal_task:Cancel()
-            heal_task = nil
+        if ghost._soul_link_heal_task then
+            ghost._soul_link_heal_task:Cancel()
+            ghost._soul_link_heal_task = nil
         end
     end
 
@@ -205,7 +205,7 @@ local function doLink(ghost, player)
             ghosthealth:DoDelta(6.8, nil, player)
 
             if player.components.hunger then
-                player.components.hunger:DoDelta(-3.4)
+                player.components.hunger:DoDelta(-SoulLinkConsume)
             end
 
             SpawnPrefab("soul_link_endpoint").Transform:SetPosition(ghost.Transform:GetWorldPosition())
@@ -225,8 +225,6 @@ local function doLink(ghost, player)
         ghost:ListenForEvent("stopaura", OnStopAura)
         player:ListenForEvent("onattackother", OnPlayerAttack)
 
-        -- 记录 heal_task 给后面清理用
-        ghost._soul_link_heal_task = heal_task
     end
 
     -- 重置 LINK_TIME 倒计时
