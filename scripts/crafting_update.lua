@@ -1,8 +1,5 @@
-local PlayerUIDData = require("player_uid_data")
-
 local HEALTH_BOUND = 50
 local SPEED_BOUND = 0.05
-
 -- 增加Abigail的属性
 local function OnSisterBondChange(inst)
     if inst._playerlink ~= nil and inst._playerlink.components.pethealthbar ~= nil then
@@ -36,6 +33,9 @@ local function OnSisterBondChange(inst)
 end
 
 function SpawnSoulWaves(position, numWaves, waveSpeed, spawn_dist)
+    if numWaves == nil or numWaves < 1 then
+        return
+    end
     local totalAngle = 360
     local anglePerWave = totalAngle/numWaves
     local startAngle = math.random(-180, 180)
@@ -57,17 +57,60 @@ function SpawnSoulWaves(position, numWaves, waveSpeed, spawn_dist)
     return wave_spawned
 end
 
+
+AddPrefabPostInit("world", function(inst)
+    if not TheWorld.ismastersim then
+        return
+    end
+
+    if not inst.components.playerbondtracker then
+        inst:AddComponent("playerbondtracker")
+        print("[Bond] 世界组件 playerbondtracker 已添加")
+    end
+end)
+
+-- AddSimPostInit(function()
+--     TheWorld:ListenForEvent("playeractivated", function(world, player)
+--         -- 确保组件和玩家都有效
+--         if TheWorld.components.playerbondtracker and player.userid then
+--             local bond = TheWorld.components.playerbondtracker:GetBondData(player.userid, "sisterBond")
+--             local ghostcurrenthealth = TheWorld.components.playerbondtracker:GetBondData(player.userid, "ghostcurrenthealth")
+
+
+--             -- 在这里处理加载后的逻辑，例如重新设定玩家的某个状态
+--             player.sisterBond = bond or 0
+--             print(string.format("[Bond] 玩家加载完成，保护欲：", player:GetDisplayName(), bond))
+
+--             if ghostcurrenthealth then
+--                 if player.components.ghostlybond and player.components.ghostlybond.ghost then
+--                     local ghost = player.components.ghostlybond.ghost
+--                     if ghost.components.health then
+--                         OnSisterBondChange(ghost)
+--                         print("load data.ghostcurrenthealth", ghostcurrenthealth)
+--                         ghost.components.health.currenthealth = ghostcurrenthealth
+--                     end
+--                 end
+--             end
+--         end
+--     end)
+-- end)
+
 -- 多年生植物祭坛复活事件监听
 local function onactivateresurrection(inst, resurrect_target)
     -- print("Resurrection activated!", inst, resurrect_target)
     if resurrect_target and resurrect_target.components.skilltreeupdater and resurrect_target.components.skilltreeupdater:IsActivated("wendy_ghostflower_grave") then
-        if resurrect_target.sisterBond then
-            resurrect_target.sisterBond = resurrect_target.sisterBond + 1
-        else
-            resurrect_target.sisterBond = 1
+        -- if resurrect_target.sisterBond then
+        --     resurrect_target.sisterBond = resurrect_target.sisterBond + 1
+        -- else
+        --     resurrect_target.sisterBond = 1
+        -- end
+        local tracker = TheWorld.components.playerbondtracker
+        if tracker then
+            local currentBond = tracker:GetBondData(resurrect_target.userid, "sisterBond") or 0
+            tracker:SetBondData(resurrect_target.userid, "sisterBond", currentBond + 1)
+            print(string.format("复活加1次", resurrect_target.userid, tracker:GetBondData(resurrect_target.userid, "sisterBond")))
+            resurrect_target.sisterBond = tracker:GetBondData(resurrect_target.userid, "sisterBond")
         end
-        -- 持久化
-        PlayerUIDData:Set(inst.userid, "sisterBond", resurrect_target.sisterBond)
 
         -- 回收灵魂
         local wave_spawned = SpawnSoulWaves(inst:GetPosition(), resurrect_target.sisterBond, -3.5, 12)
@@ -103,19 +146,14 @@ AddPrefabPostInit("wendy", function(inst)
                 old_OnSave(inst, data)
             end
             if inst.sisterBond then
-                data.sisterBond = inst.sisterBond
-                if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
-                    local ghost = inst.components.ghostlybond.ghost
-                    if ghost.components.health then
-                        data.ghostcurrenthealth = ghost.components.health.currenthealth
-                        print("save data.ghostcurrenthealth", data.ghostcurrenthealth)
-                    end
-                end
-            end
-            -- 持久化
-            if inst.userid ~= nil and inst.sisterBond then
-                print("持久化", inst.userid, inst.sisterBond)
-                PlayerUIDData:Set(inst.userid, "sisterBond", inst.sisterBond)
+                -- data.sisterBond = inst.sisterBond
+                -- if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
+                --     local ghost = inst.components.ghostlybond.ghost
+                --     if ghost.components.health then
+                --         data.ghostcurrenthealth = ghost.components.health.currenthealth
+                --         print("save data.ghostcurrenthealth", data.ghostcurrenthealth)
+                --     end
+                -- end
             end
         end
 
@@ -125,19 +163,44 @@ AddPrefabPostInit("wendy", function(inst)
                 old_OnLoad(inst, data)
             end
             if data and data.sisterBond then
-                inst.sisterBond = data.sisterBond
-                if data and data.ghostcurrenthealth and inst.components.health then
+                -- inst.sisterBond = data.sisterBond
+                -- if data and data.ghostcurrenthealth and inst.components.health then
+                --     if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
+                --         local ghost = inst.components.ghostlybond.ghost
+                --         if ghost.components.health then
+                --             OnSisterBondChange(ghost)
+                --             print("load data.ghostcurrenthealth", data.ghostcurrenthealth)
+                --             ghost.components.health.currenthealth = data.ghostcurrenthealth
+                --         end
+                --     end
+                -- end
+            end
+        end
+
+        inst:DoTaskInTime(0, function(inst)
+            -- 确保组件和玩家都有效
+            if TheWorld.components.playerbondtracker and inst.userid then
+                print("获取血量GetBondData")
+                local bond = TheWorld.components.playerbondtracker:GetBondData(inst.userid, "sisterBond")
+                local ghostcurrenthealth = TheWorld.components.playerbondtracker:GetBondData(inst.userid, "ghostcurrenthealth")
+
+
+                -- 在这里处理加载后的逻辑，例如重新设定玩家的某个状态
+                inst.sisterBond = bond or 0
+                print(string.format("[Bond] 玩家跨世界加载完成，保护欲：", inst:GetDisplayName(), bond))
+
+                if ghostcurrenthealth then
                     if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
                         local ghost = inst.components.ghostlybond.ghost
                         if ghost.components.health then
                             OnSisterBondChange(ghost)
-                            print("load data.ghostcurrenthealth", data.ghostcurrenthealth)
-                            ghost.components.health.currenthealth = data.ghostcurrenthealth
+                            print("load data.ghostcurrenthealth", ghostcurrenthealth)
+                            ghost.components.health.currenthealth = ghostcurrenthealth
                         end
                     end
                 end
             end
-        end
+        end)
     end
 end)
 
@@ -148,14 +211,18 @@ local function OnDeath(inst)
             --释放灵魂
             local wave_spawned = SpawnSoulWaves(inst:GetPosition(), leader.sisterBond, 3.5, 1)
 
-            local reduction = math.ceil(leader.sisterBond / 3)
-            -- print("阿比盖尔死亡reduction：", reduction)
-            leader.sisterBond = leader.sisterBond - math.max(1, reduction)
-            -- 持久化
-            if inst.userid ~= nil and inst.sisterBond then
-                print("持久化,阿比死亡", inst.userid, inst.sisterBond)
-                PlayerUIDData:Set(inst.userid, "sisterBond", inst.sisterBond)
+            local reduction = math.max(1, (math.ceil(leader.sisterBond / 3)))
+            local tracker = TheWorld.components.playerbondtracker
+            if tracker then
+                local currentBond = tracker:GetBondData(leader.userid, "sisterBond")
+                if currentBond > reduction then
+                    tracker:SetBondData(leader.userid, "sisterBond", currentBond-reduction)
+                    print(string.format("阿比死亡减少", reduction, tracker:GetBondData(leader.userid, "sisterBond")))
+                    leader.sisterBond = tracker:GetBondData(leader.userid, "sisterBond")
+                end
             end
+            -- print("阿比盖尔死亡reduction：", reduction)
+            -- leader.sisterBond = leader.sisterBond - math.max(1, reduction)
         end
     end
 end
@@ -287,13 +354,4 @@ AddPrefabPostInit("abigail", function(inst)
         if inst._tether_task ~= nil then return end
         StartTetherTask()
     end
-end)
-
-AddPlayerPostInit(function(inst)
-    inst:DoTaskInTime(0, function()
-        if inst.userid then
-            inst.sisterBond = PlayerUIDData:Get(inst.userid, "sisterBond", 0)
-            print("加载sisterBond", inst.sisterBond)
-        end
-    end)
 end)
