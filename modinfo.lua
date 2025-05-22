@@ -7,6 +7,7 @@ description = isCh and
 "\n󰀐感谢赏玩！"..
 "\n\n〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓"..
 "\n󰀅完整更新日志可以在创意工坊查看"..
+"\n V1.0.3 增加了灵魂链接消耗配置"..
 "\n V1.0.2 变猴换人都能保持保护欲层数；添加了测试的配置，可以自己调节当前保护欲层数"..
 "\n"
 or
@@ -14,6 +15,7 @@ or
 "\n󰀐Thanks to enjoy!"..
 "\n\n〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓"..
 "\n󰀅Full changelog available on the Workshop"..
+"\n V1.0.3 Added soul link consumption configuration."..
 "\n V1.0.2 Keeps Protective Instinct stacks when switching characters or transforming into a monkey; added a configuration option to manually adjust the current Protective Instinct."..
 "\n"
 
