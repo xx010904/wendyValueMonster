@@ -1,5 +1,5 @@
 local isCh = locale == "zh" or locale == "zhr"
-version = "1.0.1"
+version = "1.0.2"
 name = isCh and "数值怪阿比盖尔" or "The Value Monster: Abigail"
 author = "XJS"
 description = isCh and 
