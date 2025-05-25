@@ -1,5 +1,5 @@
 local isCh = locale == "zh" or locale == "zhr"
-version = "1.0.3"
+version = "1.0.4"
 name = isCh and "数值怪阿比盖尔" or "The Value Monster: Abigail"
 author = "XJS"
 description = isCh and 
@@ -229,5 +229,16 @@ configuration_options =
 			{ description = isCh and "无损" or "No Cost", data = 0 },
 		},
 		default = 3.4,
-	}
+	},
+	{
+		name = "SyncSisterBond",
+		label = isCh and "同步姐妹情（测试）" or "",
+		hover = isCh and "地面和洞穴同步姐妹情（测试功能）" or "",
+		options =
+		{
+			{ description = isCh and "开" or "Enable", data = true, hover = isCh and "开" or "Enable" },
+			{ description = isCh and "不开" or "Disable", data = false, hover = isCh and "不开" or "Disable" },
+		},
+		default = false,
+	},
 }

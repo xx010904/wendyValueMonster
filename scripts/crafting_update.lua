@@ -1,3 +1,5 @@
+local SyncSisterBond = GetModConfigData("SyncSisterBond")
+
 local HEALTH_BOUND = 50
 local SPEED_BOUND = 0.05
 -- 增加Abigail的属性
@@ -59,13 +61,39 @@ end
 
 
 AddPrefabPostInit("world", function(inst)
-    if not TheWorld.ismastersim then
-        return
-    end
+    -- if not TheWorld.ismastersim then return end
 
     if not inst.components.playerbondtracker then
-        inst:AddComponent("playerbondtracker")
-        -- print("[Bond] 世界组件 playerbondtracker 已添加")
+        local playerbondtracker = inst:AddComponent("playerbondtracker")
+        playerbondtracker.SyncSisterBond = SyncSisterBond
+        print("[playerbondtracker] 世界组件添加完毕")
+    end
+
+    if not inst.components.shard_sisterbondtracker then
+        inst:AddComponent("shard_sisterbondtracker")
+        print("[shard_sisterbondtracker] 世界组件添加完毕")
+    end
+
+    -- 监听远程同步事件
+    if SyncSisterBond then
+        inst:ListenForEvent("sisterbond_update_remote", function(world, data)
+            print("[world] 收到 shard_sisterbondtracker 同步事件: ", data.userid, data.sisterBond)
+            local tracker = inst.components.playerbondtracker
+            if tracker and data.userid and data.sisterBond ~= nil then
+                tracker:OnRemoteUpdate(data.userid, "sisterBond", data.sisterBond)
+            else
+                print("[world][warn] 无法处理 sisterBond 同步事件，缺失 tracker 或参数")
+            end
+        end)
+    end
+end)
+
+AddPrefabPostInit("shard_network", function(inst)
+    if SyncSisterBond then
+        if not inst.components.shard_sisterbondtracker then
+            inst:AddComponent("shard_sisterbondtracker")
+            print("[ShardSisterBond] 组件添加完成")
+        end
     end
 end)
 
