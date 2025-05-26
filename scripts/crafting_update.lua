@@ -77,7 +77,7 @@ AddPrefabPostInit("world", function(inst)
     -- 监听远程同步事件
     if SyncSisterBond then
         inst:ListenForEvent("sisterbond_update_remote", function(world, data)
-            print("[world] 收到 shard_sisterbondtracker 同步事件: ", data.userid, data.sisterBond)
+            print("[world] 收到 shard_sisterbondtracker 同步 sisterbond 事件: ", data.userid, data.sisterBond)
             local tracker = inst.components.playerbondtracker
             if tracker and data.userid and data.sisterBond ~= nil then
                 tracker:OnRemoteUpdate(data.userid, "sisterBond", data.sisterBond)
@@ -85,7 +85,41 @@ AddPrefabPostInit("world", function(inst)
                 print("[world][warn] 无法处理 sisterBond 同步事件，缺失 tracker 或参数")
             end
         end)
+        inst:ListenForEvent("ghosthealth_update_remote", function(world, data)
+            print("[world] 收到 shard_sisterbondtracker 同步 ghosthealth 事件: ", data.userid, data.ghostCurrentHealth)
+            local tracker = inst.components.playerbondtracker
+            if tracker and data.userid and data.ghostCurrentHealth ~= nil then
+                tracker:OnRemoteUpdate(data.userid, "ghostcurrenthealth", data.ghostCurrentHealth)
+                print("[world] ghostCurrentHealth 更新成功", tracker:GetBondData(data.userid, "ghostcurrenthealth"))
+            else
+                print("[world][warn] 无法处理 sisterBond 同步事件，缺失 tracker 或参数")
+            end
+        end)
     end
+
+    -- 监听下洞穴，然后同步血量
+    inst:ListenForEvent("ms_playerdespawnandmigrate", function (inst, data)
+        local player = data.player
+        if player then
+            local ghost = player.components.ghostlybond.ghost
+            if ghost then
+                local health = ghost.components.health
+                if health then
+                    print("ms_playerdespawnandmigrate", player.userid, health.currenthealth)
+                    TheWorld:PushEvent("sync_other_ghosthealth", {
+                        userid = player.userid,
+                        ghostCurrentHealth = health.currenthealth,
+                    })
+                else
+                    print("[world][warn] ms_playerdespawnandmigrate 事件中未找到 ghost 的 health 组件")
+                end
+            else
+                print("[world][warn] ms_playerdespawnandmigrate 事件中未找到 ghost")
+            end
+        else
+            print("[world][warn] ms_playerdespawnandmigrate 事件中未找到 player")
+        end
+    end)
 end)
 
 AddPrefabPostInit("shard_network", function(inst)
@@ -149,13 +183,15 @@ AddPrefabPostInit("wendy", function(inst)
             end
             if inst.sisterBond then
                 -- data.sisterBond = inst.sisterBond
-                -- if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
-                --     local ghost = inst.components.ghostlybond.ghost
-                --     if ghost.components.health then
-                --         data.ghostcurrenthealth = ghost.components.health.currenthealth
-                --         print("save data.ghostcurrenthealth", data.ghostcurrenthealth)
-                --     end
-                -- end
+                if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
+                    local ghost = inst.components.ghostlybond.ghost
+                    if ghost.components.health then
+                        local tracker = TheWorld.components.playerbondtracker
+                        tracker:SetBondData(inst.userid, "ghostcurrenthealth", ghost.components.health.currenthealth)
+                        -- data.ghostcurrenthealth = ghost.components.health.currenthealth
+                        print("save ghostcurrenthealth", tracker:GetBondData(inst.userid, "ghostcurrenthealth"))
+                    end
+                end
             end
         end
 
@@ -165,16 +201,18 @@ AddPrefabPostInit("wendy", function(inst)
                 old_OnLoad(inst, data)
             end
             if data and data.sisterBond then
-                -- inst.sisterBond = data.sisterBond
+                inst.sisterBond = data.sisterBond
                 -- if data and data.ghostcurrenthealth and inst.components.health then
-                --     if inst.components.ghostlybond and inst.components.ghostlybond.ghost then
-                --         local ghost = inst.components.ghostlybond.ghost
-                --         if ghost.components.health then
-                --             OnSisterBondChange(ghost)
-                --             print("load data.ghostcurrenthealth", data.ghostcurrenthealth)
-                --             ghost.components.health.currenthealth = data.ghostcurrenthealth
-                --         end
-                --     end
+                local tracker = TheWorld.components.playerbondtracker
+                local ghostcurrenthealth = tracker:GetBondData(inst.userid, "ghostcurrenthealth")
+                if ghostcurrenthealth and inst.components.ghostlybond and inst.components.ghostlybond.ghost then
+                    local ghost = inst.components.ghostlybond.ghost
+                    if ghost.components.health then
+                        -- OnSisterBondChange(ghost)
+                        print("load ghostcurrenthealth", inst.userid, ghostcurrenthealth)
+                        ghost.components.health.currenthealth = ghostcurrenthealth
+                    end
+                end
                 -- end
             end
         end
@@ -196,7 +234,7 @@ AddPrefabPostInit("wendy", function(inst)
                         local ghost = inst.components.ghostlybond.ghost
                         if ghost.components.health then
                             OnSisterBondChange(ghost)
-                            print("load data.ghostcurrenthealth", ghostcurrenthealth)
+                            print("load data.ghostcurrenthealth", inst.userid, ghostcurrenthealth)
                             ghost.components.health.currenthealth = ghostcurrenthealth
                         end
                     end
