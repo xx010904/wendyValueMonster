@@ -100,7 +100,7 @@ AddPrefabPostInit("world", function(inst)
     -- 监听下洞穴，然后同步血量
     inst:ListenForEvent("ms_playerdespawnandmigrate", function (inst, data)
         local player = data.player
-        if player then
+        if player and player.components.ghostlybond then
             local ghost = player.components.ghostlybond.ghost
             if ghost then
                 local health = ghost.components.health
